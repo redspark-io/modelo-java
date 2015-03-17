@@ -51,8 +51,11 @@ $ fig up
 
 ## Requisits
 Maven | [http://maven.apache.org/](http://maven.apache.org/)
+
 JDK8 Oracle/Sun | [http://www.oracle.com/technetwork/java/javase/downloads/index.html](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+
 Lombok | [http://projectlombok.org/](http://projectlombok.org/)
+
 Lombok install:
 Run this:
 ```
