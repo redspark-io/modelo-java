@@ -1,0 +1,39 @@
+### General
+
+.vagrant
+
+### Server
+.springBeans
+techint-checklist-java/**/target/
+*.classpath
+*.project
+*.settings/
+*.db
+*.log
+*~
+*.zip
+*.class
+*.idea
+*.iml
+data
+
+### Client
+target
+build
+.gradle
+.sass-cache
+*.sublime-project
+*.sublime-workspace
+data
+.DS_Store
+bin-debug
+bin-release
+html-template
+.externalToolBuilders
+node_modules/
+
+### Scripts
+packer_cache/
+output-vagrant/
+scripts/packer/*.pem
+*.box

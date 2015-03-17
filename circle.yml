@@ -1,0 +1,21 @@
+machine:
+  java:
+    version: oraclejdk8
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker info
+
+test:
+  override:
+    # build
+    - mvn clean install -f server/pom.xml
+
+    # publish do core
+    - cp server/target/modelo.jar $CIRCLE_ARTIFACTS/modelo.jar
+
+    # testes report
+    - mkdir -p $CIRCLE_TEST_REPORTS/modelo
+    - cp -r server/target/surefire-reports/* $CIRCLE_TEST_REPORTS/modelo/
