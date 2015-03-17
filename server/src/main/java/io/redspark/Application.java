@@ -25,13 +25,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.validation.BindException;
 import org.springframework.web.filter.HttpPutFormContentFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @SpringBootApplication
@@ -50,13 +47,6 @@ public class Application extends WebMvcConfigurerAdapter {
     @Bean
     public HttpPutFormContentFilter httpPutFormContentFilter() {
 	return new HttpPutFormContentFilter();
-    }
-    
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	registry.addResourceHandler("**/*.css", "**/*.js", "**/*.map", "*.html")
-	    	.addResourceLocations("classpath:META-INF/resources/").setCachePeriod(0);
-        super.addResourceHandlers(registry);
     }
     
     @Override
@@ -92,11 +82,6 @@ public class Application extends WebMvcConfigurerAdapter {
 	super.configureHandlerExceptionResolvers(exceptionResolvers);
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-	return new StandardPasswordEncoder();
-    }
-
     @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
     protected static class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 
@@ -110,7 +95,7 @@ public class Application extends WebMvcConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-	    http.authorizeRequests().antMatchers("/jsondoc*", "/webjars/**/*").permitAll().anyRequest()
+	    http.authorizeRequests().antMatchers("/public").permitAll().anyRequest()
 		    .fullyAuthenticated();
 	    this.configureCsrf(http);
 	    this.configureSession(http);
