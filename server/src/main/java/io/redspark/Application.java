@@ -35,96 +35,94 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class Application extends WebMvcConfigurerAdapter {
 
-    public static void main(String[] args) throws Exception {
-	new SpringApplicationBuilder(Application.class).run(args);
-    }
+	public static void main(String[] args) throws Exception {
+		new SpringApplicationBuilder(Application.class).run(args);
+	}
 
-    @Bean
-    public ApplicationSecurity applicationSecurity() {
-	return new ApplicationSecurity();
-    }
+	@Bean
+	public ApplicationSecurity applicationSecurity() {
+		return new ApplicationSecurity();
+	}
 
-    @Bean
-    public HttpPutFormContentFilter httpPutFormContentFilter() {
-	return new HttpPutFormContentFilter();
-    }
-    
-    @Override
-    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
-	exceptionResolvers.add(new HandlerExceptionResolver() {
-
-	    @Override
-	    public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response,
-		    Object handler, Exception ex) {
-		if (ex.getClass().isAssignableFrom(BindException.class)) {
-		    BindException bindex = (BindException) ex;
-		    final StringBuilder message = new StringBuilder();
-		    bindex.getAllErrors().forEach(a -> message.append(a.getDefaultMessage()).append("\n"));
-		    try {
-			response.sendError(HttpStatus.BAD_REQUEST.value(), message.toString());
-		    } catch (IOException e) {
-			return null;
-		    }
-		    return new ModelAndView();
-		}
-		if (ex instanceof WebException) {
-		    WebException webex = (WebException) ex;
-		    try {
-			response.sendError(webex.getStatus().value(), ex.getMessage());
-		    } catch (IOException e) {
-			return null;
-		    }
-		    return new ModelAndView();
-		}
-		return null;
-	    }
-	});
-	super.configureHandlerExceptionResolvers(exceptionResolvers);
-    }
-
-    @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-    protected static class ApplicationSecurity extends WebSecurityConfigurerAdapter {
-
-	@Autowired
-	private DatabaseAuthenticationProvider databaseAuthenticationProvider;
-
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-	    auth.authenticationProvider(databaseAuthenticationProvider);
+	@Bean
+	public HttpPutFormContentFilter httpPutFormContentFilter() {
+		return new HttpPutFormContentFilter();
 	}
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-	    http.authorizeRequests().antMatchers("/public").permitAll().anyRequest()
-		    .fullyAuthenticated();
-	    this.configureCsrf(http);
-	    this.configureSession(http);
-	    this.configureEntryPoint(http);
-	    this.configureAuthentication(http);
+	public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
+		exceptionResolvers.add(new HandlerExceptionResolver() {
+
+			@Override
+			public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
+			    Exception ex) {
+				if (ex.getClass().isAssignableFrom(BindException.class)) {
+					BindException bindex = (BindException) ex;
+					final StringBuilder message = new StringBuilder();
+					bindex.getAllErrors().forEach(a -> message.append(a.getDefaultMessage()).append("\n"));
+					try {
+						response.sendError(HttpStatus.BAD_REQUEST.value(), message.toString());
+					} catch (IOException e) {
+						return null;
+					}
+					return new ModelAndView();
+				}
+				if (ex instanceof WebException) {
+					WebException webex = (WebException) ex;
+					try {
+						response.sendError(webex.getStatus().value(), ex.getMessage());
+					} catch (IOException e) {
+						return null;
+					}
+					return new ModelAndView();
+				}
+				return null;
+			}
+		});
+		super.configureHandlerExceptionResolvers(exceptionResolvers);
 	}
 
-	private void configureAuthentication(HttpSecurity http) throws Exception {
-	    DefaultSuccessHandler successHandler = new DefaultSuccessHandler(p -> new UserDTO((DefaultUser) p));
+	@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+	protected static class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 
-	    http.formLogin().loginProcessingUrl("/login").successHandler(successHandler)
-		    .failureHandler(new DefaultFailureHandler());
+		@Autowired
+		private DatabaseAuthenticationProvider databaseAuthenticationProvider;
 
-	    http.logout().logoutUrl("/logout").logoutSuccessHandler(successHandler);
+		@Override
+		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+			auth.authenticationProvider(databaseAuthenticationProvider);
+		}
+
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http.authorizeRequests().antMatchers("/public").permitAll().anyRequest().fullyAuthenticated();
+			this.configureCsrf(http);
+			this.configureSession(http);
+			this.configureEntryPoint(http);
+			this.configureAuthentication(http);
+		}
+
+		private void configureAuthentication(HttpSecurity http) throws Exception {
+			DefaultSuccessHandler successHandler = new DefaultSuccessHandler(p -> new UserDTO((DefaultUser) p));
+
+			http.formLogin().loginProcessingUrl("/login").successHandler(successHandler)
+			    .failureHandler(new DefaultFailureHandler());
+
+			http.logout().logoutUrl("/logout").logoutSuccessHandler(successHandler);
+		}
+
+		private void configureCsrf(HttpSecurity http) throws Exception {
+			http.csrf().disable();
+		}
+
+		private void configureSession(HttpSecurity http) throws Exception {
+			http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+		}
+
+		private void configureEntryPoint(HttpSecurity http) throws Exception {
+			http.exceptionHandling().authenticationEntryPoint(
+			    (request, response, exception) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "unauthorized"));
+		}
 	}
-
-	private void configureCsrf(HttpSecurity http) throws Exception {
-	    http.csrf().disable();
-	}
-
-	private void configureSession(HttpSecurity http) throws Exception {
-	    http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
-	}
-
-	private void configureEntryPoint(HttpSecurity http) throws Exception {
-	    http.exceptionHandling().authenticationEntryPoint(
-		    (request, response, exception) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
-			    "unauthorized"));
-	}
-    }
 
 }

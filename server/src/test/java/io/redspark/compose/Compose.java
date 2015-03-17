@@ -10,34 +10,22 @@ import io.redspark.domain.User.UserBuilder;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Compose {
-    
-    private static AtomicLong counter = new AtomicLong();
-    
-    public static UserBuilder admin(String name) {
-	return user(name)
-		.admin(true);
-    }
-    
-    public static UserBuilder user(String name) {
-	return User.builder()
-		.name(name)
-		.password(name)
-		.login(name)
-		.admin(false);
-    }
-    
-    public static CityBuilder city(String name) {
-	return City.builder()
-		.name(name)
-		.country("Country " + counter.incrementAndGet())
-		.state("State " + counter.get());
-    }
-    
-    public static HotelBuilder hotel(String name, City city) {
-	return Hotel.builder()
-		.name(name)
-		.address("Rua Quintana, 753")
-		.city(city)
-		.zip("12345-123");
-    }
+
+	private static AtomicLong counter = new AtomicLong();
+
+	public static UserBuilder admin(String name) {
+		return user(name).admin(true);
+	}
+
+	public static UserBuilder user(String name) {
+		return User.builder().name(name).password(name).login(name).admin(false);
+	}
+
+	public static CityBuilder city(String name) {
+		return City.builder().name(name).country("Country " + counter.incrementAndGet()).state("State " + counter.get());
+	}
+
+	public static HotelBuilder hotel(String name, City city) {
+		return Hotel.builder().name(name).address("Rua Quintana, 753").city(city).zip("12345-123");
+	}
 }

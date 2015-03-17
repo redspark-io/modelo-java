@@ -13,18 +13,18 @@ import org.springframework.http.ResponseEntity;
 
 public class MeControllerTest extends ApplicationTest {
 
-    @Test
-    public void testMe() {
-	User user = admin("bruno").build();
-	saveall(user);
-	signIn(user);
-	
-	ResponseEntity<UserDTO> response = get("/me").status(HttpStatus.OK).getResponse(UserDTO.class);
-	assertThat(response.getBody().getId(), equalTo(user.getId()));
-    }
-    
-    @Test
-    public void testMe401() {
-	get("/me").status(HttpStatus.UNAUTHORIZED).getResponse();
-    }
+	@Test
+	public void testMe() {
+		User user = admin("bruno").build();
+		saveall(user);
+		signIn(user);
+
+		ResponseEntity<UserDTO> response = get("/me").status(HttpStatus.OK).getResponse(UserDTO.class);
+		assertThat(response.getBody().getId(), equalTo(user.getId()));
+	}
+
+	@Test
+	public void testMe401() {
+		get("/me").status(HttpStatus.UNAUTHORIZED).getResponse();
+	}
 }

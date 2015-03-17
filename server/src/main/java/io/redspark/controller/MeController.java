@@ -17,11 +17,11 @@ public class MeController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public UserDTO me() {
-		
+
 		if (UserUtils.isUserLoggedAsHolmesUser()) {
 			return new UserDTO(UserUtils.getUserLogged());
 		}
-		
+
 		throw new WebException(HttpStatus.UNAUTHORIZED, "unauthorized");
 	}
 

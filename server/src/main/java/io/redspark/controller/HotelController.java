@@ -46,7 +46,8 @@ public class HotelController {
 
 	@Transactional(readOnly = true)
 	@RequestMapping(method = RequestMethod.GET)
-	public Page<HotelDTO> list(@PageableDefault(page = 0, size = 50, sort = "name") Pageable page, @RequestParam(value = "search", required = false) String search) {
+	public Page<HotelDTO> list(@PageableDefault(page = 0, size = 50, sort = "name") Pageable page,
+	    @RequestParam(value = "search", required = false) String search) {
 
 		Page<Hotel> result;
 		if (StringUtils.hasText(search)) {
@@ -55,19 +56,20 @@ public class HotelController {
 			result = repository.findAll(page);
 		}
 
-		return new PageImpl<HotelDTO>(result.getContent().stream().map(c -> convert.toDTO(c)).collect(Collectors.toList()), page, result.getTotalElements());
+		return new PageImpl<HotelDTO>(result.getContent().stream().map(c -> convert.toDTO(c)).collect(Collectors.toList()),
+		    page, result.getTotalElements());
 	}
 
 	@Transactional(readOnly = true)
 	@RequestMapping(value = "/{ref}", method = RequestMethod.GET)
 	public HotelDTO read(@PathVariable("ref") Long ref) {
-	
+
 		Hotel entity = repository.findByIdWithCity(ref);
-		
+
 		if (entity == null) {
 			throw new NotFoundException(Hotel.class);
 		}
-		
+
 		return convert.toDTO(entity);
 	}
 
@@ -112,14 +114,14 @@ public class HotelController {
 	@Transactional
 	@RequestMapping(value = "/{ref}", method = RequestMethod.DELETE)
 	public HotelDTO delete(@PathVariable("ref") Long ref) {
-		
+
 		Hotel entity = repository.findOne(ref);
 		if (entity == null) {
 			throw new NotFoundException(Hotel.class);
 		}
 
 		this.repository.delete(entity);
-		
+
 		return convert.toDTO(entity);
 	}
 }

@@ -8,12 +8,12 @@ import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class WebException extends RuntimeException {
-    
-    private static final long serialVersionUID = 3406636182783807331L;
-    
-    private HttpStatus status;
-    private String message;
+
+	private static final long serialVersionUID = 3406636182783807331L;
+
+	private HttpStatus status;
+	private String message;
 
 }
