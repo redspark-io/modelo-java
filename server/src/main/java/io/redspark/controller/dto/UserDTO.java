@@ -1,10 +1,11 @@
 package io.redspark.controller.dto;
 
-import io.redspark.security.DefaultUser;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import org.springframework.security.core.authority.AuthorityUtils;
+
+import br.org.sesc.commons.security.SescUser;
 
 @Data
 @NoArgsConstructor
@@ -18,9 +19,9 @@ public class UserDTO {
 
 	private Boolean accessChecklist;
 
-	public UserDTO(DefaultUser user) {
-		this.id = user.getId();
-		this.name = user.getName();
+	public UserDTO(SescUser user) {
+		this.id = user.getUsuId();
+		this.name = user.getUsername();
 		this.admin = user.getAuthorities().contains(AuthorityUtils.createAuthorityList("ROLE_ADMIN").get(0));
 	}
 

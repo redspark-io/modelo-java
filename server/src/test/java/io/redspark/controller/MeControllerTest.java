@@ -3,7 +3,7 @@ package io.redspark.controller;
 import static io.redspark.compose.Compose.admin;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
-import io.redspark.ApplicationTest;
+import io.redspark.SescApplicationTest;
 import io.redspark.controller.dto.UserDTO;
 import io.redspark.domain.User;
 
@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class MeControllerTest extends ApplicationTest {
+public class MeControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testMe() {
@@ -19,7 +19,9 @@ public class MeControllerTest extends ApplicationTest {
 		saveall(user);
 		signIn(user);
 
-		ResponseEntity<UserDTO> response = get("/me").status(HttpStatus.OK).getResponse(UserDTO.class);
+		ResponseEntity<UserDTO> response = get("/me")
+			.status(HttpStatus.OK)
+			.getResponse(UserDTO.class);
 		assertThat(response.getBody().getId(), equalTo(user.getId()));
 	}
 

@@ -8,7 +8,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import io.redspark.ApplicationTest;
+import io.redspark.SescApplicationTest;
 import io.redspark.controller.dto.CityDTO;
 import io.redspark.domain.City;
 import io.redspark.domain.Hotel;
@@ -26,7 +26,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-public class CityControllerTest extends ApplicationTest {
+public class CityControllerTest extends SescApplicationTest {
     
     private MapperUtils<City, CityDTO> convert = new MapperUtils<City, CityDTO>(City.class, CityDTO.class);
     

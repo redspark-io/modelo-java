@@ -32,7 +32,7 @@ public abstract class ApplicationTest {
 	private static List<Object> toPersist = new ArrayList<Object>();
 
 	private final String server;
-	private String authentication;
+	protected String authentication;
 
 	@Autowired
 	private JpaTransactionManager manager;

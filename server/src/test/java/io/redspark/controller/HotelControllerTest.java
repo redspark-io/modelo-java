@@ -8,7 +8,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
-import io.redspark.ApplicationTest;
+import io.redspark.SescApplicationTest;
 import io.redspark.controller.dto.HotelDTO;
 import io.redspark.domain.City;
 import io.redspark.domain.Hotel;
@@ -23,7 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class HotelControllerTest extends ApplicationTest {
+public class HotelControllerTest extends SescApplicationTest {
     
     private MapperUtils<Hotel, HotelDTO> convert = new MapperUtils<Hotel, HotelDTO>(Hotel.class, HotelDTO.class);
     
