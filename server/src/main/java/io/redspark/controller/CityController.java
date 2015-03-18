@@ -23,8 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -76,7 +76,7 @@ public class CityController {
 	@Transactional
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public CityDTO create(@Valid @ModelAttribute("city") CityDTO dto) {
+	public CityDTO create(@Valid @RequestBody CityDTO dto) {
 
 		City entity = convert.toEntity(dto);
 		entity = repository.save(entity);
@@ -86,7 +86,7 @@ public class CityController {
 	@Transactional
 	@RequestMapping(value = "/{ref}", method = RequestMethod.PUT)
 	@ResponseBody
-	public CityDTO update(@PathVariable("ref") Long ref, @Valid @ModelAttribute("city") CityDTO dto) {
+	public CityDTO update(@PathVariable("ref") Long ref, @Valid @RequestBody CityDTO dto) {
 		City entity = repository.findOne(ref);
 		if (entity == null) {
 			throw new NotFoundException(City.class);
