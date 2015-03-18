@@ -35,6 +35,7 @@ public class RequestBuilder {
     private HttpMethod method;
     private String server;
     private HttpStatus status;
+    private Object json;
     
     public RequestBuilder(String server, String URI, HttpMethod method) {
 	super();
@@ -44,6 +45,9 @@ public class RequestBuilder {
     }
     
     public RequestBuilder formParam(String key, Object value) {
+	if (this.json != null) {
+	    throw new RuntimeException("Can't use formParam and json body on the same request");
+	}
 	this.variables.add(key, value.toString());
 	return this;
     }
@@ -60,6 +64,14 @@ public class RequestBuilder {
 	return this;
     }
     
+    public RequestBuilder json(Object json) {
+	if (this.variables.size() > 0) {
+	    throw new RuntimeException("Can't use formParam and json body on the same request");
+	}
+	this.json = json;
+	return this;
+    }
+    
     public RequestBuilder status(HttpStatus status) {
 	this.status = status;
 	return this;
@@ -71,7 +83,16 @@ public class RequestBuilder {
 	if (HttpMethod.GET.equals(method)) {
 	    entity = new HttpEntity<Void>(headers);
 	} else {
-	    entity = new HttpEntity<MultiValueMap<String, String>>(variables, headers);
+	    if (this.json != null) {
+		try {
+		    this.header("Content-Type", "application/json;charset=UTF-8");
+		    entity = new HttpEntity<String>(mapper.writeValueAsString(this.json), headers);
+		} catch (JsonProcessingException e) {
+		    throw new RuntimeException(e);
+		}
+	    } else {
+		entity = new HttpEntity<MultiValueMap<String, String>>(variables, headers);
+	    }
 	}
 	
 	URI link = UriComponentsBuilder.fromHttpUrl(server).path(URI).queryParams(queryString).build().toUri();

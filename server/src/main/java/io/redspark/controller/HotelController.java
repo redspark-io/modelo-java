@@ -23,8 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,7 +74,7 @@ public class HotelController {
 	@Transactional
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public HotelDTO create(@Valid @ModelAttribute("hotel") HotelDTO dto) {
+	public HotelDTO create(@Valid @RequestBody HotelDTO dto) {
 
 		City city = cityRepository.findOne(dto.getCity().getId());
 		if (city == null) {
@@ -90,7 +90,7 @@ public class HotelController {
 
 	@Transactional
 	@RequestMapping(value = "/{ref}", method = RequestMethod.PUT)
-	public HotelDTO update(@PathVariable("ref") Long ref, @Valid @ModelAttribute("hotel") HotelDTO dto) {
+	public HotelDTO update(@PathVariable("ref") Long ref, @Valid @RequestBody HotelDTO dto) {
 
 		City city = cityRepository.findOne(dto.getCity().getId());
 		if (city == null) {
