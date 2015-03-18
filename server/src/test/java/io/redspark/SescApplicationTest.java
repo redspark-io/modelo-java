@@ -29,33 +29,14 @@ public abstract class SescApplicationTest extends ApplicationTest {
     @Autowired
     private WebServiceTemplate webServiceTemplate;
 
-    private Source responsePayload;
-    private Source errorPayload = new StringSource("<Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>" +
-                        	    "<Body>" +
-                        	    "<fncValidarResponse soapenv:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' xmlns:ns1='http://auth.web_service.sesc'>" +
-                        	    "<fncValidarReturn xsi:type='ns2:Document' xmlns:ns2='http://xml.apache.org/xml-soap'>" +
-                        	    "<resultado>" +
-                        	    "<erro>3</erro>" +
-                        	    "<erro_mensagem>Hash/Opção não encontrado</erro_mensagem>" +
-                        	    "</resultado>" +
-                        	    "</fncValidarReturn>" +
-                        	    "<fncValidarResponse>" +
-                        	    "<Body>" +
-                        	    "<Envelope>");
-
-    private MockWebServiceServer mockWebServiceServer;
-    
     @Override
     public void setUp() {
 	super.setUp();
     }
 
-    private void initializeWS() {
-	mockWebServiceServer = MockWebServiceServer.createServer(webServiceTemplate);
-    }
-
-    protected void createMockResponse(UserAuthentication user) {
-	responsePayload = new StringSource(
+    protected void signIn(UserAuthentication user) {
+	MockWebServiceServer mockWebServiceServer = MockWebServiceServer.createServer(webServiceTemplate);
+	Source responsePayload = new StringSource(
 		"<fncValidarResponse>"
 			+ "<fncValidarReturn>"
 			+ "<resultado>"
@@ -82,14 +63,9 @@ public abstract class SescApplicationTest extends ApplicationTest {
 			+ "<erro_mensagem>Consulta executada com sucesso!</erro_mensagem>"
 			+ "</resultado>" + "</fncValidarReturn>"
 			+ "</fncValidarResponse>");
-    }
 
-    protected void signIn(UserAuthentication user) {
-
-	// cria um mock a mais na pilha pois ele autentica e depois valida o
-	// usuário
-	createMockResponse(user);
-	criaMockWS(2);
+	mockWebServiceServer.expect(connectionTo(authenticationUrl))
+		.andRespond(withPayload(responsePayload));
 
 	ResponseEntity<Object> response = super.get("/me")
 		.header(SescAuthConst.HASH_KEY, "hash")
@@ -100,48 +76,7 @@ public abstract class SescApplicationTest extends ApplicationTest {
 	authentication = response.getHeaders().getFirst("Set-Cookie");
     }
 
-    private void criaMockWS() {
-	this.criaMockWS(2);
-    }
-    
-    private void criaMockWS(int numberOfCalls) {
-	initializeWS();
-	for (int i = 0; i < numberOfCalls; i++) {
-        	if (responsePayload == null) {
-        	    mockWebServiceServer.expect(connectionTo(authenticationUrl))
-        	    	.andRespond(withPayload(errorPayload));
-        	} else {
-        	    mockWebServiceServer.expect(connectionTo(authenticationUrl))
-        	    	.andRespond(withPayload(responsePayload));
-        	}
-	}
-    }
-
     protected void signOut(UserAuthentication user) {
 	this.authentication = null;
-    }
-
-    @Override
-    protected RequestBuilder get(String uri) {
-	criaMockWS();
-	return super.get(uri);
-    }
-
-    @Override
-    protected RequestBuilder put(String uri) {
-	criaMockWS();
-	return super.put(uri);
-    }
-
-    @Override
-    protected RequestBuilder post(String uri) {
-	criaMockWS();
-	return super.post(uri);
-    }
-
-    @Override
-    protected RequestBuilder delete(String uri) {
-	criaMockWS();
-	return super.delete(uri);
     }
 }
