@@ -54,7 +54,8 @@ public class Application extends WebMvcConfigurerAdapter {
 		exceptionResolvers.add(new HandlerExceptionResolver() {
 
 			@Override
-			public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+			public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
+			    Exception ex) {
 				if (ex.getClass().isAssignableFrom(BindException.class)) {
 					BindException bindex = (BindException) ex;
 					final StringBuilder message = new StringBuilder();
@@ -104,7 +105,8 @@ public class Application extends WebMvcConfigurerAdapter {
 		private void configureAuthentication(HttpSecurity http) throws Exception {
 			DefaultSuccessHandler successHandler = new DefaultSuccessHandler(p -> new UserDTO((DefaultUser) p));
 
-			http.formLogin().loginProcessingUrl("/login").successHandler(successHandler).failureHandler(new DefaultFailureHandler());
+			http.formLogin().loginProcessingUrl("/login").successHandler(successHandler)
+			    .failureHandler(new DefaultFailureHandler());
 
 			http.logout().logoutUrl("/logout").logoutSuccessHandler(successHandler);
 		}
@@ -118,7 +120,8 @@ public class Application extends WebMvcConfigurerAdapter {
 		}
 
 		private void configureEntryPoint(HttpSecurity http) throws Exception {
-			http.exceptionHandling().authenticationEntryPoint((request, response, exception) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "unauthorized"));
+			http.exceptionHandling().authenticationEntryPoint(
+			    (request, response, exception) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "unauthorized"));
 		}
 	}
 

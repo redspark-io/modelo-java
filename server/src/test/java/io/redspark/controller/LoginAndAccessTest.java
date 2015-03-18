@@ -16,29 +16,25 @@ public class LoginAndAccessTest extends ApplicationTest {
 
 	@Test
 	public void testLogin() throws Exception {
-	    User user = admin("bruno").build();
-	    saveall(user);
-	    
-	    ResponseEntity<UserDTO> response = post("/login")
-	    	.formParam("username", user.getLogin())
-	    	.formParam("password", user.getPassword())
-	    	.getResponse(UserDTO.class);
-	    
-	    assertThat(response.getStatusCode(), is(HttpStatus.OK));
-	    assertThat(response.getBody().getName(), equalTo(user.getName()));
-	    assertThat(response.getBody().getId(), equalTo(user.getId()));
-	    assertThat(response.getBody().getAdmin(), equalTo(user.getAdmin()));
-	    
+		User user = admin("bruno").build();
+		saveall(user);
+
+		ResponseEntity<UserDTO> response = post("/login").formParam("username", user.getLogin())
+		    .formParam("password", user.getPassword()).getResponse(UserDTO.class);
+
+		assertThat(response.getStatusCode(), is(HttpStatus.OK));
+		assertThat(response.getBody().getName(), equalTo(user.getName()));
+		assertThat(response.getBody().getId(), equalTo(user.getId()));
+		assertThat(response.getBody().getAdmin(), equalTo(user.getAdmin()));
+
 	}
-	
+
 	@Test
 	public void testLoginFailure() {
-	    
-	    ResponseEntity<String> response = post("/login")
-	    	.formParam("username", "1")
-	    	.formParam("password", "2")
-	    	.getResponse(String.class);
-	    
-	    assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
+
+		ResponseEntity<String> response = post("/login").formParam("username", "1").formParam("password", "2")
+		    .getResponse(String.class);
+
+		assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
 	}
 }

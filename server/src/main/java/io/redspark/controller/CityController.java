@@ -47,23 +47,25 @@ public class CityController {
 
 	@Transactional(readOnly = true)
 	@RequestMapping(method = RequestMethod.GET)
-	public Page<CityDTO> list(@PageableDefault(page = 0, size = 50, sort = "name") Pageable page, @RequestParam(value = "search", required = false) String search) {
-		
+	public Page<CityDTO> list(@PageableDefault(page = 0, size = 50, sort = "name") Pageable page,
+	    @RequestParam(value = "search", required = false) String search) {
+
 		Page<City> result;
-		
+
 		if (StringUtils.hasText(search)) {
 			result = repository.search(SQLLikeUtils.like(search), page);
 		} else {
 			result = repository.findAll(page);
 		}
 
-		return new PageImpl<CityDTO>(result.getContent().stream().map(c -> convert.toDTO(c)).collect(Collectors.toList()), page, result.getTotalElements());
+		return new PageImpl<CityDTO>(result.getContent().stream().map(c -> convert.toDTO(c)).collect(Collectors.toList()),
+		    page, result.getTotalElements());
 	}
 
 	@Transactional(readOnly = true)
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public CityDTO read(@PathVariable("id") Long id) {
-		
+
 		City city = repository.findOne(id);
 		if (city == null) {
 			throw new NotFoundException(City.class);
@@ -97,16 +99,16 @@ public class CityController {
 	@Transactional
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public CityDTO delete(@PathVariable("id") Long id) {
-		
+
 		City city = repository.findOne(id);
-		
+
 		if (city == null) {
 			throw new NotFoundException(City.class);
 		}
 		if (hotelRepository.countByCity(city) > 0) {
 			throw new WebException(HttpStatus.PRECONDITION_FAILED, "city.hasHotel");
 		}
-		
+
 		this.repository.delete(city);
 
 		return convert.toDTO(city);

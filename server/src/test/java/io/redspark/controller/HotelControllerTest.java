@@ -309,4 +309,5 @@ public class HotelControllerTest extends ApplicationTest {
 		.formParam("name", "name")
 		.status(HttpStatus.NOT_FOUND);
     }
+
 }
