@@ -1,10 +1,12 @@
 package io.redspark.security.sesc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +20,6 @@ import org.springframework.security.config.annotation.authentication.configurers
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.ws.WebServiceMessageFactory;
 import org.springframework.ws.client.core.WebServiceTemplate;
@@ -46,15 +47,9 @@ public class SescSecurityConfigurerAdapter extends
 
     @Value("${sesc.authentication.app.codigo}")
     private Long codigo;
-
-    @Value("${sesc.authentication.app.login}")
-    private String aplicationLogin;
-
-    @Value("${sesc.authentication.app.password}")
-    private String aplicationPassword;
-
-    @Value("${sesc.authentication.app.roles}")
-    private String aplicationRoles;
+    
+    @Autowired
+    private SescApplicationUser sescApplicationUser;
 
     // *****************************************
     // ************* WEB SERVICES
@@ -112,9 +107,8 @@ public class SescSecurityConfigurerAdapter extends
     @SuppressWarnings("unchecked")
     public SescWebServiceAuthenticationProvider sescUserAuthenticationProvider() {
 
-	// SescWebServiceAuthenticationProvider authenticationProvider = new
-	// SescWebServiceAuthenticationProvider(CustomSescUser.class);
-	SescWebServiceAuthenticationProvider authenticationProvider = new SescWebServiceAuthenticationProvider(SescUser.class);
+	SescWebServiceAuthenticationProvider authenticationProvider = new SescWebServiceAuthenticationProvider(
+		CustomSescUser.class);
 	authenticationProvider.setValidations(sescAuthenticationValidators());
 	authenticationProvider.setHook(hook());
 
@@ -125,14 +119,12 @@ public class SescSecurityConfigurerAdapter extends
      * Provider de autenticação da aplicação
      */
     public DaoAuthenticationProvider applicationAuthenticationProvider() {
-	CustomSescUser sescUser = new CustomSescUser();
-	sescUser.setLogin(this.aplicationLogin);
-	sescUser.setPassword(this.aplicationPassword);
-	sescUser.setAuthorities(AuthorityUtils
-		.commaSeparatedStringToAuthorityList(aplicationRoles));
+	ArrayList<SescUser> userAuthList = new ArrayList<SescUser>();
+	for (int i = 0; i < this.sescApplicationUser.size(); i++) {
+	    userAuthList.add(this.sescApplicationUser.getSescUser(i));
+	}
 
-	SimpleUserDetailService simpleUserDetailService = new SimpleUserDetailService(
-		Arrays.asList(sescUser));
+	SimpleUserDetailService simpleUserDetailService = new SimpleUserDetailService(userAuthList);
 	DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 	authenticationProvider.setUserDetailsService(simpleUserDetailService);
 
@@ -164,11 +156,6 @@ public class SescSecurityConfigurerAdapter extends
     protected static class ApplicationSecurity extends
 	    WebSecurityConfigurerAdapter {
 
-	// public SescBasicAuthenticationFilter sescBasicAuthenticationFilter()
-	// {
-	// return new SescBasicAuthenticationFilter(authenticationManager());
-	// }
-
 	public SescWebServiceAuthenticationSecurityFilter sescWebServiceAuthenticationSecurityFilter()
 		throws Exception {
 	    return new SescWebServiceAuthenticationSecurityFilter(
@@ -187,8 +174,6 @@ public class SescSecurityConfigurerAdapter extends
 	}
 
 	private void configureFilters(HttpSecurity http) throws Exception {
-	    // http.addFilterBefore(sescBasicAuthenticationFilter(),
-	    // DefaultLoginPageGeneratingFilter.class);
 	    http.addFilterAfter(sescWebServiceAuthenticationSecurityFilter(),
 		    BasicAuthenticationFilter.class);
 	}

@@ -15,7 +15,7 @@
 
 	<properties>
 		<!-- SESC -->
-		<sesc.commons.version>2.0.2</sesc.commons.version>
+		<sesc.commons.version>2.0.3</sesc.commons.version>
 
 		<!-- UTIL -->
 		<lombok-version>1.16.2</lombok-version>
