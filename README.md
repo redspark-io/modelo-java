@@ -3,7 +3,7 @@ Projeto Modelo redspark
 O projeto modelo tem a ideal de mostrar diversas práticas para ajudar o desenvolvedor na tomada de decisão.
 Esse projeto também servirá como base para os demais projetos da redspark.
 
-[![Build status](https://circleci.com/gh/dclick/modelo-java/tree/master.png?circle-token=7622aeaf3787feb02939549a5622cca378b03163)]
+[![Build status](https://circleci.com/gh/dclick/modelo-java/tree/master.png?circle-token=7622aeaf3787feb02939549a5622cca378b03163)](https://circleci.com/gh/dclick/modelo-java)
 
 ## Note for the Developers
 We use Github issues as reference for the project development. So every single commit must reference a GITHUB ISSUE.
