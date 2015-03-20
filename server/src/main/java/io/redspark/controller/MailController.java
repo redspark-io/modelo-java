@@ -26,7 +26,6 @@ public class MailController {
 	public String sendMail(@RequestParam(value = "to", required = true) String to) throws MessagingException{
 		
 		mailSender.send(to, "Spring boot test mail", "Hello");
-		return "Enviou";
 	}
 	
 }
