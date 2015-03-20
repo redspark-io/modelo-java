@@ -11,6 +11,7 @@ We use Github issues as reference for the project development. So every single c
 To make sure you don't forget to reference any issue, run the command below so git will warn you if you are trying to commit anything without a issue reference.
 ```curl -o .git/hooks/prepare-commit-msg https://s3.amazonaws.com/holmes-provision/prepare-commit-msg | chmod +x .git/hooks/prepare-commit-msg```
 
+
 ## Required
 
 ### Docker
