@@ -174,12 +174,13 @@ public class SescSecurityConfigurerAdapter extends
 	}
 
 	private void configureFilters(HttpSecurity http) throws Exception {
-	    http.addFilterAfter(sescWebServiceAuthenticationSecurityFilter(),
+	    http.addFilterBefore(sescWebServiceAuthenticationSecurityFilter(),
 		    BasicAuthenticationFilter.class);
 	}
 
 	private void configureAuthentication(HttpSecurity http)
 		throws Exception {
+	    http.httpBasic();
 	}
 
 	private void configureCsrf(HttpSecurity http) throws Exception {
