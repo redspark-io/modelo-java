@@ -153,11 +153,10 @@ public class CityControllerTest extends ApplicationTest {
 	String name = "name";
 	String state = "state";
 	String country = "country";
+	City city = city(name).state(state).country(country).build();
 	
 	ResponseEntity<CityDTO> response = post("/city")
-		.formParam("name", name)
-		.formParam("state", state)
-		.formParam("country", country)
+		.json(convert.toDTO(city))
 		.status(HttpStatus.CREATED)
 		.getResponse(CityDTO.class);
 	
@@ -178,11 +177,12 @@ public class CityControllerTest extends ApplicationTest {
 	String name = "newname";
 	String state = "newstate";
 	String country = "newcountry";
+	c1.setName(name);
+	c1.setState(state);
+	c1.setCountry(country);
 	
 	ResponseEntity<CityDTO> response = put("/city/%s", c1.getId())
-		.formParam("name", name)
-		.formParam("state", state)
-		.formParam("country", country)
+		.json(c1)
 		.status(HttpStatus.OK)
 		.getResponse(CityDTO.class);
 	
@@ -244,24 +244,12 @@ public class CityControllerTest extends ApplicationTest {
     @Test
     public void testUpdateNotFound() {
 	User bruno = admin("bruno").build();
-	saveall(bruno);
+	City city = city("Sao Paulo").build();
+	saveall(city, bruno);
 	signIn(bruno);
-	put("/city/1")
-		.formParam("name", "name")
-		.formParam("state", "state")
-		.formParam("country", "country")
+	put("/city/%s", city.getId() + 1)
+		.json(convert.toDTO(city))
 		.status(HttpStatus.NOT_FOUND)
-		.getResponse();
-    }
-    
-    @Test
-    public void testeCreateInvalidParam() {
-	User bruno = admin("bruno").build();
-	saveall(bruno);
-	signIn(bruno);
-	
-	post("/city")
-		.status(HttpStatus.BAD_REQUEST)
 		.getResponse();
     }
 }

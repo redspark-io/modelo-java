@@ -171,13 +171,7 @@ public class HotelControllerTest extends ApplicationTest {
 	Hotel c = hotel("Days Inn", cidade).build();
 	
 	ResponseEntity<HotelDTO> response = post("/hotel")
-		.formParam("name", c.getName())
-		.formParam("address", c.getAddress())
-		.formParam("zip", c.getZip())
-		.formParam("city.id", cidade.getId())
-		.formParam("city.name", cidade.getName())
-		.formParam("city.state", cidade.getState())
-		.formParam("city.country", cidade.getCountry())
+		.json(convert.toDTO(c))
 		.status(HttpStatus.CREATED)
 		.getResponse(HotelDTO.class);
 	
@@ -196,15 +190,10 @@ public class HotelControllerTest extends ApplicationTest {
 	signIn(bruno);
 	
 	Hotel c = hotel("Days Inn", cidade).build();
+	c.getCity().setName("newname");
 	
 	ResponseEntity<HotelDTO> response = post("/hotel")
-		.formParam("name", c.getName())
-		.formParam("address", c.getAddress())
-		.formParam("zip", c.getZip())
-		.formParam("city.id", cidade.getId())
-		.formParam("city.name", "newname")
-		.formParam("city.state", cidade.getState())
-		.formParam("city.country", cidade.getCountry())
+		.json(convert.toDTO(c))
 		.status(HttpStatus.CREATED)
 		.getResponse(HotelDTO.class);
 	
@@ -220,15 +209,10 @@ public class HotelControllerTest extends ApplicationTest {
 	signIn(bruno);
 	
 	Hotel c = hotel("Days Inn", cidade).build();
+	c.getCity().setId(9999l);
 	
 	post("/hotel")
-		.formParam("name", c.getName())
-		.formParam("address", c.getAddress())
-		.formParam("zip", c.getZip())
-		.formParam("city.id", 9999)
-		.formParam("city.name", "newname")
-		.formParam("city.state", cidade.getState())
-		.formParam("city.country", cidade.getCountry())
+		.json(convert.toDTO(c))
 		.status(HttpStatus.NOT_FOUND)
 		.getResponse();
 	
@@ -245,15 +229,10 @@ public class HotelControllerTest extends ApplicationTest {
 	signIn(bruno);
 	
 	String name = "newname";
+	c.setName(name);
 	
 	ResponseEntity<HotelDTO> response = put("/hotel/%s", c.getId())
-		.formParam("name", name)
-		.formParam("address", c.getAddress())
-		.formParam("zip", c.getZip())
-		.formParam("city.id", cidade.getId())
-		.formParam("city.name", "teste")
-		.formParam("city.state", cidade.getState())
-		.formParam("city.country", cidade.getCountry())
+		.json(convert.toDTO(c))
 		.status(HttpStatus.OK)
 		.getResponse(HotelDTO.class);
 	
@@ -275,15 +254,11 @@ public class HotelControllerTest extends ApplicationTest {
 	signIn(bruno);
 	
 	String name = "newname";
+	c.setName(name);
+	c.getCity().setId(9999l);
 	
 	put("/hotel/%s", c.getId())
-		.formParam("name", name)
-		.formParam("address", c.getAddress())
-		.formParam("zip", c.getZip())
-		.formParam("city.id", 9999)
-		.formParam("city.name", "teste")
-		.formParam("city.state", cidade.getState())
-		.formParam("city.country", cidade.getCountry())
+		.json(convert.toDTO(c))
 		.status(HttpStatus.NOT_FOUND)
 		.getResponse();
 	
@@ -334,15 +309,5 @@ public class HotelControllerTest extends ApplicationTest {
 		.formParam("name", "name")
 		.status(HttpStatus.NOT_FOUND);
     }
-    
-    @Test
-    public void testeCreateInvalidParam() {
-	User bruno = admin("bruno").build();
-	saveall(bruno);
-	signIn(bruno);
-	
-	post("/hotel")
-		.status(HttpStatus.BAD_REQUEST)
-		.getResponse();
-    }
+
 }

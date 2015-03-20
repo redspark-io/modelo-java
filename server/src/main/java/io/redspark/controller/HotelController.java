@@ -23,8 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,7 +46,8 @@ public class HotelController {
 
 	@Transactional(readOnly = true)
 	@RequestMapping(method = RequestMethod.GET)
-	public Page<HotelDTO> list(@PageableDefault(page = 0, size = 50, sort = "name") Pageable page, @RequestParam(value = "search", required = false) String search) {
+	public Page<HotelDTO> list(@PageableDefault(page = 0, size = 50, sort = "name") Pageable page,
+	    @RequestParam(value = "search", required = false) String search) {
 
 		Page<Hotel> result;
 		if (StringUtils.hasText(search)) {
@@ -55,26 +56,27 @@ public class HotelController {
 			result = repository.findAll(page);
 		}
 
-		return new PageImpl<HotelDTO>(result.getContent().stream().map(c -> convert.toDTO(c)).collect(Collectors.toList()), page, result.getTotalElements());
+		return new PageImpl<HotelDTO>(result.getContent().stream().map(c -> convert.toDTO(c)).collect(Collectors.toList()),
+		    page, result.getTotalElements());
 	}
 
 	@Transactional(readOnly = true)
 	@RequestMapping(value = "/{ref}", method = RequestMethod.GET)
 	public HotelDTO read(@PathVariable("ref") Long ref) {
-	
+
 		Hotel entity = repository.findByIdWithCity(ref);
-		
+
 		if (entity == null) {
 			throw new NotFoundException(Hotel.class);
 		}
-		
+
 		return convert.toDTO(entity);
 	}
 
 	@Transactional
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public HotelDTO create(@Valid @ModelAttribute("hotel") HotelDTO dto) {
+	public HotelDTO create(@Valid @RequestBody HotelDTO dto) {
 
 		City city = cityRepository.findOne(dto.getCity().getId());
 		if (city == null) {
@@ -90,7 +92,7 @@ public class HotelController {
 
 	@Transactional
 	@RequestMapping(value = "/{ref}", method = RequestMethod.PUT)
-	public HotelDTO update(@PathVariable("ref") Long ref, @Valid @ModelAttribute("hotel") HotelDTO dto) {
+	public HotelDTO update(@PathVariable("ref") Long ref, @Valid @RequestBody HotelDTO dto) {
 
 		City city = cityRepository.findOne(dto.getCity().getId());
 		if (city == null) {
@@ -112,14 +114,14 @@ public class HotelController {
 	@Transactional
 	@RequestMapping(value = "/{ref}", method = RequestMethod.DELETE)
 	public HotelDTO delete(@PathVariable("ref") Long ref) {
-		
+
 		Hotel entity = repository.findOne(ref);
 		if (entity == null) {
 			throw new NotFoundException(Hotel.class);
 		}
 
 		this.repository.delete(entity);
-		
+
 		return convert.toDTO(entity);
 	}
 }

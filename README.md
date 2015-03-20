@@ -3,6 +3,8 @@ Projeto Modelo redspark
 O projeto modelo tem a ideal de mostrar diversas práticas para ajudar o desenvolvedor na tomada de decisão.
 Esse projeto também servirá como base para os demais projetos da redspark.
 
+[![Build status](https://circleci.com/gh/dclick/modelo-java/tree/master.png?circle-token=7622aeaf3787feb02939549a5622cca378b03163)](https://circleci.com/gh/dclick/modelo-java)
+
 ## Note for the Developers
 We use Github issues as reference for the project development. So every single commit must reference a GITHUB ISSUE.
 To make sure you don't forget to reference any issue, run the command below so git will warn you if you are trying to commit anything without a issue reference.
@@ -50,8 +52,18 @@ $ fig up
 # Build
 
 ## Requisits
-Maven | [http://maven.apache.org/](http://maven.apache.org/) ---
-JDK8 Oracle/Sun | [http://www.oracle.com/technetwork/java/javase/downloads/index.html](http://www.oracle.com/technetwork/java/javase/downloads/index.html) ---
+Maven | [http://maven.apache.org/](http://maven.apache.org/)
+
+JDK8 Oracle/Sun | [http://www.oracle.com/technetwork/java/javase/downloads/index.html](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+
+Lombok | [http://projectlombok.org/](http://projectlombok.org/)
+
+Lombok install:
+Run this:
+```
+java -jar ~/.m2/repository/org/projectlombok/lombok/1.16.2/lombok-1.16.2.jar
+```
+After run, it's necessary to specify your current Eclipse installation, attention to select de link 'eclipse' in Eclipse installation folder and click Install.
 
 ## Front-End
 
