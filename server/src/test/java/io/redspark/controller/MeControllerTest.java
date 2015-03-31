@@ -20,13 +20,13 @@ public class MeControllerTest extends SescApplicationTest {
 		signIn(user);
 
 		ResponseEntity<UserDTO> response = get("/me")
-			.status(HttpStatus.OK)
-			.getResponse(UserDTO.class);
+		    .expectedStatus(HttpStatus.OK)
+		    .getResponse(UserDTO.class);
 		assertThat(response.getBody().getId(), equalTo(user.getId()));
 	}
 
 	@Test
 	public void testMe401() {
-		get("/me").status(HttpStatus.UNAUTHORIZED).getResponse();
+		get("/me").expectedStatus(HttpStatus.UNAUTHORIZED).getResponse();
 	}
 }

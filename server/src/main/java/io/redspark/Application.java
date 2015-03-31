@@ -26,7 +26,7 @@ public class Application extends WebMvcConfigurerAdapter {
 	public static void main(String[] args) throws Exception {
 		new SpringApplicationBuilder(Application.class).run(args);
 	}
-	
+
 	@Bean
 	public HttpPutFormContentFilter httpPutFormContentFilter() {
 		return new HttpPutFormContentFilter();
