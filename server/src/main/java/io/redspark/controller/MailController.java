@@ -20,12 +20,12 @@ public class MailController {
 
 	@Autowired
 	private SmtpMailSender mailSender;
-	
+
 	@Transactional
 	@RequestMapping(method = RequestMethod.GET)
-	public void sendMail(@RequestParam(value = "to", required = true) String to) throws MessagingException{
-		
+	public void sendMail(@RequestParam(value = "to", required = true) String to) throws MessagingException {
+
 		mailSender.send(to, "Spring boot test mail", "Hello");
 	}
-	
+
 }

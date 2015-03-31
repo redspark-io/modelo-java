@@ -19,12 +19,12 @@ public class MeControllerTest extends ApplicationTest {
 		saveall(user);
 		signIn(user);
 
-		ResponseEntity<UserDTO> response = get("/me").status(HttpStatus.OK).getResponse(UserDTO.class);
+		ResponseEntity<UserDTO> response = get("/me").expectedStatus(HttpStatus.OK).getResponse(UserDTO.class);
 		assertThat(response.getBody().getId(), equalTo(user.getId()));
 	}
 
 	@Test
 	public void testMe401() {
-		get("/me").status(HttpStatus.UNAUTHORIZED).getResponse();
+		get("/me").expectedStatus(HttpStatus.UNAUTHORIZED).getResponse();
 	}
 }

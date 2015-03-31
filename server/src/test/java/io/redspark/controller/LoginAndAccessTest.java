@@ -37,4 +37,9 @@ public class LoginAndAccessTest extends ApplicationTest {
 
 		assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
 	}
+	
+	@Test
+	public void testUnauthorized() {
+		get("/me").expectedStatus(HttpStatus.UNAUTHORIZED).getResponse();
+	}
 }
