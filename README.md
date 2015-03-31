@@ -3,12 +3,15 @@ Projeto Modelo redspark
 O projeto modelo tem a ideal de mostrar diversas práticas para ajudar o desenvolvedor na tomada de decisão.
 Esse projeto também servirá como base para os demais projetos da redspark.
 
-[![Build status](https://circleci.com/gh/dclick/modelo-java/tree/master.png?circle-token=7622aeaf3787feb02939549a5622cca378b03163)](https://circleci.com/gh/dclick/modelo-java)
+[![Build status](https://circleci.com/gh/dclick/modelo-java/tree/master.png?style=shield&circle-token=7622aeaf3787feb02939549a5622cca378b03163)](https://circleci.com/gh/dclick/modelo-java)
+
+[![Coverage Status](https://coveralls.io/repos/dclick/modelo-java/badge.svg?branch=master)](https://coveralls.io/r/dclick/modelo-java?branch=master)
 
 ## Note for the Developers
 We use Github issues as reference for the project development. So every single commit must reference a GITHUB ISSUE.
 To make sure you don't forget to reference any issue, run the command below so git will warn you if you are trying to commit anything without a issue reference.
 ```curl -o .git/hooks/prepare-commit-msg https://s3.amazonaws.com/holmes-provision/prepare-commit-msg | chmod +x .git/hooks/prepare-commit-msg```
+
 
 ## Required
 

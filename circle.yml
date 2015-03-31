@@ -11,7 +11,7 @@ dependencies:
 test:
   override:
     # build
-    - mvn clean install -f server/pom.xml
+    - mvn clean install -f server/pom.xml jacoco:report coveralls:report -DrepoToken=9Ro0hy5Nb04PsxRHGox4qFBEkp3X1flcv
 
     # publish do core
     - cp server/target/modelo.jar $CIRCLE_ARTIFACTS/modelo.jar
