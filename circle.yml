@@ -12,7 +12,7 @@ dependencies:
 general:
   artifacts:
     # publish do core
-    - "server/target/modelo.jar"
+    - "server/target/modelo.war"
 
 test:
   override:
