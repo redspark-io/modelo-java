@@ -17,7 +17,7 @@ general:
 test:
   override:
     # build
-    - mvn clean install -f server/pom.xml jacoco:report coveralls:report -DrepoToken=xD2BhriS5jtLjhNaTYOzey494ufU5GyuE
+    - mvn install -f server/pom.xml jacoco:report coveralls:report
 
   post:
     # testes report
