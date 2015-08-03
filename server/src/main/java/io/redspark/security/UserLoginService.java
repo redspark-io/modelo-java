@@ -4,33 +4,32 @@ import io.redspark.domain.User;
 import io.redspark.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DatabaseAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
-
+public class UserLoginService implements UserDetailsService {
+	
 	@Autowired
 	private UserRepository userRepository;
 
 	@Override
-	protected void additionalAuthenticationChecks(UserDetails userDetails,
-	    UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
-	}
-
-	@Override
-	protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication)
-	    throws AuthenticationException {
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
 		User u = userRepository.findByLogin(username);
 		if (u == null) {
 			throw new UsernameNotFoundException(username);
 		}
 
+		DefaultUser user = buildPrincipal(u);
+
+		return user;
+	}
+
+	public DefaultUser buildPrincipal(User u) {
 		DefaultUser user = new DefaultUser();
 		user.setId(u.getId());
 		user.setName(u.getName());
@@ -45,7 +44,6 @@ public class DatabaseAuthenticationProvider extends AbstractUserDetailsAuthentic
 		} else {
 			user.setAuthorities(AuthorityUtils.createAuthorityList("ROLE_USER"));
 		}
-
 		return user;
 	}
 

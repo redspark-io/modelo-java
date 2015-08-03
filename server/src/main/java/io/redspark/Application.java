@@ -2,10 +2,10 @@ package io.redspark;
 
 import io.redspark.controller.dto.UserDTO;
 import io.redspark.exception.WebException;
-import io.redspark.security.DatabaseAuthenticationProvider;
 import io.redspark.security.DefaultFailureHandler;
 import io.redspark.security.DefaultSuccessHandler;
 import io.redspark.security.DefaultUser;
+import io.redspark.security.UserLoginService;
 
 import java.io.IOException;
 import java.util.List;
@@ -86,11 +86,11 @@ public class Application extends WebMvcConfigurerAdapter {
 	protected static class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 
 		@Autowired
-		private DatabaseAuthenticationProvider databaseAuthenticationProvider;
+		private UserLoginService userLoginService;
 
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.authenticationProvider(databaseAuthenticationProvider);
+			auth.userDetailsService(userLoginService);
 		}
 
 		@Override
