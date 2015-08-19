@@ -30,7 +30,7 @@ public class RequestBuilder {
 	private TestRestTemplate rest = new TestRestTemplate();
 	private String URI;
 	private MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-	private MultiValueMap<String, String> variables = new LinkedMultiValueMap<String, String>();
+	private MultiValueMap<String, Object> variables = new LinkedMultiValueMap<String, Object>();
 	private MultiValueMap<String, String> queryString = new LinkedMultiValueMap<String, String>();
 	private HttpMethod method;
 	private String server;
@@ -46,9 +46,10 @@ public class RequestBuilder {
 
 	public RequestBuilder formParam(String key, Object value) {
 		if (this.json != null) {
-			throw new RuntimeException("Can't use formParam and json body on the same request");
+			throw new RuntimeException(
+					"Can't use formParam and json body on the same request");
 		}
-		this.variables.add(key, value.toString());
+		this.variables.add(key, value);
 		return this;
 	}
 
@@ -66,7 +67,8 @@ public class RequestBuilder {
 
 	public RequestBuilder json(Object json) {
 		if (this.variables.size() > 0) {
-			throw new RuntimeException("Can't use formParam and json body on the same request");
+			throw new RuntimeException(
+					"Can't use formParam and json body on the same request");
 		}
 		this.json = json;
 		return this;
@@ -85,19 +87,24 @@ public class RequestBuilder {
 		} else {
 			if (this.json != null) {
 				try {
-					this.header("Content-Type", "application/json;charset=UTF-8");
-					entity = new HttpEntity<String>(mapper.writeValueAsString(this.json), headers);
+					this.header("Content-Type",
+							"application/json;charset=UTF-8");
+					entity = new HttpEntity<String>(
+							mapper.writeValueAsString(this.json), headers);
 				} catch (JsonProcessingException e) {
 					throw new RuntimeException(e);
 				}
 			} else {
-				entity = new HttpEntity<MultiValueMap<String, String>>(variables, headers);
+				entity = new HttpEntity<MultiValueMap<String, Object>>(
+						variables, headers);
 			}
 		}
 
-		URI link = UriComponentsBuilder.fromHttpUrl(server).path(URI).queryParams(queryString).build().toUri();
+		URI link = UriComponentsBuilder.fromHttpUrl(server).path(URI)
+				.queryParams(queryString).build().toUri();
 
-		ResponseEntity<T> response = rest.exchange(link, method, entity, responseType);
+		ResponseEntity<T> response = rest.exchange(link, method, entity,
+				responseType);
 
 		if (status != null) {
 			assertThat(response.getStatusCode(), equalTo(status));
@@ -112,8 +119,9 @@ public class RequestBuilder {
 			JsonNode node = getJson();
 			JsonNode content = node.get("content");
 			T[] readValue = (T[]) mapper.readValue(content.toString(), class1);
-			return new PageImpl<T>(Arrays.asList(readValue), new PageRequest(node.get("number").asInt(), node.get(
-			    "size").asInt()), node.get("totalElements").asInt());
+			return new PageImpl<T>(Arrays.asList(readValue), new PageRequest(
+					node.get("number").asInt(), node.get("size").asInt()), node
+					.get("totalElements").asInt());
 		} catch (Exception e) {
 			throw new RuntimeException("Can't convert to PAGE");
 		}
@@ -125,5 +133,14 @@ public class RequestBuilder {
 
 	public ResponseEntity<Object> getResponse() {
 		return this.getResponse(Object.class);
+	}
+
+	public void errorMessage(String errorMessage) {
+		try {
+			JsonNode json = this.getJson();
+			assertThat(json.get("message").asText(), equalTo(errorMessage));
+		} catch (IOException e) {
+			throw new RuntimeException("Can't convert response to Json");
+		}
 	}
 }

@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.2.3.RELEASE</version>
+		<version>1.2.5.RELEASE</version>
 	</parent>
 
 	<groupId>io.redspark</groupId>
@@ -21,8 +21,8 @@
 		<sesc.commons.version>2.0.3</sesc.commons.version>
 
 		<!-- UTIL -->
-		<lombok-version>1.16.2</lombok-version>
-		<orika-version>1.4.5</orika-version>
+		<lombok-version>1.16.4</lombok-version>
+		<orika-version>1.4.6</orika-version>
 
 		<start-class>io.redspark.ApplicationServletInitializer</start-class>
 	</properties>
@@ -269,7 +269,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.4.201502262128</version>
+				<version>0.7.5.201505241946</version>
 				<executions>
 					<execution>
 						<id>prepare-agent</id>
@@ -279,6 +279,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 		</plugins>
 	</build>
 
