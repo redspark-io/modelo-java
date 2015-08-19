@@ -3,24 +3,28 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
+	
+	<packaging>war</packaging>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.2.2.RELEASE</version>
+		<version>1.2.5.RELEASE</version>
 	</parent>
 
 	<groupId>io.redspark</groupId>
 	<artifactId>modelo</artifactId>
+	<description>Projeto de modelo para o desenvolvimento de aplicações Java</description>
 
 	<properties>
 		<!-- SESC -->
 		<sesc.commons.version>2.0.3</sesc.commons.version>
 
 		<!-- UTIL -->
-		<lombok-version>1.16.2</lombok-version>
-		<orika-version>1.4.5</orika-version>
+		<lombok-version>1.16.4</lombok-version>
+		<orika-version>1.4.6</orika-version>
 
+		<start-class>io.redspark.ApplicationServletInitializer</start-class>
 	</properties>
 
 	<dependencies>
@@ -29,6 +33,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -44,6 +54,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 
 		<dependency>
@@ -85,19 +100,28 @@
 			<version>${orika-version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- SESC -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-ws</artifactId>
 		</dependency>
+
 		<dependency>
-	        <groupId>org.springframework.ws</groupId>
-	        <artifactId>spring-ws-test</artifactId>
-	    </dependency>
+			<groupId>org.springframework.ws</groupId>
+			<artifactId>spring-ws-test</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>wsdl4j</groupId>
 			<artifactId>wsdl4j</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>br.org.sesc</groupId>
 			<artifactId>sesc-commons-security</artifactId>
@@ -219,6 +243,7 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
@@ -226,6 +251,35 @@
 					<downloadSources>true</downloadSources>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<configuration>
+					<dotGitDirectory>${project.basedir}/../.git</dotGitDirectory>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eluder.coveralls</groupId>
+				<artifactId>coveralls-maven-plugin</artifactId>
+				<version>3.1.0</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.5.201505241946</version>
+				<executions>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 

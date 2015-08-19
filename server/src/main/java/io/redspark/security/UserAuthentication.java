@@ -2,9 +2,9 @@ package io.redspark.security;
 
 public interface UserAuthentication {
 
-    Long getId();
+	Long getId();
 
-    String getLogin();
+	String getLogin();
 
-    String getPassword();
+	String getPassword();
 }

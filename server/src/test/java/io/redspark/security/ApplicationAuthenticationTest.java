@@ -18,26 +18,25 @@ import br.org.sesc.commons.security.SescUser;
 
 public class ApplicationAuthenticationTest extends SescApplicationTest {
 
-    @Autowired
-    private SescApplicationUser sescApplicationUser;
-    
-    @Test
-    public void testAuthenticationSucessfully() {
-	assertThat(sescApplicationUser.size(), greaterThan(0));
-	
-	SescUser appUser = sescApplicationUser.getSescUser(0);
-	
-	String authString = appUser.getLogin() + ":" + appUser.getPassword();
-	byte[] authEncBytes = Base64.getEncoder().encode(authString.getBytes());
-	String authStringEnc = new String(authEncBytes);
-	
-	
-	ResponseEntity<UserDTO> response = get("/me")
-		.header("Authorization", "Basic " + authStringEnc)
-		.status(HttpStatus.OK)
-		.getResponse(UserDTO.class);
-	
-	assertThat(response.getBody().getName(), is(appUser.getLogin()));
-	
-    }
+	@Autowired
+	private SescApplicationUser sescApplicationUser;
+
+	@Test
+	public void testAuthenticationSucessfully() {
+		assertThat(sescApplicationUser.size(), greaterThan(0));
+
+		SescUser appUser = sescApplicationUser.getSescUser(0);
+
+		String authString = appUser.getLogin() + ":" + appUser.getPassword();
+		byte[] authEncBytes = Base64.getEncoder().encode(authString.getBytes());
+		String authStringEnc = new String(authEncBytes);
+
+		ResponseEntity<UserDTO> response = get("/me")
+		    .header("Authorization", "Basic " + authStringEnc)
+		    .expectedStatus(HttpStatus.OK)
+		    .getResponse(UserDTO.class);
+
+		assertThat(response.getBody().getName(), is(appUser.getLogin()));
+
+	}
 }

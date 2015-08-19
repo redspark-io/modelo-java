@@ -12,7 +12,7 @@ core:
   ports:
   - "8080:8080"
   volumes:
-  - server/target/modelo.jar:/opt/modelo.jar
+  - server/target/modelo.war:/opt/modelo.war
   links:
   - mysql
-  command: java -Djsondoc.basePath=http://docker:8080/ -jar /opt/modelo.jar
+  command: java -Djsondoc.basePath=http://docker:8080/ -jar /opt/modelo.war

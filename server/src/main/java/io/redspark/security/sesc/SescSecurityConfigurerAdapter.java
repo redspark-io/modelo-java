@@ -40,163 +40,163 @@ import br.org.sesc.commons.security.webservice.SescAuthentication;
 @Configuration
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class SescSecurityConfigurerAdapter extends
-	GlobalAuthenticationConfigurerAdapter {
+    GlobalAuthenticationConfigurerAdapter {
 
-    @Value("${sesc.authentication.url}")
-    private String authenticationUrl;
+	@Value("${sesc.authentication.url}")
+	private String authenticationUrl;
 
-    @Value("${sesc.authentication.app.codigo}")
-    private Long codigo;
-    
-    @Autowired
-    private SescApplicationUser sescApplicationUser;
+	@Value("${sesc.authentication.app.codigo}")
+	private Long codigo;
 
-    // *****************************************
-    // ************* WEB SERVICES
-    // *****************************************
-    @Bean
-    public WebServiceMessageFactory messageFactory() {
-	return new SaajSoapMessageFactory();
-    }
+	@Autowired
+	private SescApplicationUser sescApplicationUser;
 
-    @Bean
-    public WebServiceTemplate securityWebService() {
-
-	Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-	marshaller.setClassesToBeBound(AuthenticationMessage.class,
-		SescAuthentication.class, AuthenticationResult.class,
-		AuthenticationResponse.class);
-
-	WebServiceTemplate template = new WebServiceTemplate(messageFactory());
-	template.setMarshaller(marshaller);
-	template.setUnmarshaller(marshaller);
-	template.setDefaultUri(authenticationUrl);
-
-	return template;
-    }
-
-    // *****************************************
-    // ************* VALIDATORS
-    // *****************************************
-    @Bean
-    public List<SecurityValidation> sescAuthenticationValidators() {
-	HashSecurityValidation hashSecurityValidation = new HashSecurityValidation();
-	hashSecurityValidation.setCodigo(codigo);
-
-	return Arrays.asList(hashSecurityValidation);
-    }
-
-    // *****************************************
-    // ************* HOOK
-    // *****************************************
-
-    @Bean
-    @SuppressWarnings("rawtypes")
-    public AuthenticationHook hook() {
-	return new SampleAuthenticationHook();
-    }
-
-    // *****************************************
-    // ************* PROVIDERS
-    // *****************************************
-
-    /**
-     * Provider de autenticação do usuário no SESC
-     */
-    @Bean
-    @SuppressWarnings("unchecked")
-    public SescWebServiceAuthenticationProvider sescUserAuthenticationProvider() {
-
-	SescWebServiceAuthenticationProvider authenticationProvider = new SescWebServiceAuthenticationProvider(
-		CustomSescUser.class);
-	authenticationProvider.setValidations(sescAuthenticationValidators());
-	authenticationProvider.setHook(hook());
-
-	return authenticationProvider;
-    }
-
-    /**
-     * Provider de autenticação da aplicação
-     */
-    public DaoAuthenticationProvider applicationAuthenticationProvider() {
-	ArrayList<SescUser> userAuthList = new ArrayList<SescUser>();
-	for (int i = 0; i < this.sescApplicationUser.size(); i++) {
-	    userAuthList.add(this.sescApplicationUser.getSescUser(i));
+	// *****************************************
+	// ************* WEB SERVICES
+	// *****************************************
+	@Bean
+	public WebServiceMessageFactory messageFactory() {
+		return new SaajSoapMessageFactory();
 	}
 
-	SimpleUserDetailService simpleUserDetailService = new SimpleUserDetailService(userAuthList);
-	DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-	authenticationProvider.setUserDetailsService(simpleUserDetailService);
+	@Bean
+	public WebServiceTemplate securityWebService() {
 
-	return authenticationProvider;
+		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+		marshaller.setClassesToBeBound(AuthenticationMessage.class,
+		    SescAuthentication.class, AuthenticationResult.class,
+		    AuthenticationResponse.class);
 
-    }
+		WebServiceTemplate template = new WebServiceTemplate(messageFactory());
+		template.setMarshaller(marshaller);
+		template.setUnmarshaller(marshaller);
+		template.setDefaultUri(authenticationUrl);
 
-    // *****************************************
-    // ************* MANAGER
-    // *****************************************
-
-    @Override
-    public void init(AuthenticationManagerBuilder auth) throws Exception {
-	auth.authenticationProvider(sescUserAuthenticationProvider());
-	auth.authenticationProvider(applicationAuthenticationProvider());
-	super.init(auth);
-    }
-
-    // *****************************************
-    // ************* Security
-    // *****************************************
-
-    @Bean
-    public ApplicationSecurity applicationSecurity() {
-	return new ApplicationSecurity();
-    }
-
-    @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-    protected static class ApplicationSecurity extends
-	    WebSecurityConfigurerAdapter {
-
-	public SescWebServiceAuthenticationSecurityFilter sescWebServiceAuthenticationSecurityFilter()
-		throws Exception {
-	    return new SescWebServiceAuthenticationSecurityFilter(
-		    authenticationManager());
+		return template;
 	}
+
+	// *****************************************
+	// ************* VALIDATORS
+	// *****************************************
+	@Bean
+	public List<SecurityValidation> sescAuthenticationValidators() {
+		HashSecurityValidation hashSecurityValidation = new HashSecurityValidation();
+		hashSecurityValidation.setCodigo(codigo);
+
+		return Arrays.asList(hashSecurityValidation);
+	}
+
+	// *****************************************
+	// ************* HOOK
+	// *****************************************
+
+	@Bean
+	@SuppressWarnings("rawtypes")
+	public AuthenticationHook hook() {
+		return new SampleAuthenticationHook();
+	}
+
+	// *****************************************
+	// ************* PROVIDERS
+	// *****************************************
+
+	/**
+	 * Provider de autenticação do usuário no SESC
+	 */
+	@Bean
+	@SuppressWarnings("unchecked")
+	public SescWebServiceAuthenticationProvider sescUserAuthenticationProvider() {
+
+		SescWebServiceAuthenticationProvider authenticationProvider = new SescWebServiceAuthenticationProvider(
+		    CustomSescUser.class);
+		authenticationProvider.setValidations(sescAuthenticationValidators());
+		authenticationProvider.setHook(hook());
+
+		return authenticationProvider;
+	}
+
+	/**
+	 * Provider de autenticação da aplicação
+	 */
+	public DaoAuthenticationProvider applicationAuthenticationProvider() {
+		ArrayList<SescUser> userAuthList = new ArrayList<SescUser>();
+		for (int i = 0; i < this.sescApplicationUser.size(); i++) {
+			userAuthList.add(this.sescApplicationUser.getSescUser(i));
+		}
+
+		SimpleUserDetailService simpleUserDetailService = new SimpleUserDetailService(userAuthList);
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(simpleUserDetailService);
+
+		return authenticationProvider;
+
+	}
+
+	// *****************************************
+	// ************* MANAGER
+	// *****************************************
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-	    http.authorizeRequests().antMatchers("/public").permitAll()
-		    .anyRequest().fullyAuthenticated();
-	    this.configureCsrf(http);
-	    this.configureSession(http);
-	    this.configureEntryPoint(http);
-	    this.configureAuthentication(http);
-	    this.configureFilters(http);
+	public void init(AuthenticationManagerBuilder auth) throws Exception {
+		auth.authenticationProvider(sescUserAuthenticationProvider());
+		auth.authenticationProvider(applicationAuthenticationProvider());
+		super.init(auth);
 	}
 
-	private void configureFilters(HttpSecurity http) throws Exception {
-	    http.addFilterBefore(sescWebServiceAuthenticationSecurityFilter(),
-		    BasicAuthenticationFilter.class);
+	// *****************************************
+	// ************* Security
+	// *****************************************
+
+	@Bean
+	public ApplicationSecurity applicationSecurity() {
+		return new ApplicationSecurity();
 	}
 
-	private void configureAuthentication(HttpSecurity http)
-		throws Exception {
-	    http.httpBasic();
-	}
+	@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+	protected static class ApplicationSecurity extends
+	    WebSecurityConfigurerAdapter {
 
-	private void configureCsrf(HttpSecurity http) throws Exception {
-	    http.csrf().disable();
-	}
+		public SescWebServiceAuthenticationSecurityFilter sescWebServiceAuthenticationSecurityFilter()
+		    throws Exception {
+			return new SescWebServiceAuthenticationSecurityFilter(
+			    authenticationManager());
+		}
 
-	private void configureSession(HttpSecurity http) throws Exception {
-	    http.sessionManagement().sessionCreationPolicy(
-		    SessionCreationPolicy.ALWAYS);
-	}
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http.authorizeRequests().antMatchers("/public").permitAll()
+			    .anyRequest().fullyAuthenticated();
+			this.configureCsrf(http);
+			this.configureSession(http);
+			this.configureEntryPoint(http);
+			this.configureAuthentication(http);
+			this.configureFilters(http);
+		}
 
-	private void configureEntryPoint(HttpSecurity http) throws Exception {
-	    http.exceptionHandling().authenticationEntryPoint(
-		    (request, response, exception) -> response
-			    .sendError(HttpServletResponse.SC_UNAUTHORIZED,
-				    "unauthorized"));
+		private void configureFilters(HttpSecurity http) throws Exception {
+			http.addFilterBefore(sescWebServiceAuthenticationSecurityFilter(),
+			    BasicAuthenticationFilter.class);
+		}
+
+		private void configureAuthentication(HttpSecurity http)
+		    throws Exception {
+			http.httpBasic();
+		}
+
+		private void configureCsrf(HttpSecurity http) throws Exception {
+			http.csrf().disable();
+		}
+
+		private void configureSession(HttpSecurity http) throws Exception {
+			http.sessionManagement().sessionCreationPolicy(
+			    SessionCreationPolicy.ALWAYS);
+		}
+
+		private void configureEntryPoint(HttpSecurity http) throws Exception {
+			http.exceptionHandling().authenticationEntryPoint(
+			    (request, response, exception) -> response
+			        .sendError(HttpServletResponse.SC_UNAUTHORIZED,
+			            "unauthorized"));
+		}
 	}
-    }
 }

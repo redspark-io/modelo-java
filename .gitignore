@@ -15,6 +15,7 @@ techint-checklist-java/**/target/
 *.class
 *.idea
 *.iml
+*.orig
 data
 
 ### Client
