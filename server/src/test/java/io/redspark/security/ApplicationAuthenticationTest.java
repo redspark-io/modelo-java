@@ -7,12 +7,11 @@ import io.redspark.SescApplicationTest;
 import io.redspark.controller.dto.UserDTO;
 import io.redspark.security.sesc.SescApplicationUser;
 
-import java.util.Base64;
-
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.codec.Base64;
 
 import br.org.sesc.commons.security.SescUser;
 
@@ -28,7 +27,7 @@ public class ApplicationAuthenticationTest extends SescApplicationTest {
 		SescUser appUser = sescApplicationUser.getSescUser(0);
 
 		String authString = appUser.getLogin() + ":" + appUser.getPassword();
-		byte[] authEncBytes = Base64.getEncoder().encode(authString.getBytes());
+		byte[] authEncBytes = Base64.encode(authString.getBytes());
 		String authStringEnc = new String(authEncBytes);
 
 		ResponseEntity<UserDTO> response = get("/me")

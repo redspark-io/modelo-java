@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.org.sesc.commons.security.SescUser;
+
 @RestController
 @RequestMapping("/me")
 public class MeController {
@@ -18,8 +20,10 @@ public class MeController {
 	@ResponseBody
 	public UserDTO me() {
 
-		if (UserUtils.isUserLoggedAsHolmesUser()) {
-			return new UserDTO(UserUtils.getUserLogged());
+		SescUser userLogged = UserUtils.getUserLogged();
+
+		if (userLogged != null) {
+			return new UserDTO(userLogged);
 		}
 
 		throw new WebException(HttpStatus.UNAUTHORIZED, "unauthorized");

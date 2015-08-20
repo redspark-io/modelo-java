@@ -10,7 +10,8 @@ import io.redspark.security.Roles;
 import io.redspark.utils.MapperUtils;
 import io.redspark.utils.SQLLikeUtils;
 
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -57,9 +58,14 @@ public class CityController {
 		} else {
 			result = repository.findAll(page);
 		}
+		
+		List<CityDTO> dtos = new ArrayList<CityDTO>();
+		
+		for (City city : result) {
+			dtos.add(convert.toDTO(city));
+		}
 
-		return new PageImpl<CityDTO>(result.getContent().stream().map(c -> convert.toDTO(c)).collect(Collectors.toList()),
-		    page, result.getTotalElements());
+		return new PageImpl<CityDTO>(dtos, page, result.getTotalElements());
 	}
 
 	@Transactional(readOnly = true)

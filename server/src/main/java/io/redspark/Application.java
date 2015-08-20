@@ -16,6 +16,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.validation.BindException;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.filter.HttpPutFormContentFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -45,7 +46,10 @@ public class Application extends WebMvcConfigurerAdapter {
 				if (ex.getClass().isAssignableFrom(BindException.class)) {
 					BindException bindex = (BindException) ex;
 					final StringBuilder message = new StringBuilder();
-					bindex.getAllErrors().forEach(a -> message.append(a.getDefaultMessage()).append("\n"));
+					for(ObjectError a : bindex.getAllErrors())
+					{
+						message.append(a.getDefaultMessage()).append("\n");
+					}
 					try {
 						response.sendError(HttpStatus.BAD_REQUEST.value(), message.toString());
 					} catch (IOException e) {

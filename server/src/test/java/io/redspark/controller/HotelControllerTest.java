@@ -35,13 +35,13 @@ public class HotelControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testList() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
 		Hotel c1 = hotel("Macbook", cidade).build();
 		Hotel c2 = hotel("IPhone", cidade).build();
-		saveall(cidade, c1, c2, bruno);
+		saveall(cidade, c1, c2, test);
 
-		signIn(bruno);
+		signIn(test);
 
 		Page<HotelDTO> page = get("/hotel").expectedStatus(HttpStatus.OK).getPage(HotelDTO.class);
 
@@ -52,16 +52,16 @@ public class HotelControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testeListWithPagination() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
 		Hotel c1 = hotel("A-Hotel", cidade).build();
 		Hotel c2 = hotel("B-Hotel", cidade).build();
 		Hotel c3 = hotel("C-Hotel", cidade).build();
 		Hotel c4 = hotel("D-Hotel", cidade).build();
 		Hotel c5 = hotel("E-Hotel", cidade).build();
-		saveall(cidade, c1, c2, c3, c4, c5, bruno);
+		saveall(cidade, c1, c2, c3, c4, c5, test);
 
-		signIn(bruno);
+		signIn(test);
 
 		Page<HotelDTO> page = get("/hotel").queryParam("page", "0").queryParam("size", "2").expectedStatus(HttpStatus.OK)
 		    .getPage(HotelDTO.class);
@@ -85,13 +85,13 @@ public class HotelControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testSearchByName() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
 		Hotel c1 = hotel("Days Inn", cidade).build();
 		Hotel c2 = hotel("Hilton", cidade).build();
-		saveall(cidade, c1, c2, bruno);
+		saveall(cidade, c1, c2, test);
 
-		signIn(bruno);
+		signIn(test);
 
 		Page<HotelDTO> page = get("/hotel").queryParam("search", "inn").expectedStatus(HttpStatus.OK).getPage(HotelDTO.class);
 
@@ -101,13 +101,13 @@ public class HotelControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testSearchByAddress() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
 		Hotel c1 = hotel("Days Inn", cidade).address("2512 Orange Blossom").build();
 		Hotel c2 = hotel("Hilton", cidade).build();
-		saveall(cidade, c1, c2, bruno);
+		saveall(cidade, c1, c2, test);
 
-		signIn(bruno);
+		signIn(test);
 
 		Page<HotelDTO> page = get("/hotel").queryParam("search", "orange").expectedStatus(HttpStatus.OK).getPage(HotelDTO.class);
 
@@ -117,13 +117,13 @@ public class HotelControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testSearchByZip() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
 		Hotel c1 = hotel("Days Inn", cidade).build();
 		Hotel c2 = hotel("Hilton", cidade).zip("07105").build();
-		saveall(cidade, c1, c2, bruno);
+		saveall(cidade, c1, c2, test);
 
-		signIn(bruno);
+		signIn(test);
 
 		Page<HotelDTO> page = get("/hotel").queryParam("search", "07105").expectedStatus(HttpStatus.OK).getPage(HotelDTO.class);
 
@@ -133,13 +133,13 @@ public class HotelControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testSearchByCityName() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
 		Hotel c1 = hotel("Days Inn", cidade).build();
 		Hotel c2 = hotel("Hilton", cidade).build();
-		saveall(cidade, c1, c2, bruno);
+		saveall(cidade, c1, c2, test);
 
-		signIn(bruno);
+		signIn(test);
 
 		Page<HotelDTO> page = get("/hotel").queryParam("search", "paulo").expectedStatus(HttpStatus.OK).getPage(HotelDTO.class);
 
@@ -149,12 +149,12 @@ public class HotelControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testRead() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
 		Hotel c1 = hotel("Days Inn", cidade).build();
-		saveall(cidade, c1, bruno);
+		saveall(cidade, c1, test);
 
-		signIn(bruno);
+		signIn(test);
 
 		ResponseEntity<HotelDTO> response = get("/hotel/" + c1.getId()).expectedStatus(HttpStatus.OK).getResponse(HotelDTO.class);
 		HotelDTO dto = convert.toDTO(c1);
@@ -164,10 +164,10 @@ public class HotelControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testCreate() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
-		saveall(bruno, cidade);
-		signIn(bruno);
+		saveall(test, cidade);
+		signIn(test);
 
 		Hotel c = hotel("Days Inn", cidade).build();
 
@@ -185,10 +185,10 @@ public class HotelControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testCreateNotPersistyCity() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
-		saveall(bruno, cidade);
-		signIn(bruno);
+		saveall(test, cidade);
+		signIn(test);
 
 		Hotel c = hotel("Days Inn", cidade).build();
 		c.getCity().setName("newname");
@@ -204,10 +204,10 @@ public class HotelControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testCreateInvalidCity() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
-		saveall(bruno, cidade);
-		signIn(bruno);
+		saveall(test, cidade);
+		signIn(test);
 
 		Hotel c = hotel("Days Inn", cidade).build();
 		c.getCity().setId(9999l);
@@ -223,11 +223,11 @@ public class HotelControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testUpdate() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
 		Hotel c = hotel("Days Inn", cidade).build();
-		saveall(cidade, c, bruno);
-		signIn(bruno);
+		saveall(cidade, c, test);
+		signIn(test);
 
 		String name = "newname";
 		c.setName(name);
@@ -248,11 +248,11 @@ public class HotelControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testUpdateWithInvalidCity() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
 		Hotel c = hotel("Days Inn", cidade).build();
-		saveall(cidade, c, bruno);
-		signIn(bruno);
+		saveall(cidade, c, test);
+		signIn(test);
 
 		String name = "newname";
 		c.setName(name);
@@ -270,11 +270,11 @@ public class HotelControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testDelete() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
 		Hotel c1 = hotel("Days Inn", cidade).build();
-		saveall(cidade, c1, bruno);
-		signIn(bruno);
+		saveall(cidade, c1, test);
+		signIn(test);
 
 		assertThat(repository.findAll(), hasSize(1));
 
@@ -288,25 +288,25 @@ public class HotelControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testReadNotFound() {
-		User bruno = admin("bruno").build();
-		saveall(bruno);
-		signIn(bruno);
+		User test = admin("test").build();
+		saveall(test);
+		signIn(test);
 		get("/hotel/1").expectedStatus(HttpStatus.NOT_FOUND).getResponse();
 	}
 
 	@Test
 	public void testDeleteNotFound() {
-		User bruno = admin("bruno").build();
-		saveall(bruno);
-		signIn(bruno);
+		User test = admin("test").build();
+		saveall(test);
+		signIn(test);
 		delete("/hotel/1").expectedStatus(HttpStatus.NOT_FOUND).getResponse();
 	}
 
 	@Test
 	public void testUpdateNotFound() {
-		User bruno = admin("bruno").build();
-		saveall(bruno);
-		signIn(bruno);
+		User test = admin("test").build();
+		saveall(test);
+		signIn(test);
 		put("/hotel/1")
 		    .formParam("name", "name")
 		    .expectedStatus(HttpStatus.NOT_FOUND);

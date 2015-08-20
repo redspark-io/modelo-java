@@ -35,12 +35,12 @@ public class CityControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testList() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City c1 = city("B-city").build();
 		City c2 = city("A-city").build();
-		saveall(c1, c2, bruno);
+		saveall(c1, c2, test);
 
-		signIn(bruno);
+		signIn(test);
 
 		Page<CityDTO> page = get("/city").expectedStatus(HttpStatus.OK).getPage(CityDTO.class);
 
@@ -51,15 +51,15 @@ public class CityControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testeListWithPagination() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City c1 = city("A-city").build();
 		City c2 = city("B-city").build();
 		City c3 = city("C-city").build();
 		City c4 = city("D-city").build();
 		City c5 = city("E-city").build();
-		saveall(c1, c2, c3, c4, c5, bruno);
+		saveall(c1, c2, c3, c4, c5, test);
 
-		signIn(bruno);
+		signIn(test);
 
 		Page<CityDTO> page = get("/city").queryParam("page", "0").queryParam("size", "2").expectedStatus(HttpStatus.OK)
 		    .getPage(CityDTO.class);
@@ -83,12 +83,12 @@ public class CityControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testSearchByName() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City c1 = city("São Paulo").build();
 		City c2 = city("Rio de Janeiro").build();
-		saveall(c1, c2, bruno);
+		saveall(c1, c2, test);
 
-		signIn(bruno);
+		signIn(test);
 
 		Page<CityDTO> page = get("/city").queryParam("search", "paulo").expectedStatus(HttpStatus.OK).getPage(CityDTO.class);
 
@@ -100,12 +100,12 @@ public class CityControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testSearchByState() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City c1 = city("São Paulo").state("SP").build();
 		City c2 = city("Rio de Janeiro").state("RJ").build();
-		saveall(c1, c2, bruno);
+		saveall(c1, c2, test);
 
-		signIn(bruno);
+		signIn(test);
 
 		Page<CityDTO> page = get("/city").queryParam("search", "rj").expectedStatus(HttpStatus.OK).getPage(CityDTO.class);
 
@@ -117,12 +117,12 @@ public class CityControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testSearchByCountry() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City c1 = city("São Paulo").country("Brazil").build();
 		City c2 = city("Rio de Janeiro").country("USA").build();
-		saveall(c1, c2, bruno);
+		saveall(c1, c2, test);
 
-		signIn(bruno);
+		signIn(test);
 
 		Page<CityDTO> page = get("/city").queryParam("search", "azil").expectedStatus(HttpStatus.OK).getPage(CityDTO.class);
 
@@ -134,11 +134,11 @@ public class CityControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testRead() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City c1 = city("A-city").build();
-		saveall(c1, bruno);
+		saveall(c1, test);
 
-		signIn(bruno);
+		signIn(test);
 
 		ResponseEntity<CityDTO> response = get("/city/%s", c1.getId()).expectedStatus(HttpStatus.OK).getResponse(CityDTO.class);
 
@@ -147,9 +147,9 @@ public class CityControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testCreate() throws JsonProcessingException, IOException {
-		User bruno = admin("bruno").build();
-		saveall(bruno);
-		signIn(bruno);
+		User test = admin("test").build();
+		saveall(test);
+		signIn(test);
 
 		String name = "name";
 		String state = "state";
@@ -170,10 +170,10 @@ public class CityControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testUpdate() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City c1 = city("A-city").build();
-		saveall(c1, bruno);
-		signIn(bruno);
+		saveall(c1, test);
+		signIn(test);
 
 		String name = "newname";
 		String state = "newstate";
@@ -200,10 +200,10 @@ public class CityControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testDelete() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City c1 = city("A-city").build();
-		saveall(c1, bruno);
-		signIn(bruno);
+		saveall(c1, test);
+		signIn(test);
 
 		assertThat(cityRepository.findAll(), hasSize(1));
 
@@ -215,11 +215,11 @@ public class CityControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testDeleteWithHotel() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City c1 = city("A-city").build();
 		Hotel hotel = hotel("Days Inn", c1).build();
-		saveall(c1, hotel, bruno);
-		signIn(bruno);
+		saveall(c1, hotel, test);
+		signIn(test);
 
 		assertThat(cityRepository.findAll(), hasSize(1));
 
@@ -228,26 +228,26 @@ public class CityControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testReadNotFound() {
-		User bruno = admin("bruno").build();
-		saveall(bruno);
-		signIn(bruno);
+		User test = admin("test").build();
+		saveall(test);
+		signIn(test);
 		get("/city/1").expectedStatus(HttpStatus.NOT_FOUND).getResponse();
 	}
 
 	@Test
 	public void testDeleteNotFound() {
-		User bruno = admin("bruno").build();
-		saveall(bruno);
-		signIn(bruno);
+		User test = admin("test").build();
+		saveall(test);
+		signIn(test);
 		delete("/city/1").expectedStatus(HttpStatus.NOT_FOUND).getResponse();
 	}
 
 	@Test
 	public void testUpdateNotFound() {
-		User bruno = admin("bruno").build();
+		User test = admin("test").build();
 		City city = city("Sao Paulo").build();
-		saveall(city, bruno);
-		signIn(bruno);
+		saveall(city, test);
+		signIn(test);
 		put("/city/%s", city.getId() + 1)
 		    .json(convert.toDTO(city))
 		    .expectedStatus(HttpStatus.NOT_FOUND)

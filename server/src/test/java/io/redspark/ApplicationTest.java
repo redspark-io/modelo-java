@@ -1,5 +1,7 @@
 package io.redspark;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 import io.redspark.security.UserAuthentication;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = { Application.class })
+@SpringApplicationConfiguration(classes = { ApplicationServletInitializer.class, Application.class })
 @WebAppConfiguration
 @IntegrationTest("server.port=10001")
 public abstract class ApplicationTest {
@@ -49,12 +51,10 @@ public abstract class ApplicationTest {
 	}
 
 	protected void signIn(UserAuthentication user) {
-		ResponseEntity<Object> response = post("/login")
-		    .formParam("username", user.getLogin())
-		    .formParam("password", user.getPassword())
-		    .expectedStatus(HttpStatus.OK)
-		    .getResponse(Object.class);
+		ResponseEntity<Object> response = post("/login").formParam("username", user.getLogin())
+		    .formParam("password", user.getPassword()).getResponse(Object.class);
 
+		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
 		authentication = response.getHeaders().getFirst("Set-Cookie");
 	}
 

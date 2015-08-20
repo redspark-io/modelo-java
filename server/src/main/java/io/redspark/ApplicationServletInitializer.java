@@ -6,7 +6,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.context.annotation.PropertySource;
 
+@PropertySource(value = {"${MODELO_CONFIG_PATH}", "classpath:/configuracoes.properties"}, ignoreResourceNotFound=true)
 @SpringBootApplication
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ApplicationServletInitializer extends SpringBootServletInitializer {

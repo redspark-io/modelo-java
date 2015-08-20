@@ -15,7 +15,7 @@ public class MeControllerTest extends SescApplicationTest {
 
 	@Test
 	public void testMe() {
-		User user = admin("bruno").build();
+		User user = admin("test").build();
 		saveall(user);
 		signIn(user);
 

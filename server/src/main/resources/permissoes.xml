@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuracao xmlns="http://www.sesc.org.br/permissoes-schema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.sesc.org.br/permissoes-schema http://www.sesc.org.br/permissoes-schema">
+
+	<acao id="ROLE_ADMIN" />
+	<acao id="ROLE_USER" />
+	<acao id="ROLE_COMPONENTE.PERMISSAO" />
+
+</configuracao>
