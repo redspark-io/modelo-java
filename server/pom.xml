@@ -19,6 +19,8 @@
 		<!-- UTIL -->
 		<lombok-version>1.16.4</lombok-version>
 		<orika-version>1.4.6</orika-version>
+		<fakesmtp.version>2.0</fakesmtp.version>
+		<!-- <mail.version>1.4.7</mail.version> -->
 
 	</properties>
 
@@ -89,10 +91,29 @@
 			<version>${orika-version}</version>
 		</dependency>
 
+		<!-- <dependency> -->
+		<!-- <groupId>javax.mail</groupId> -->
+		<!-- <artifactId>mail</artifactId> -->
+		<!-- <version>${mail.version}</version> -->
+		<!-- </dependency> -->
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.tntim96</groupId>
+			<artifactId>fakesmtp</artifactId>
+			<version>${fakesmtp.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.mail</groupId>
+					<artifactId>mail</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 	</dependencies>
