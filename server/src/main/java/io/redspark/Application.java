@@ -14,17 +14,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.filter.HttpPutFormContentFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @SpringBootApplication
 @Order(Ordered.LOWEST_PRECEDENCE)
 @EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableScheduling
 public class Application extends WebMvcConfigurerAdapter {
 
 	public static void main(String[] args) throws Exception {
@@ -34,6 +37,15 @@ public class Application extends WebMvcConfigurerAdapter {
 	@Bean
 	public HttpPutFormContentFilter httpPutFormContentFilter() {
 		return new HttpPutFormContentFilter();
+	}
+	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry
+		    .addResourceHandler("**/*.css", "**/*.js", "**/*.map", "*.html", "**/*.png", "**/*.ico", "**/*.jpeg",
+		        "**/*.jpg")
+		    .addResourceLocations("classpath:/static/").setCachePeriod(0);
+		super.addResourceHandlers(registry);
 	}
 
 	@Override
