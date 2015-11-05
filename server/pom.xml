@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.2.5.RELEASE</version>
+		<version>1.2.7.RELEASE</version>
 	</parent>
 
 	<groupId>io.redspark</groupId>
@@ -17,7 +17,7 @@
 	<properties>
 
 		<!-- UTIL -->
-		<lombok-version>1.16.4</lombok-version>
+		<lombok-version>1.16.6</lombok-version>
 		<orika-version>1.4.6</orika-version>
 		<fakesmtp.version>2.0</fakesmtp.version>
 		<!-- <mail.version>1.4.7</mail.version> -->
