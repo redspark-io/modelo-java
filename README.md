@@ -22,10 +22,17 @@ To make sure you don't forget to reference any issue, run the command below so g
 [Link to Installation Section on Mac](https://docs.docker.com/installation/mac/)
 
 Run this once after install docker in your console to add the hostname "http://docker" to you hosts:
+
+### boot2docker
 ```
 IP=$(boot2docker ssh ip addr show eth1 |sed -nEe 's/^[ \t]*inet[ \t]*([0-9.]+)\/.*$/\1/p'); sudo bash -c "echo '' >> /etc/hosts; echo $IP docker >> /etc/hosts"
-````
 
+````
+### docker-machine
+```
+IP=$(docker-machine ip default); sudo bash -c "echo '' >> /etc/hosts; echo $IP docker >> /etc/hosts"
+
+```
 ### Fig
 [Link to Installation Section](http://www.fig.sh/install.html)
 
