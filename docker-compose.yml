@@ -1,0 +1,21 @@
+mysql:
+  image: mysql:5.7
+  ports:
+  - "3306:3306"
+  volumes:
+  - ./mysql.conf:/etc/mysql/conf.d
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: modelo
+    MYSQL_USER: modelo
+    MYSQL_PASSWORD: modelo
+
+core:
+  image: redspark/oracle-jdk:1.8
+  ports:
+  - "8080:8080"
+  volumes:
+  - "./server/target/modelo.jar:/opt/modelo.jar"
+  links:
+  - mysql
+  command: java -jar /opt/modelo.jar

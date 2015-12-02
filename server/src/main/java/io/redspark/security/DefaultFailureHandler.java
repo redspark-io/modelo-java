@@ -13,19 +13,19 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 
 public class DefaultFailureHandler implements AuthenticationFailureHandler {
 
-	@Override
-	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-	    AuthenticationException exception) throws IOException, ServletException {
+  @Override
+  public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+      AuthenticationException exception) throws IOException, ServletException {
 
-		this.updateHeaders(response);
-		response.getWriter().print(exception.getMessage());
-		response.getWriter().flush();
+    this.updateHeaders(response);
+    response.getWriter().print(exception.getMessage());
+    response.getWriter().flush();
 
-	}
+  }
 
-	private void updateHeaders(HttpServletResponse response) {
-		response.setHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-		response.setStatus(HttpStatus.FORBIDDEN.value());
-	}
+  private void updateHeaders(HttpServletResponse response) {
+    response.setHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+    response.setStatus(HttpStatus.FORBIDDEN.value());
+  }
 
 }

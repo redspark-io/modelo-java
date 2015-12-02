@@ -27,21 +27,21 @@ import lombok.ToString;
 @ToString(exclude = "hotels")
 public class City {
 
-	@GeneratedValue
-	@Id
-	@Column(name = "city_id")
-	private Long id;
+  @GeneratedValue
+  @Id
+  @Column(name = "city_id")
+  private Long id;
 
-	@Column(name = "city_name", nullable = false, length = 200)
-	private String name;
+  @Column(name = "city_name", nullable = false, length = 200)
+  private String name;
 
-	@Column(name = "city_state", nullable = false, length = 100)
-	private String state;
+  @Column(name = "city_state", nullable = false, length = 100)
+  private String state;
 
-	@Column(name = "city_country", nullable = false, length = 100)
-	private String country;
+  @Column(name = "city_country", nullable = false, length = 100)
+  private String country;
 
-	@OneToMany(mappedBy = "city")
-	private Set<Hotel> hotels = new HashSet<Hotel>();
+  @OneToMany(mappedBy = "city")
+  private Set<Hotel> hotels = new HashSet<Hotel>();
 
 }

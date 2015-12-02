@@ -18,47 +18,47 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DefaultSuccessHandler implements AuthenticationSuccessHandler, LogoutSuccessHandler {
 
-	private ConvertPrincipal convertPrincipal;
+  private ConvertPrincipal convertPrincipal;
 
-	public DefaultSuccessHandler(ConvertPrincipal convertPrincipal) {
-		super();
-		this.convertPrincipal = convertPrincipal;
-	}
+  public DefaultSuccessHandler(ConvertPrincipal convertPrincipal) {
+    super();
+    this.convertPrincipal = convertPrincipal;
+  }
 
-	@Override
-	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-	    Authentication authentication) throws IOException, ServletException {
-		success(response, authentication);
-	}
+  @Override
+  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+      Authentication authentication) throws IOException, ServletException {
+    success(response, authentication);
+  }
 
-	private void success(HttpServletResponse response, Authentication authentication) throws IOException {
-		JsonFactory jsonFactory = new JsonFactory(new ObjectMapper());
-		StringWriter writer = new StringWriter();
-		JsonGenerator jsonGenerator = jsonFactory.createGenerator(writer);
+  private void success(HttpServletResponse response, Authentication authentication) throws IOException {
+    JsonFactory jsonFactory = new JsonFactory(new ObjectMapper());
+    StringWriter writer = new StringWriter();
+    JsonGenerator jsonGenerator = jsonFactory.createGenerator(writer);
 
-		if (authentication != null) {
-			Object principal = authentication.getPrincipal();
-			jsonGenerator.writeObject(convertPrincipal.convertPrincipal(principal));
+    if (authentication != null) {
+      Object principal = authentication.getPrincipal();
+      jsonGenerator.writeObject(convertPrincipal.convertPrincipal(principal));
 
-			this.updateHeaders(response);
+      this.updateHeaders(response);
 
-			try {
-				response.getWriter().print(writer.toString());
-				response.getWriter().flush();
-			} finally {
-				writer.close();
-			}
-		}
-	}
+      try {
+        response.getWriter().print(writer.toString());
+        response.getWriter().flush();
+      } finally {
+        writer.close();
+      }
+    }
+  }
 
-	protected void updateHeaders(HttpServletResponse response) {
-		response.setHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-	}
+  protected void updateHeaders(HttpServletResponse response) {
+    response.setHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+  }
 
-	@Override
-	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-	    throws IOException, ServletException {
-		success(response, authentication);
-	}
+  @Override
+  public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+      throws IOException, ServletException {
+    success(response, authentication);
+  }
 
 }

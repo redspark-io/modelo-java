@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class CityDTO {
 
-	private Long id;
+  private Long id;
 
-	@NotNull(message = "property name can't be null")
-	private String name;
+  @NotNull(message = "property name can't be null")
+  private String name;
 
-	@NotNull(message = "property state can't be null")
-	private String state;
+  @NotNull(message = "property state can't be null")
+  private String state;
 
-	@NotNull(message = "property country can't be null")
-	private String country;
+  @NotNull(message = "property country can't be null")
+  private String country;
 
 }

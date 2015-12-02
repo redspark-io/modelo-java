@@ -1,15 +1,5 @@
 package io.redspark.controller;
 
-import io.redspark.controller.dto.HotelDTO;
-import io.redspark.domain.City;
-import io.redspark.domain.Hotel;
-import io.redspark.exception.NotFoundException;
-import io.redspark.repository.CityRepository;
-import io.redspark.repository.HotelRepository;
-import io.redspark.security.Roles;
-import io.redspark.utils.MapperUtils;
-import io.redspark.utils.SQLLikeUtils;
-
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -31,97 +21,107 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.redspark.controller.dto.HotelDTO;
+import io.redspark.domain.City;
+import io.redspark.domain.Hotel;
+import io.redspark.exception.NotFoundException;
+import io.redspark.repository.CityRepository;
+import io.redspark.repository.HotelRepository;
+import io.redspark.security.Roles;
+import io.redspark.utils.MapperUtils;
+import io.redspark.utils.SQLLikeUtils;
+
 @RestController
 @RequestMapping("/hotel")
 @Secured(Roles.ROLE_ADMIN)
 public class HotelController {
 
-	private MapperUtils<Hotel, HotelDTO> convert = new MapperUtils<Hotel, HotelDTO>(Hotel.class, HotelDTO.class);
+  private MapperUtils<Hotel, HotelDTO> convert = new MapperUtils<Hotel, HotelDTO>(Hotel.class, HotelDTO.class);
 
-	@Autowired
-	private HotelRepository repository;
+  @Autowired
+  private HotelRepository repository;
 
-	@Autowired
-	private CityRepository cityRepository;
+  @Autowired
+  private CityRepository cityRepository;
 
-	@Transactional(readOnly = true)
-	@RequestMapping(method = RequestMethod.GET)
-	public Page<HotelDTO> list(@PageableDefault(page = 0, size = 50, sort = "name") Pageable page,
-	    @RequestParam(value = "search", required = false) String search) {
+  @Transactional(readOnly = true)
+  @RequestMapping(method = RequestMethod.GET)
+  public Page<HotelDTO> list(@PageableDefault(page = 0, size = 50, sort = "name") Pageable page,
+      @RequestParam(value = "search", required = false) String search) {
 
-		Page<Hotel> result;
-		if (StringUtils.hasText(search)) {
-			result = repository.search(SQLLikeUtils.like(search), page);
-		} else {
-			result = repository.findAll(page);
-		}
+    Page<Hotel> result;
+    if (StringUtils.hasText(search)) {
+      result = repository.search(SQLLikeUtils.like(search), page);
+    } else {
+      result = repository.findAll(page);
+    }
 
-		return new PageImpl<HotelDTO>(result.getContent().stream().map(c -> convert.toDTO(c)).collect(Collectors.toList()),
-		    page, result.getTotalElements());
-	}
+    return new PageImpl<HotelDTO>(result.getContent().stream().map(c -> convert.toDTO(c)).collect(Collectors.toList()),
+        page, result.getTotalElements());
+  }
 
-	@Transactional(readOnly = true)
-	@RequestMapping(value = "/{ref}", method = RequestMethod.GET)
-	public HotelDTO read(@PathVariable("ref") Long ref) {
+  @Transactional(readOnly = true)
+  @RequestMapping(value = "/{ref}", method = RequestMethod.GET)
+  public HotelDTO read(@PathVariable("ref") Long ref) {
 
-		Hotel entity = repository.findByIdWithCity(ref);
+    Hotel entity = repository.findByIdWithCity(ref);
 
-		if (entity == null) {
-			throw new NotFoundException(Hotel.class);
-		}
+    if (entity == null) {
+      throw new NotFoundException(Hotel.class);
+    }
 
-		return convert.toDTO(entity);
-	}
+    return convert.toDTO(entity);
+  }
 
-	@Transactional
-	@RequestMapping(method = RequestMethod.POST)
-	@ResponseStatus(value = HttpStatus.CREATED)
-	public HotelDTO create(@Valid @RequestBody HotelDTO dto) {
+  @Transactional
+  @RequestMapping(method = RequestMethod.POST)
+  @ResponseStatus(value = HttpStatus.CREATED)
+  public HotelDTO create(@Valid @RequestBody HotelDTO dto) {
 
-		City city = cityRepository.findOne(dto.getCity().getId());
-		if (city == null) {
-			throw new NotFoundException(City.class);
-		}
+    City city = cityRepository.findOne(dto.getCity().getId());
+    if (city == null) {
+      throw new NotFoundException(City.class);
+    }
 
-		Hotel entity = convert.toEntity(dto);
-		entity.setCity(city);
+    Hotel entity = convert.toEntity(dto);
+    entity.setCity(city);
 
-		entity = repository.save(entity);
-		return convert.toDTO(entity);
-	}
+    entity = repository.save(entity);
+    return convert.toDTO(entity);
+  }
 
-	@Transactional
-	@RequestMapping(value = "/{ref}", method = RequestMethod.PUT)
-	public HotelDTO update(@PathVariable("ref") Long ref, @Valid @RequestBody HotelDTO dto) {
+  @Transactional
+  @RequestMapping(value = "/{ref}", method = RequestMethod.PUT)
+  public HotelDTO update(@PathVariable("ref") Long ref, @Valid @RequestBody HotelDTO dto) {
 
-		City city = cityRepository.findOne(dto.getCity().getId());
-		if (city == null) {
-			throw new NotFoundException(City.class);
-		}
+    City city = cityRepository.findOne(dto.getCity().getId());
+    if (city == null) {
+      throw new NotFoundException(City.class);
+    }
 
-		Hotel entity = repository.findOne(ref);
-		if (entity == null) {
-			throw new NotFoundException(Hotel.class);
-		}
+    Hotel entity = repository.findOne(ref);
+    if (entity == null) {
+      throw new NotFoundException(Hotel.class);
+    }
 
-		convert.updateEntity(entity, dto, "id", "city");
-		entity.setCity(city);
+    convert.updateEntity(entity, dto, "id", "city");
+    entity.setCity(city);
 
-		entity = repository.save(entity);
-		return convert.toDTO(entity);
-	}
+    entity = repository.save(entity);
+    return convert.toDTO(entity);
+  }
 
-	@Transactional
-	@RequestMapping(value = "/{ref}", method = RequestMethod.DELETE)
-	public HotelDTO delete(@PathVariable("ref") Long ref) {
+  @Transactional
+  @RequestMapping(value = "/{ref}", method = RequestMethod.DELETE)
+  public HotelDTO delete(@PathVariable("ref") Long ref) {
 
-		Hotel entity = repository.findOne(ref);
-		if (entity == null) {
-			throw new NotFoundException(Hotel.class);
-		}
+    Hotel entity = repository.findOne(ref);
+    if (entity == null) {
+      throw new NotFoundException(Hotel.class);
+    }
 
-		this.repository.delete(entity);
+    this.repository.delete(entity);
 
-		return convert.toDTO(entity);
-	}
+    return convert.toDTO(entity);
+  }
 }

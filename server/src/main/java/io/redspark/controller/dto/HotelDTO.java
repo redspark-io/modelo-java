@@ -13,17 +13,17 @@ import lombok.ToString;
 @ToString(exclude = "city")
 public class HotelDTO {
 
-	private Long id;
+  private Long id;
 
-	@NotNull(message = "property name can't be null")
-	private String name;
+  @NotNull(message = "property name can't be null")
+  private String name;
 
-	@NotNull(message = "property address can't be null")
-	private String address;
+  @NotNull(message = "property address can't be null")
+  private String address;
 
-	@NotNull(message = "property zip can't be null")
-	private String zip;
+  @NotNull(message = "property zip can't be null")
+  private String zip;
 
-	private CityDTO city;
+  private CityDTO city;
 
 }
