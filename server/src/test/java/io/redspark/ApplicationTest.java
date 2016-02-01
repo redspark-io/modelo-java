@@ -24,102 +24,102 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = { ApplicationServletInitializer.class, Application.class })
+@SpringApplicationConfiguration(classes = { Application.class })
 @WebAppConfiguration
 @IntegrationTest("server.port=10001")
 public abstract class ApplicationTest {
 
-	private static List<Object> toPersist = new ArrayList<Object>();
+    private static List<Object> toPersist = new ArrayList<Object>();
 
-	private final String server;
-	protected String authentication;
+    private final String server;
+    protected String authentication;
 
-	@Autowired
-	private JpaTransactionManager manager;
+    @Autowired
+    private JpaTransactionManager manager;
 
-	@Autowired
-	private JdbcTemplate template;
+    @Autowired
+    private JdbcTemplate template;
 
-	public ApplicationTest() {
-		this.server = "http://localhost:10001";
+    public ApplicationTest() {
+	server = "http://localhost:10001";
+    }
+
+    @Before
+    public void setUp() {
+	toPersist.clear();
+	template.execute("TRUNCATE SCHEMA public AND COMMIT");
+    }
+
+    protected void signIn(final UserAuthentication user) {
+	final ResponseEntity<Object> response = post("/login").formParam("username", user.getLogin())
+		.formParam("password", user.getPassword()).getResponse(Object.class);
+
+	assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+	authentication = response.getHeaders().getFirst("Set-Cookie");
+    }
+
+    protected void add(final Object... objects) {
+	for (final Object object : objects) {
+	    toPersist.add(object);
 	}
+    }
 
-	@Before
-	public void setUp() {
-		toPersist.clear();
-		template.execute("TRUNCATE SCHEMA public AND COMMIT");
+    protected void saveall(final Object... objects) {
+	add(objects);
+	this.saveall();
+    }
+
+    protected void saveall() {
+	final EntityManager em = manager.getEntityManagerFactory().createEntityManager();
+	em.getTransaction().begin();
+	for (final Object object : toPersist) {
+	    em.persist(object);
 	}
+	em.flush();
+	em.clear();
+	em.close();
+	toPersist.clear();
+	em.getTransaction().commit();
+    }
 
-	protected void signIn(UserAuthentication user) {
-		ResponseEntity<Object> response = post("/login").formParam("username", user.getLogin())
-		    .formParam("password", user.getPassword()).getResponse(Object.class);
+    protected void signOut(final UserAuthentication user) {
+	authentication = null;
+    }
 
-		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-		authentication = response.getHeaders().getFirst("Set-Cookie");
-	}
+    protected RequestBuilder get(final String uri) {
+	return new RequestBuilder(server, uri, HttpMethod.GET).header("Cookie", authentication);
+    }
 
-	protected void add(Object... objects) {
-		for (Object object : objects) {
-			toPersist.add(object);
-		}
-	}
+    protected RequestBuilder put(final String uri) {
+	return new RequestBuilder(server, uri, HttpMethod.PUT).header("Cookie", authentication);
+    }
 
-	protected void saveall(Object... objects) {
-		this.add(objects);
-		this.saveall();
-	}
+    protected RequestBuilder post(final String uri) {
+	return new RequestBuilder(server, uri, HttpMethod.POST).header("Cookie", authentication);
+    }
 
-	protected void saveall() {
-		EntityManager em = manager.getEntityManagerFactory().createEntityManager();
-		em.getTransaction().begin();
-		for (Object object : toPersist) {
-			em.persist(object);
-		}
-		em.flush();
-		em.clear();
-		em.close();
-		toPersist.clear();
-		em.getTransaction().commit();
-	}
+    protected RequestBuilder delete(final String uri) {
+	return new RequestBuilder(server, uri, HttpMethod.DELETE).header("Cookie", authentication);
+    }
 
-	protected void signOut(UserAuthentication user) {
-		this.authentication = null;
-	}
+    // With path variables
+    protected RequestBuilder get(final String uri, final Object... path) {
+	return get(String.format(uri, path));
+    }
 
-	protected RequestBuilder get(String uri) {
-		return new RequestBuilder(server, uri, HttpMethod.GET).header("Cookie", authentication);
-	}
+    protected RequestBuilder post(final String uri, final Object... path) {
+	return post(String.format(uri, path));
+    }
 
-	protected RequestBuilder put(String uri) {
-		return new RequestBuilder(server, uri, HttpMethod.PUT).header("Cookie", authentication);
-	}
+    protected RequestBuilder put(final String uri, final Object... path) {
+	return put(String.format(uri, path));
+    }
 
-	protected RequestBuilder post(String uri) {
-		return new RequestBuilder(server, uri, HttpMethod.POST).header("Cookie", authentication);
-	}
+    protected RequestBuilder delete(final String uri, final Object... path) {
+	return delete(String.format(uri, path));
+    }
 
-	protected RequestBuilder delete(String uri) {
-		return new RequestBuilder(server, uri, HttpMethod.DELETE).header("Cookie", authentication);
-	}
-
-	// With path variables
-	protected RequestBuilder get(String uri, Object... path) {
-		return get(String.format(uri, path));
-	}
-
-	protected RequestBuilder post(String uri, Object... path) {
-		return post(String.format(uri, path));
-	}
-
-	protected RequestBuilder put(String uri, Object... path) {
-		return put(String.format(uri, path));
-	}
-
-	protected RequestBuilder delete(String uri, Object... path) {
-		return delete(String.format(uri, path));
-	}
-
-	protected TestRestTemplate template() {
-		return new TestRestTemplate();
-	}
+    protected TestRestTemplate template() {
+	return new TestRestTemplate();
+    }
 }

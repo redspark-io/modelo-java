@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -24,10 +26,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+@PropertySources({
+    @PropertySource("application.properties"),
+    @PropertySource(value = "${MODELO_CONFIG_PATH}", ignoreResourceNotFound = true) })
 @SpringBootApplication
-@Order(Ordered.LOWEST_PRECEDENCE)
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @EnableScheduling
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class Application extends WebMvcConfigurerAdapter {
 
 	public static void main(String[] args) throws Exception {
