@@ -1,5 +1,7 @@
 package io.redspark.controller;
 
+import static io.redspark.controller.ControllerConstants.CITY;
+
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -33,7 +35,7 @@ import io.redspark.utils.MapperUtils;
 import io.redspark.utils.SQLLikeUtils;
 
 @RestController
-@RequestMapping("/city")
+@RequestMapping(CITY)
 @Secured(Roles.ROLE_ADMIN)
 public class CityController {
 

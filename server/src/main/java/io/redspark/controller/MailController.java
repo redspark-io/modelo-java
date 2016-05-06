@@ -1,5 +1,7 @@
 package io.redspark.controller;
 
+import static io.redspark.controller.ControllerConstants.MAIL;
+
 import javax.mail.MessagingException;
 
 import org.slf4j.Logger;
@@ -16,7 +18,7 @@ import io.redspark.security.Roles;
 import io.redspark.service.SmtpMailSender;
 
 @RestController
-@RequestMapping("/send-mail")
+@RequestMapping(MAIL)
 @Secured(Roles.ROLE_ADMIN)
 public class MailController {
 
