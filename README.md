@@ -5,7 +5,7 @@ Esse projeto também servirá como base para os demais projetos da redspark.
 
 [![Circle CI](https://circleci.com/gh/redspark-io/modelo-java.svg?style=shield)](https://circleci.com/gh/redspark-io/modelo-java)
 
-[![Coverage Status](https://coveralls.io/repos/dclick/modelo-java/badge.svg?branch=master&service=github)](https://coveralls.io/github/dclick/modelo-java?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/redspark-io/modelo-java/badge.svg?branch=master)](https://coveralls.io/github/redspark-io/modelo-java?branch=master)
 
 ## Note for the Developers
 We use Github issues as reference for the project development. So every single commit must reference a GITHUB ISSUE.
