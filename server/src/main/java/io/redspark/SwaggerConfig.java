@@ -1,53 +1,52 @@
 package io.redspark;
 
-import javax.servlet.ServletContext;
+import static com.google.common.base.Predicates.or;
+import static io.redspark.AppProfile.DEV;
+import static io.redspark.AppProfile.PRODUCAO;
+import static springfox.documentation.builders.PathSelectors.regex;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.context.ServletContextAware;
+import org.springframework.context.annotation.Profile;
 
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
-import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider;
-import com.mangofactory.swagger.plugin.EnableSwagger;
-import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
-import com.wordnik.swagger.model.ApiInfo;
+import com.google.common.base.Predicate;
+
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
-@EnableSwagger
-public class SwaggerConfig implements ServletContextAware {
-
-    private SpringSwaggerConfig springSwaggerConfig;
-
-    @Autowired
-    public void setSpringSwaggerConfig(final SpringSwaggerConfig springSwaggerConfig) {
-	this.springSwaggerConfig = springSwaggerConfig;
-    }
-
-    @Value("${swagger.resource_prefix}")
-    private String prefix;
-
-    private ServletContext servletContext;
+@Profile({DEV, PRODUCAO})
+public class SwaggerConfig {
 
     @Bean
-    public SwaggerSpringMvcPlugin customImplementation() {
-
-	final RelativeSwaggerPathProvider relativeSwaggerPathProvider = new RelativeSwaggerPathProvider(servletContext);
-	relativeSwaggerPathProvider.setApiResourcePrefix(prefix);
-	return new SwaggerSpringMvcPlugin(springSwaggerConfig).pathProvider(relativeSwaggerPathProvider)
-	.apiInfo(apiInfo()).includePatterns("/me.*", "/usuario.*", "/unidades.*").apiVersion("1.0.5");
+    public Docket api(){
+        return new Docket(DocumentationType.SWAGGER_2)
+            .select()
+	            .apis(RequestHandlerSelectors.any())
+	            .paths(paths())    
+	            .build()
+            .pathMapping("/")
+            .apiInfo(apiInfo());
     }
-
-    @Override
-    public void setServletContext(final ServletContext servletContext) {
-	this.servletContext = servletContext;
-    }
-
+    
     private ApiInfo apiInfo() {
-	final ApiInfo apiInfo = new ApiInfo("SESC-Seta API", "API for SESC-Seta", "SESC-Seta API terms of service",
-		null, "SESC-Seta API Licence Type", "SESC-Seta API License URL");
-	return apiInfo;
+        ApiInfo apiInfo = new ApiInfo(
+            "SESC REST API",
+            "Modelo do SESC.",
+            "1.0.0",
+            "redspark.io",
+            "API License",
+            "API License URL",
+            "/"
+        );
+        
+        return apiInfo;
     }
-
+    
+	@SuppressWarnings("unchecked")
+	private Predicate<String> paths() {
+		return or(regex("/*.*"));
+	}
 }

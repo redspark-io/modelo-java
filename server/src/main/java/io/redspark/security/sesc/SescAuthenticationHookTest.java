@@ -60,9 +60,6 @@ public class SescAuthenticationHookTest implements AuthenticationHook<SescUser> 
 			user.addAuthority(new SimpleGrantedAuthority(Roles.ROLE_USER));
 		}
 		
-		
 		System.out.println("HOOK TEST <<<<<<<<<<<<<<<<<<<<<<<<<<<");
-		
 	}
-
 }

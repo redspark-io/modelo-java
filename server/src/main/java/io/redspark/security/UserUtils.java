@@ -1,6 +1,6 @@
 package io.redspark.security;
 
-import org.springframework.security.core.context.SecurityContextHolder;
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 import br.org.sesc.commons.security.SescUser;
 
@@ -11,16 +11,18 @@ public class UserUtils {
 	}
 
 	private static Object getLoggedAsPrincipal() {
-		if (SecurityContextHolder.getContext() == null) {
+		if (getContext() == null) {
 			return null;
 		}
-		if (SecurityContextHolder.getContext().getAuthentication() == null) {
+		
+		if (getContext().getAuthentication() == null) {
 			return null;
 		}
-		return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		return getContext().getAuthentication().getPrincipal();
 	}
 
-	public static boolean isUserLoggedAsHolmesUser() {
+	public static boolean isUserLoggedAsSescUser() {
 		return getLoggedAsPrincipal() != null && SescUser.class.isAssignableFrom(getLoggedAsPrincipal().getClass());
 	}
 

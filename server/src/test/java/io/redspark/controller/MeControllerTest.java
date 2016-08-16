@@ -16,7 +16,7 @@ public class MeControllerTest extends SescApplicationTest {
 	@Test
 	public void testMe() {
 		User user = admin("test").build();
-		saveall(user);
+		saveAll(user);
 		signIn(user);
 
 		ResponseEntity<UserDTO> response = get("/me")

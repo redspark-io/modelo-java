@@ -39,7 +39,7 @@ public class HotelControllerTest extends SescApplicationTest {
 		City cidade = city("São Paulo").build();
 		Hotel c1 = hotel("Macbook", cidade).build();
 		Hotel c2 = hotel("IPhone", cidade).build();
-		saveall(cidade, c1, c2, test);
+		saveAll(cidade, c1, c2, test);
 
 		signIn(test);
 
@@ -59,7 +59,7 @@ public class HotelControllerTest extends SescApplicationTest {
 		Hotel c3 = hotel("C-Hotel", cidade).build();
 		Hotel c4 = hotel("D-Hotel", cidade).build();
 		Hotel c5 = hotel("E-Hotel", cidade).build();
-		saveall(cidade, c1, c2, c3, c4, c5, test);
+		saveAll(cidade, c1, c2, c3, c4, c5, test);
 
 		signIn(test);
 
@@ -89,7 +89,7 @@ public class HotelControllerTest extends SescApplicationTest {
 		City cidade = city("São Paulo").build();
 		Hotel c1 = hotel("Days Inn", cidade).build();
 		Hotel c2 = hotel("Hilton", cidade).build();
-		saveall(cidade, c1, c2, test);
+		saveAll(cidade, c1, c2, test);
 
 		signIn(test);
 
@@ -105,7 +105,7 @@ public class HotelControllerTest extends SescApplicationTest {
 		City cidade = city("São Paulo").build();
 		Hotel c1 = hotel("Days Inn", cidade).address("2512 Orange Blossom").build();
 		Hotel c2 = hotel("Hilton", cidade).build();
-		saveall(cidade, c1, c2, test);
+		saveAll(cidade, c1, c2, test);
 
 		signIn(test);
 
@@ -121,7 +121,7 @@ public class HotelControllerTest extends SescApplicationTest {
 		City cidade = city("São Paulo").build();
 		Hotel c1 = hotel("Days Inn", cidade).build();
 		Hotel c2 = hotel("Hilton", cidade).zip("07105").build();
-		saveall(cidade, c1, c2, test);
+		saveAll(cidade, c1, c2, test);
 
 		signIn(test);
 
@@ -137,7 +137,7 @@ public class HotelControllerTest extends SescApplicationTest {
 		City cidade = city("São Paulo").build();
 		Hotel c1 = hotel("Days Inn", cidade).build();
 		Hotel c2 = hotel("Hilton", cidade).build();
-		saveall(cidade, c1, c2, test);
+		saveAll(cidade, c1, c2, test);
 
 		signIn(test);
 
@@ -152,7 +152,7 @@ public class HotelControllerTest extends SescApplicationTest {
 		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
 		Hotel c1 = hotel("Days Inn", cidade).build();
-		saveall(cidade, c1, test);
+		saveAll(cidade, c1, test);
 
 		signIn(test);
 
@@ -166,7 +166,7 @@ public class HotelControllerTest extends SescApplicationTest {
 	public void testCreate() {
 		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
-		saveall(test, cidade);
+		saveAll(test, cidade);
 		signIn(test);
 
 		Hotel c = hotel("Days Inn", cidade).build();
@@ -187,7 +187,7 @@ public class HotelControllerTest extends SescApplicationTest {
 	public void testCreateNotPersistyCity() {
 		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
-		saveall(test, cidade);
+		saveAll(test, cidade);
 		signIn(test);
 
 		Hotel c = hotel("Days Inn", cidade).build();
@@ -206,7 +206,7 @@ public class HotelControllerTest extends SescApplicationTest {
 	public void testCreateInvalidCity() {
 		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
-		saveall(test, cidade);
+		saveAll(test, cidade);
 		signIn(test);
 
 		Hotel c = hotel("Days Inn", cidade).build();
@@ -226,7 +226,7 @@ public class HotelControllerTest extends SescApplicationTest {
 		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
 		Hotel c = hotel("Days Inn", cidade).build();
-		saveall(cidade, c, test);
+		saveAll(cidade, c, test);
 		signIn(test);
 
 		String name = "newname";
@@ -251,7 +251,7 @@ public class HotelControllerTest extends SescApplicationTest {
 		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
 		Hotel c = hotel("Days Inn", cidade).build();
-		saveall(cidade, c, test);
+		saveAll(cidade, c, test);
 		signIn(test);
 
 		String name = "newname";
@@ -273,7 +273,7 @@ public class HotelControllerTest extends SescApplicationTest {
 		User test = admin("test").build();
 		City cidade = city("São Paulo").build();
 		Hotel c1 = hotel("Days Inn", cidade).build();
-		saveall(cidade, c1, test);
+		saveAll(cidade, c1, test);
 		signIn(test);
 
 		assertThat(repository.findAll(), hasSize(1));
@@ -289,7 +289,7 @@ public class HotelControllerTest extends SescApplicationTest {
 	@Test
 	public void testReadNotFound() {
 		User test = admin("test").build();
-		saveall(test);
+		saveAll(test);
 		signIn(test);
 		get("/hotel/1").expectedStatus(HttpStatus.NOT_FOUND).getResponse();
 	}
@@ -297,7 +297,7 @@ public class HotelControllerTest extends SescApplicationTest {
 	@Test
 	public void testDeleteNotFound() {
 		User test = admin("test").build();
-		saveall(test);
+		saveAll(test);
 		signIn(test);
 		delete("/hotel/1").expectedStatus(HttpStatus.NOT_FOUND).getResponse();
 	}
@@ -305,7 +305,7 @@ public class HotelControllerTest extends SescApplicationTest {
 	@Test
 	public void testUpdateNotFound() {
 		User test = admin("test").build();
-		saveall(test);
+		saveAll(test);
 		signIn(test);
 		put("/hotel/1")
 		    .formParam("name", "name")

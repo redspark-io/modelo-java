@@ -1,7 +1,5 @@
 package io.redspark;
 
-import io.redspark.exception.WebException;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -26,11 +24,16 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-@PropertySources({
-    @PropertySource("application.properties"),
-    @PropertySource(value = "${MODELO_CONFIG_PATH}", ignoreResourceNotFound = true) })
+import io.redspark.exception.WebException;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+@PropertySources({ 
+	@PropertySource("application.properties"), 
+	@PropertySource(value = "${MODELO_CONFIG_PATH}", ignoreResourceNotFound = true) 
+})
 @SpringBootApplication
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@EnableSwagger2
 @EnableScheduling
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class Application extends WebMvcConfigurerAdapter {
@@ -44,12 +47,28 @@ public class Application extends WebMvcConfigurerAdapter {
 		return new HttpPutFormContentFilter();
 	}
 	
+	@Bean
+	public SwaggerConfig swagger() {
+		return new SwaggerConfig();
+	}
+	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry
-		    .addResourceHandler("**/*.css", "**/*.js", "**/*.map", "*.html", "**/*.png", "**/*.ico", "**/*.jpeg",
-		        "**/*.jpg")
-		    .addResourceLocations("classpath:/static/").setCachePeriod(0);
+			.addResourceHandler("**/*.css", "**/*.js", "**/*.map", "*.html", "**/*.png", "**/*.ico", "**/*.jpeg", "**/*.jpg")
+			.addResourceLocations("classpath:/static/")
+			.setCachePeriod(0);
+		
+		registry
+			.addResourceHandler("swagger-ui.html")
+			.addResourceLocations("classpath:/META-INF/resources/")
+			.setCachePeriod(0);
+		
+		registry
+			.addResourceHandler("/webjars/**")
+			.addResourceLocations("classpath:/META-INF/resources/webjars/")
+			.setCachePeriod(0);
+		
 		super.addResourceHandlers(registry);
 	}
 
@@ -58,34 +77,43 @@ public class Application extends WebMvcConfigurerAdapter {
 		exceptionResolvers.add(new HandlerExceptionResolver() {
 
 			@Override
-			public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
-			    Exception ex) {
+			public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+				
+				ModelAndView vm = null;
+				
 				if (ex.getClass().isAssignableFrom(BindException.class)) {
 					BindException bindex = (BindException) ex;
+					
 					final StringBuilder message = new StringBuilder();
-					for(ObjectError a : bindex.getAllErrors())
-					{
+					for (ObjectError a : bindex.getAllErrors()) {
 						message.append(a.getDefaultMessage()).append("\n");
+					
 					}
 					try {
 						response.sendError(HttpStatus.BAD_REQUEST.value(), message.toString());
 					} catch (IOException e) {
-						return null;
+						vm = null;
 					}
-					return new ModelAndView();
+					
+					vm = new ModelAndView();
 				}
+				
 				if (ex instanceof WebException) {
 					WebException webex = (WebException) ex;
+					
 					try {
 						response.sendError(webex.getStatus().value(), ex.getMessage());
 					} catch (IOException e) {
 						return null;
 					}
-					return new ModelAndView();
+					
+					vm = new ModelAndView();
 				}
-				return null;
+				
+				return vm;
 			}
 		});
+		
 		super.configureHandlerExceptionResolvers(exceptionResolvers);
 	}
 }

@@ -1,7 +1,8 @@
 package io.redspark.security.sesc;
 
-import io.redspark.service.PermissaoService;
-import io.redspark.service.PermissaoServiceTest;
+import static io.redspark.AppProfile.DEV;
+import static io.redspark.AppProfile.PRODUCAO;
+import static io.redspark.AppProfile.QA;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,11 +62,12 @@ import br.org.sesc.permissao.sync.SyncService;
 import br.org.sesc.permissao.sync.annotation.AnnotatedControllerPermissionLoader;
 import br.org.sesc.permissao.sync.config.DefaultSyncConfiguration;
 import br.org.sesc.permissao.sync.xml.XmlPermissionLoader;
+import io.redspark.service.PermissaoService;
+import io.redspark.service.PermissaoServiceTest;
 
 @Configuration
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class SescSecurityConfigurerAdapter extends
-GlobalAuthenticationConfigurerAdapter {
+public class SescSecurityConfigurerAdapter extends GlobalAuthenticationConfigurerAdapter {
 
 	@Value("${sesc.authentication.url}")
 	private String authenticationUrl;
@@ -100,9 +102,9 @@ GlobalAuthenticationConfigurerAdapter {
 	@Autowired
 	private SescApplicationUser sescApplicationUser;
 
-	// *****************************************
-	// ************* WEB SERVICES
-	// *****************************************
+	/** 
+	 * 	WEB SERVICES
+	 */ 
 	@Bean
 	public WebServiceMessageFactory messageFactory() {
 		return new SaajSoapMessageFactory();
@@ -112,9 +114,7 @@ GlobalAuthenticationConfigurerAdapter {
 	public WebServiceTemplate securityWebService() {
 
 		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-		marshaller.setClassesToBeBound(AuthenticationMessage.class,
-				SescAuthentication.class, AuthenticationResult.class,
-				AuthenticationResponse.class);
+		marshaller.setClassesToBeBound(AuthenticationMessage.class, SescAuthentication.class, AuthenticationResult.class, AuthenticationResponse.class);
 
 		WebServiceTemplate template = new WebServiceTemplate(messageFactory());
 		template.setMarshaller(marshaller);
@@ -124,9 +124,9 @@ GlobalAuthenticationConfigurerAdapter {
 		return template;
 	}
 
-	// *****************************************
-	// ************* VALIDATORS
-	// *****************************************
+	/** 
+	 * 	VALIDATORS
+	 */
 	@Bean
 	public List<SecurityValidation> sescAuthenticationValidators() {
 		HashSecurityValidation hashSecurityValidation = new HashSecurityValidation();
@@ -137,21 +137,21 @@ GlobalAuthenticationConfigurerAdapter {
 		return list;
 	}
 
-	// *****************************************
-	// ************* HOOK
-	// *****************************************
-
+	/** 
+	 *  HOOK
+	 */
 	@Bean
 	@SuppressWarnings("rawtypes")
-	@Profile({"DEV", "QA", "PRODUCAO"})
+	@Profile(value = { DEV, QA, PRODUCAO })
 	public AuthenticationHook hook(PermissaoService service) {
 		return new SescAuthenticationHook(service);
 	}
-
-	// *****************************************
-	// ************* PROVIDERS
-	// *****************************************
-
+	
+	
+	/** 
+	 *  PROVIDERS
+	 */
+	
 	/**
 	 * Provider de autenticação do usuário no SESC
 	 */
@@ -159,8 +159,7 @@ GlobalAuthenticationConfigurerAdapter {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public SescWebServiceAuthenticationProvider sescWebServiceAuthenticationProvider(AuthenticationHook hook) {
 
-		SescWebServiceAuthenticationProvider authenticationProvider = new SescWebServiceAuthenticationProvider(
-				CustomSescUser.class);
+		SescWebServiceAuthenticationProvider authenticationProvider = new SescWebServiceAuthenticationProvider(CustomSescUser.class);
 		authenticationProvider.setValidations(sescAuthenticationValidators());
 		authenticationProvider.setHook(hook);
 
@@ -185,10 +184,9 @@ GlobalAuthenticationConfigurerAdapter {
 
 	}
 
-	// *****************************************
-	// ************* MANAGER
-	// *****************************************
-
+	/** 
+	 *  MANAGER
+	 */
 	@Override
 	public void init(AuthenticationManagerBuilder auth) throws Exception {
 		super.init(auth);
@@ -200,10 +198,9 @@ GlobalAuthenticationConfigurerAdapter {
 		auth.authenticationProvider(daoAuthenticationProvider);
 	}
 
-	// *****************************************
-	// ************* Security
-	// *****************************************
-
+	/** 
+	 *  SECURITY
+	 */
 	@Bean
 	public ApplicationSecurity applicationSecurity() {
 		return new ApplicationSecurity();
@@ -218,7 +215,14 @@ GlobalAuthenticationConfigurerAdapter {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			http.authorizeRequests().antMatchers("/styles/**/*", "/i18n/**/*", "/fonts/**/*", "/assets/**/*", "/scripts/**/*", "/index.html","/version.html","/404.html").permitAll().anyRequest().fullyAuthenticated();
+			http.authorizeRequests()
+				.antMatchers("/styles/**/*", "/i18n/**/*", "/fonts/**/*", "/assets/**/*", 
+						"/scripts/**/*", "/index.html", "/version.html", "/404.html",
+					  "/swagger-ui.html", "/webjars/**", "/configuration/*", "/swagger-resources", "/v2/api-docs")
+				.permitAll()
+				.anyRequest()
+				.fullyAuthenticated();
+			
 			this.configureCsrf(http);
 			this.configureSession(http);
 			this.configureEntryPoint(http);
@@ -250,9 +254,7 @@ GlobalAuthenticationConfigurerAdapter {
 			return new AuthenticationEntryPoint() {
 
 				@Override
-				public void commence(HttpServletRequest request, HttpServletResponse response,
-						AuthenticationException authException)
-								throws IOException, ServletException {
+				public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 					response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "unauthorized");
 				}
 			};
@@ -278,10 +280,10 @@ GlobalAuthenticationConfigurerAdapter {
 	public UsuarioClientService usuarioClientService() {
 		return new UsuarioClientServiceImpl(host, authenticatedRestTemplate());
 	}
-
-	// *****************************************
-	// ************** Permissoes ***************
-	// *****************************************
+	
+	/** 
+	 *  PERMISSOES
+	 */
 	@Bean
 	public DefaultSyncConfiguration defaultSyncConfiguration() {
 		DefaultSyncConfiguration sync = new DefaultSyncConfiguration();
@@ -293,14 +295,14 @@ GlobalAuthenticationConfigurerAdapter {
 	}
 
 	@Bean
-	@Profile(value={"QA", "PRODUCAO"})
+	@Profile(value = { QA, PRODUCAO })
 	public AnnotatedControllerPermissionLoader annotationPermissionLoader() {
 		AnnotatedControllerPermissionLoader acpl = new AnnotatedControllerPermissionLoader();
 		return acpl;
 	}
 
 	@Bean
-	@Profile(value={"QA", "PRODUCAO"})
+	@Profile(value = { QA, PRODUCAO })
 	public XmlPermissionLoader xmlPermissionLoader() throws IOException, URISyntaxException {
 		XmlPermissionLoader xml = new XmlPermissionLoader();
 
@@ -312,7 +314,7 @@ GlobalAuthenticationConfigurerAdapter {
 	}
 
 	@Bean
-	@Profile(value={"QA", "PRODUCAO"})
+	@Profile(value = { QA, PRODUCAO })
 	public SyncService syncService(DefaultSyncConfiguration dsc, AnnotatedControllerPermissionLoader acpl, XmlPermissionLoader xpl) {
 		SyncService syncService = new SyncService(dsc);
 		syncService.setLoaders(Arrays.asList(acpl, xpl));
@@ -329,13 +331,13 @@ GlobalAuthenticationConfigurerAdapter {
 	 *****************************************/
 
 	@Bean
-	@Profile({"test-integration"})
+	@Profile({ "test-integration" })
 	public PermissaoService permissaoServiceClientTest(DefaultSyncConfiguration dsc) {
 		return new PermissaoServiceTest(dsc);
 	}
 
 	@Bean
-	@Profile({"test-integration"})
+	@Profile({ "test-integration" })
 	@SuppressWarnings("rawtypes")
 	public AuthenticationHook hookTest() {
 		return new SescAuthenticationHookTest();

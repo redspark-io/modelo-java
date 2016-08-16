@@ -38,7 +38,7 @@ public class CityControllerTest extends SescApplicationTest {
 		User test = admin("test").build();
 		City c1 = city("B-city").build();
 		City c2 = city("A-city").build();
-		saveall(c1, c2, test);
+		saveAll(c1, c2, test);
 
 		signIn(test);
 
@@ -57,7 +57,7 @@ public class CityControllerTest extends SescApplicationTest {
 		City c3 = city("C-city").build();
 		City c4 = city("D-city").build();
 		City c5 = city("E-city").build();
-		saveall(c1, c2, c3, c4, c5, test);
+		saveAll(c1, c2, c3, c4, c5, test);
 
 		signIn(test);
 
@@ -86,7 +86,7 @@ public class CityControllerTest extends SescApplicationTest {
 		User test = admin("test").build();
 		City c1 = city("São Paulo").build();
 		City c2 = city("Rio de Janeiro").build();
-		saveall(c1, c2, test);
+		saveAll(c1, c2, test);
 
 		signIn(test);
 
@@ -103,7 +103,7 @@ public class CityControllerTest extends SescApplicationTest {
 		User test = admin("test").build();
 		City c1 = city("São Paulo").state("SP").build();
 		City c2 = city("Rio de Janeiro").state("RJ").build();
-		saveall(c1, c2, test);
+		saveAll(c1, c2, test);
 
 		signIn(test);
 
@@ -120,7 +120,7 @@ public class CityControllerTest extends SescApplicationTest {
 		User test = admin("test").build();
 		City c1 = city("São Paulo").country("Brazil").build();
 		City c2 = city("Rio de Janeiro").country("USA").build();
-		saveall(c1, c2, test);
+		saveAll(c1, c2, test);
 
 		signIn(test);
 
@@ -136,7 +136,7 @@ public class CityControllerTest extends SescApplicationTest {
 	public void testRead() {
 		User test = admin("test").build();
 		City c1 = city("A-city").build();
-		saveall(c1, test);
+		saveAll(c1, test);
 
 		signIn(test);
 
@@ -148,7 +148,7 @@ public class CityControllerTest extends SescApplicationTest {
 	@Test
 	public void testCreate() throws JsonProcessingException, IOException {
 		User test = admin("test").build();
-		saveall(test);
+		saveAll(test);
 		signIn(test);
 
 		String name = "name";
@@ -172,7 +172,7 @@ public class CityControllerTest extends SescApplicationTest {
 	public void testUpdate() {
 		User test = admin("test").build();
 		City c1 = city("A-city").build();
-		saveall(c1, test);
+		saveAll(c1, test);
 		signIn(test);
 
 		String name = "newname";
@@ -202,7 +202,7 @@ public class CityControllerTest extends SescApplicationTest {
 	public void testDelete() {
 		User test = admin("test").build();
 		City c1 = city("A-city").build();
-		saveall(c1, test);
+		saveAll(c1, test);
 		signIn(test);
 
 		assertThat(cityRepository.findAll(), hasSize(1));
@@ -218,7 +218,7 @@ public class CityControllerTest extends SescApplicationTest {
 		User test = admin("test").build();
 		City c1 = city("A-city").build();
 		Hotel hotel = hotel("Days Inn", c1).build();
-		saveall(c1, hotel, test);
+		saveAll(c1, hotel, test);
 		signIn(test);
 
 		assertThat(cityRepository.findAll(), hasSize(1));
@@ -229,7 +229,7 @@ public class CityControllerTest extends SescApplicationTest {
 	@Test
 	public void testReadNotFound() {
 		User test = admin("test").build();
-		saveall(test);
+		saveAll(test);
 		signIn(test);
 		get("/city/1").expectedStatus(HttpStatus.NOT_FOUND).getResponse();
 	}
@@ -237,7 +237,7 @@ public class CityControllerTest extends SescApplicationTest {
 	@Test
 	public void testDeleteNotFound() {
 		User test = admin("test").build();
-		saveall(test);
+		saveAll(test);
 		signIn(test);
 		delete("/city/1").expectedStatus(HttpStatus.NOT_FOUND).getResponse();
 	}
@@ -246,7 +246,7 @@ public class CityControllerTest extends SescApplicationTest {
 	public void testUpdateNotFound() {
 		User test = admin("test").build();
 		City city = city("Sao Paulo").build();
-		saveall(city, test);
+		saveAll(city, test);
 		signIn(test);
 		put("/city/%s", city.getId() + 1)
 		    .json(convert.toDTO(city))
