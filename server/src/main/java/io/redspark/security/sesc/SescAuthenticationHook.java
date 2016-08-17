@@ -1,10 +1,9 @@
 package io.redspark.security.sesc;
 
-import io.redspark.service.PermissaoService;
-
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import br.org.sesc.commons.security.AuthenticationHook;
+import io.redspark.service.PermissaoService;
 
 public class SescAuthenticationHook implements AuthenticationHook<CustomSescUser> {
 

@@ -14,7 +14,7 @@ public class AppProfile {
 	
 	public static final String DEV = "DEV";
 	
-	public static final String TEST = "TEST";
+	public static final String TEST = "test-integration";
 
 	public static final String HOMOLOG = "HOMOLOG";
 	

@@ -6,9 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.org.sesc.permissao.sync.PermissaoServiceClient;
 import br.org.sesc.permissao.sync.config.SyncConfiguration;
 
-public class PermissaoServiceTest extends PermissaoService {
+public class PermissaoServiceTest extends PermissaoServiceClient implements PermissaoService {
 	
 	public PermissaoServiceTest(SyncConfiguration config) {
 		super(config);

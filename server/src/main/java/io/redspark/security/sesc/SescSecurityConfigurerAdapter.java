@@ -4,53 +4,28 @@ import static io.redspark.AppProfile.DEV;
 import static io.redspark.AppProfile.PRODUCAO;
 import static io.redspark.AppProfile.QA;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.ws.WebServiceMessageFactory;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 
-import br.org.sesc.administrativo.client.MatriculaClientService;
-import br.org.sesc.administrativo.client.UnidadeOrcamentariaClientService;
-import br.org.sesc.administrativo.client.UsuarioClientService;
-import br.org.sesc.administrativo.client.rest.security.AuthenticatedRestTemplate;
-import br.org.sesc.administrativo.client.service.impl.MatriculaClientServiceImpl;
-import br.org.sesc.administrativo.client.service.impl.UnidadeOrcamentariaClientServiceImpl;
-import br.org.sesc.administrativo.client.service.impl.UsuarioClientServiceImpl;
 import br.org.sesc.commons.security.AuthenticationHook;
 import br.org.sesc.commons.security.SescUser;
 import br.org.sesc.commons.security.SescWebServiceAuthenticationProvider;
-import br.org.sesc.commons.security.SescWebServiceAuthenticationSecurityFilter;
 import br.org.sesc.commons.security.test.SimpleUserDetailService;
 import br.org.sesc.commons.security.validation.HashSecurityValidation;
 import br.org.sesc.commons.security.validation.SecurityValidation;
@@ -58,12 +33,8 @@ import br.org.sesc.commons.security.webservice.AuthenticationMessage;
 import br.org.sesc.commons.security.webservice.AuthenticationResponse;
 import br.org.sesc.commons.security.webservice.AuthenticationResult;
 import br.org.sesc.commons.security.webservice.SescAuthentication;
-import br.org.sesc.permissao.sync.SyncService;
-import br.org.sesc.permissao.sync.annotation.AnnotatedControllerPermissionLoader;
-import br.org.sesc.permissao.sync.config.DefaultSyncConfiguration;
-import br.org.sesc.permissao.sync.xml.XmlPermissionLoader;
+import io.redspark.ApplicationSecurity;
 import io.redspark.service.PermissaoService;
-import io.redspark.service.PermissaoServiceTest;
 
 @Configuration
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -84,27 +55,12 @@ public class SescSecurityConfigurerAdapter extends GlobalAuthenticationConfigure
 	@Value("${sesc.administrativo.host}")
 	private String host;
 
-	/**
-	 * PERMISSÃO PROPERTIES
-	 */
-	@Value("${sesc.administrativo.permissao-url}")
-	private String permissaoUrl;
-
-	@Value("${sesc.administrativo.permissao-hash}")
-	private String permissaoHash;
-
-	@Value("${sesc.administrativo.permissao-login}")
-	private String permissaoLogin;
-
-	@Value("${sesc.administrativo.permissao-password}")
-	private String permissaoPassword;
-
 	@Autowired
 	private SescApplicationUser sescApplicationUser;
 
-	/** 
-	 * 	WEB SERVICES
-	 */ 
+	/**
+	 * WEB SERVICES
+	 */
 	@Bean
 	public WebServiceMessageFactory messageFactory() {
 		return new SaajSoapMessageFactory();
@@ -124,8 +80,8 @@ public class SescSecurityConfigurerAdapter extends GlobalAuthenticationConfigure
 		return template;
 	}
 
-	/** 
-	 * 	VALIDATORS
+	/**
+	 * VALIDATORS
 	 */
 	@Bean
 	public List<SecurityValidation> sescAuthenticationValidators() {
@@ -137,8 +93,8 @@ public class SescSecurityConfigurerAdapter extends GlobalAuthenticationConfigure
 		return list;
 	}
 
-	/** 
-	 *  HOOK
+	/**
+	 * HOOK
 	 */
 	@Bean
 	@SuppressWarnings("rawtypes")
@@ -146,12 +102,11 @@ public class SescSecurityConfigurerAdapter extends GlobalAuthenticationConfigure
 	public AuthenticationHook hook(PermissaoService service) {
 		return new SescAuthenticationHook(service);
 	}
-	
-	
-	/** 
-	 *  PROVIDERS
+
+	/**
+	 * PROVIDERS
 	 */
-	
+
 	/**
 	 * Provider de autenticação do usuário no SESC
 	 */
@@ -184,8 +139,8 @@ public class SescSecurityConfigurerAdapter extends GlobalAuthenticationConfigure
 
 	}
 
-	/** 
-	 *  MANAGER
+	/**
+	 * MANAGER
 	 */
 	@Override
 	public void init(AuthenticationManagerBuilder auth) throws Exception {
@@ -198,148 +153,12 @@ public class SescSecurityConfigurerAdapter extends GlobalAuthenticationConfigure
 		auth.authenticationProvider(daoAuthenticationProvider);
 	}
 
-	/** 
-	 *  SECURITY
+	/**
+	 * SECURITY
 	 */
 	@Bean
 	public ApplicationSecurity applicationSecurity() {
 		return new ApplicationSecurity();
 	}
 
-	@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-	protected static class ApplicationSecurity extends WebSecurityConfigurerAdapter {
-
-		public SescWebServiceAuthenticationSecurityFilter sescWebServiceAuthenticationSecurityFilter() throws Exception {
-			return new SescWebServiceAuthenticationSecurityFilter(authenticationManager(), authenticationEntryPoint());
-		}
-
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http.authorizeRequests()
-				.antMatchers("/styles/**/*", "/i18n/**/*", "/fonts/**/*", "/assets/**/*", 
-						"/scripts/**/*", "/index.html", "/version.html", "/404.html",
-					  "/swagger-ui.html", "/webjars/**", "/configuration/*", "/swagger-resources", "/v2/api-docs")
-				.permitAll()
-				.anyRequest()
-				.fullyAuthenticated();
-			
-			this.configureCsrf(http);
-			this.configureSession(http);
-			this.configureEntryPoint(http);
-			this.configureAuthentication(http);
-			this.configureFilters(http);
-		}
-
-		private void configureFilters(HttpSecurity http) throws Exception {
-			http.addFilterBefore(sescWebServiceAuthenticationSecurityFilter(), BasicAuthenticationFilter.class);
-		}
-
-		private void configureAuthentication(HttpSecurity http) throws Exception {
-			http.httpBasic();
-		}
-
-		private void configureCsrf(HttpSecurity http) throws Exception {
-			http.csrf().disable();
-		}
-
-		private void configureSession(HttpSecurity http) throws Exception {
-			http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
-		}
-
-		private void configureEntryPoint(HttpSecurity http) throws Exception {
-			http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint());
-		}
-
-		private AuthenticationEntryPoint authenticationEntryPoint() {
-			return new AuthenticationEntryPoint() {
-
-				@Override
-				public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-					response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "unauthorized");
-				}
-			};
-		}
-	}
-
-	@Bean
-	public AuthenticatedRestTemplate authenticatedRestTemplate() {
-		return new AuthenticatedRestTemplate(user, password);
-	}
-
-	@Bean
-	public UnidadeOrcamentariaClientService unidadeOrcamentariaClientService() {
-		return new UnidadeOrcamentariaClientServiceImpl(host, authenticatedRestTemplate());
-	}
-
-	@Bean
-	public MatriculaClientService matriculaClientService() {
-		return new MatriculaClientServiceImpl(host, authenticatedRestTemplate());
-	}
-
-	@Bean
-	public UsuarioClientService usuarioClientService() {
-		return new UsuarioClientServiceImpl(host, authenticatedRestTemplate());
-	}
-	
-	/** 
-	 *  PERMISSOES
-	 */
-	@Bean
-	public DefaultSyncConfiguration defaultSyncConfiguration() {
-		DefaultSyncConfiguration sync = new DefaultSyncConfiguration();
-		sync.setHash(permissaoHash);
-		sync.setLogin(permissaoLogin);
-		sync.setPassword(permissaoPassword);
-		sync.setUrl(permissaoUrl);
-		return sync;
-	}
-
-	@Bean
-	@Profile(value = { QA, PRODUCAO })
-	public AnnotatedControllerPermissionLoader annotationPermissionLoader() {
-		AnnotatedControllerPermissionLoader acpl = new AnnotatedControllerPermissionLoader();
-		return acpl;
-	}
-
-	@Bean
-	@Profile(value = { QA, PRODUCAO })
-	public XmlPermissionLoader xmlPermissionLoader() throws IOException, URISyntaxException {
-		XmlPermissionLoader xml = new XmlPermissionLoader();
-
-		URL url = this.getClass().getResource("/permissoes.xml");
-		FileSystemResource fsr = new FileSystemResource(new File(url.toURI()));
-
-		xml.setFile(fsr);
-		return xml;
-	}
-
-	@Bean
-	@Profile(value = { QA, PRODUCAO })
-	public SyncService syncService(DefaultSyncConfiguration dsc, AnnotatedControllerPermissionLoader acpl, XmlPermissionLoader xpl) {
-		SyncService syncService = new SyncService(dsc);
-		syncService.setLoaders(Arrays.asList(acpl, xpl));
-		return syncService;
-	}
-
-	@Bean
-	public PermissaoService permissaoServiceClient(DefaultSyncConfiguration dsc) {
-		return new PermissaoService(dsc);
-	}
-
-	/******************************************
-	 ********* Servicos para test **********
-	 *****************************************/
-
-	@Bean
-	@Profile({ "test-integration" })
-	public PermissaoService permissaoServiceClientTest(DefaultSyncConfiguration dsc) {
-		return new PermissaoServiceTest(dsc);
-	}
-
-	@Bean
-	@Profile({ "test-integration" })
-	@SuppressWarnings("rawtypes")
-	public AuthenticationHook hookTest() {
-		return new SescAuthenticationHookTest();
-	}
 }

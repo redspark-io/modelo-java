@@ -1,4 +1,4 @@
-package io.redspark.security.sesc;
+package io.redspark.security;
 
 import io.redspark.security.Roles;
 
