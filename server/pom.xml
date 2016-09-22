@@ -19,16 +19,17 @@
 	<properties>
 		<!-- JAVA -->
 		<java.version>1.8</java.version>
-		
+
 		<!-- SESC -->
 		<sesc.commons.version>2.0.4</sesc.commons.version>
 		<sesc-administrativo-client.version>2.3.1</sesc-administrativo-client.version>
 		<sesc-permissao-sync.version>1.5.1</sesc-permissao-sync.version>
 
 		<!-- UTIL -->
+		<httpcomponents.version>4.4.3</httpcomponents.version>
 		<lombok-version>1.16.4</lombok-version>
 		<orika-version>1.4.6</orika-version>
-		
+
 		<!-- Variable Sonar -->
 		<sonar.host.url>http://sonar.redspark.io/</sonar.host.url>
 		<sonar.jdbc.url>${env.SONAR_JDBC_URL}</sonar.jdbc.url>
@@ -76,25 +77,25 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- SWAGGER -->
 		<dependency>
-				<groupId>io.springfox</groupId>
-				<artifactId>springfox-swagger2</artifactId>
-				<version>2.2.2</version>
-			</dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.2.2</version>
+		</dependency>
 
-			<dependency>
-				<groupId>io.springfox</groupId>
-				<artifactId>springfox-swagger-ui</artifactId>
-				<version>2.2.2</version>
-			</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.2.2</version>
+		</dependency>
 
-			<dependency>
-				<groupId>org.webjars</groupId>
-				<artifactId>bootstrap</artifactId>
-				<version>3.3.5</version>
-			</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>3.3.5</version>
+		</dependency>
 
 		<!-- DATABASE -->
 
@@ -109,8 +110,13 @@
 			<artifactId>flyway-core</artifactId>
 		</dependency>
 
-		<!-- UTIL -->
+		<dependency>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.5.1</version>
+		</dependency>
 
+		<!-- UTIL -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -128,11 +134,16 @@
 			<artifactId>orika-core</artifactId>
 			<version>${orika-version}</version>
 		</dependency>
-
+	
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>${httpcomponents.version}</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<scope>test</scope>
 		</dependency>
 
 		<!-- SESC -->
