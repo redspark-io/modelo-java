@@ -134,13 +134,13 @@
 			<artifactId>orika-core</artifactId>
 			<version>${orika-version}</version>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>
 			<version>${httpcomponents.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -386,6 +386,21 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>de.juplo</groupId>
+				<artifactId>hibernate4-maven-plugin</artifactId>
+				<version>1.0.4</version>
+				<configuration>
+					<envers>true</envers>
+					<format>true</format>
+					<delimiter>;</delimiter>
+					<force>true</force>
+					<type>CREATE</type>
+					<target>SCRIPT</target>
+					<hibernateDialect>org.hibernate.dialect.Oracle10gDialect</hibernateDialect>
+				</configuration>
 			</plugin>
 
 		</plugins>
