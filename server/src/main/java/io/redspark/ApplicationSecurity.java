@@ -38,7 +38,7 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 			.antMatchers("/styles/**/*", "/i18n/**/*", "/fonts/**/*", "/assets/**/*", 
 					"/scripts/**/*", "/index.html", "/version.html", "/404.html",
-				  "/swagger-ui.html", "/webjars/**", "/configuration/*", "/swagger-resources", "/v2/api-docs")
+					"/swagger-ui.html", "/webjars/**", "/configuration/*", "/swagger-resources", "/swagger-resources/**/*", "/v2/api-docs")
 			.permitAll()
 			.anyRequest()
 			.fullyAuthenticated();
