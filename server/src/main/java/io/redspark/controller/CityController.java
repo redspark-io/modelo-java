@@ -15,10 +15,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -48,7 +51,7 @@ public class CityController {
   private HotelRepository hotelRepository;
 
   @Transactional(readOnly = true)
-  @RequestMapping(method = RequestMethod.GET)
+  @GetMapping
   public Page<CityDTO> list(@PageableDefault(page = 0, size = 50, sort = "name") Pageable page,
       @RequestParam(value = "search", required = false) String search) {
 
@@ -65,7 +68,7 @@ public class CityController {
   }
 
   @Transactional(readOnly = true)
-  @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+  @GetMapping(value = "/{id}")
   public CityDTO read(@PathVariable("id") Long id) {
 
     City city = repository.findOne(id);
@@ -76,7 +79,7 @@ public class CityController {
   }
 
   @Transactional
-  @RequestMapping(method = RequestMethod.POST)
+  @PostMapping
   @ResponseStatus(value = HttpStatus.CREATED)
   public CityDTO create(@Valid @RequestBody CityDTO dto) {
 
@@ -86,7 +89,7 @@ public class CityController {
   }
 
   @Transactional
-  @RequestMapping(value = "/{ref}", method = RequestMethod.PUT)
+  @PutMapping(value = "/{ref}")
   @ResponseBody
   public CityDTO update(@PathVariable("ref") Long ref, @Valid @RequestBody CityDTO dto) {
     City entity = repository.findOne(ref);
@@ -99,7 +102,7 @@ public class CityController {
   }
 
   @Transactional
-  @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+  @DeleteMapping(value = "/{id}")
   public CityDTO delete(@PathVariable("id") Long id) {
 
     City city = repository.findOne(id);

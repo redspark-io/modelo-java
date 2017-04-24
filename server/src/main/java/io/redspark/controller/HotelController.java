@@ -15,10 +15,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,7 +50,7 @@ public class HotelController {
   private CityRepository cityRepository;
 
   @Transactional(readOnly = true)
-  @RequestMapping(method = RequestMethod.GET)
+  @GetMapping
   public Page<HotelDTO> list(@PageableDefault(page = 0, size = 50, sort = "name") Pageable page,
       @RequestParam(value = "search", required = false) String search) {
 
@@ -63,7 +66,7 @@ public class HotelController {
   }
 
   @Transactional(readOnly = true)
-  @RequestMapping(value = "/{ref}", method = RequestMethod.GET)
+  @GetMapping(value = "/{ref}")
   public HotelDTO read(@PathVariable("ref") Long ref) {
 
     Hotel entity = repository.findByIdWithCity(ref);
@@ -76,7 +79,7 @@ public class HotelController {
   }
 
   @Transactional
-  @RequestMapping(method = RequestMethod.POST)
+  @PostMapping
   @ResponseStatus(value = HttpStatus.CREATED)
   public HotelDTO create(@Valid @RequestBody HotelDTO dto) {
 
@@ -93,7 +96,7 @@ public class HotelController {
   }
 
   @Transactional
-  @RequestMapping(value = "/{ref}", method = RequestMethod.PUT)
+  @PutMapping(value = "/{ref}")
   public HotelDTO update(@PathVariable("ref") Long ref, @Valid @RequestBody HotelDTO dto) {
 
     City city = cityRepository.findOne(dto.getCity().getId());
@@ -114,7 +117,7 @@ public class HotelController {
   }
 
   @Transactional
-  @RequestMapping(value = "/{ref}", method = RequestMethod.DELETE)
+  @DeleteMapping(value = "/{ref}")
   public HotelDTO delete(@PathVariable("ref") Long ref) {
 
     Hotel entity = repository.findOne(ref);
