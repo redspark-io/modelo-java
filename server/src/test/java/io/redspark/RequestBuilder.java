@@ -8,7 +8,7 @@ import java.lang.reflect.Array;
 import java.net.URI;
 import java.util.Arrays;
 
-import org.springframework.boot.test.TestRestTemplate;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
