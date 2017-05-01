@@ -18,8 +18,8 @@ public class UserUtils {
     return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
-  public static boolean isUserLoggedAsHolmesUser() {
-    return getLoggedAsPrincipal() != null && DefaultUser.class.isAssignableFrom(getLoggedAsPrincipal().getClass());
+  public static boolean isUserLoggedAsHolmesUser(DefaultUser defaultUser) {
+    return defaultUser != null && DefaultUser.class.isAssignableFrom(defaultUser.getClass());
   }
 
 }
