@@ -9,36 +9,30 @@
 	<artifactId>modelo-boot-autoconfigure</artifactId>
 	<name>modelo-boot-autoconfigure</name>
 
-	<properties>
-		<sesc-commons-version>2.1.1-SNAPSHOT</sesc-commons-version>
-		<permissao.client.version>1.6.7</permissao.client.version>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
 
-
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 		
 		<dependency>
 			<artifactId>sesc-commons-security</artifactId>
 			<groupId>br.org.sesc</groupId>
-			<version>2.1.1-SNAPSHOT</version>
-			<scope>provided</scope>
+			<optional>true</optional>
+			
 		</dependency>
 		
 		 <dependency>
             <groupId>br.org.sesc</groupId>
             <artifactId>sesc-permissao-client</artifactId>
-            <version>${permissao.client.version}</version>
-            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
 	</dependencies>
 	
