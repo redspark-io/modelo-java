@@ -1,4 +1,4 @@
-package io.redspark.autoconfigure.sesc.auth;
+package io.redspark.autoconfigure.sesc;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -14,7 +14,7 @@ import br.org.sesc.permissao.client.config.DefaultSyncConfiguration;
 import br.org.sesc.permissao.client.config.SyncConfiguration;
 
 @Configuration
-//@ConditionalOnClass(PermissaoServiceClient.class) //FIXME entender porque não carrega 
+@ConditionalOnClass(PermissaoServiceClient.class) //FIXME entender porque não carrega 
 public class SescPermissaoClientAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean

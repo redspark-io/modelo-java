@@ -1,4 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-io.redspark.autoconfigure.sesc.auth.SescDaoAuthenticationProviderAutoconfiguration,\
-io.redspark.autoconfigure.sesc.auth.SescPermissaoClientAutoconfiguration,\
-io.redspark.autoconfigure.sesc.auth.SescUserAuthenticationProviderAutoConfiguration
+io.redspark.autoconfigure.sesc.SescDaoAuthenticationProviderAutoConfiguration,\
+io.redspark.autoconfigure.sesc.SescPermissaoClientAutoConfiguration,\
+io.redspark.autoconfigure.sesc.SescDaoAuthenticationProviderAutoConfiguration,\
+io.redspark.autoconfigure.sesc.SescSecurityAutoConfiguration

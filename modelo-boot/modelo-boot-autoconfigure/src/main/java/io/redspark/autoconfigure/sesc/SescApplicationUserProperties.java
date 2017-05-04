@@ -1,4 +1,4 @@
-package io.redspark.autoconfigure.sesc.auth;
+package io.redspark.autoconfigure.sesc;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -14,12 +14,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+		
 		<dependency>
 			<artifactId>sesc-commons-security</artifactId>
 			<groupId>br.org.sesc</groupId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>br.org.sesc</groupId>
 			<artifactId>sesc-permissao-client</artifactId>

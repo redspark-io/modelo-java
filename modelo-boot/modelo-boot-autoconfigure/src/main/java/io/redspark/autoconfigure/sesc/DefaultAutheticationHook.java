@@ -1,4 +1,4 @@
-package io.redspark.autoconfigure.sesc.auth;
+package io.redspark.autoconfigure.sesc;
 
 import br.org.sesc.commons.security.AuthenticationHook;
 import br.org.sesc.commons.security.SescUser;

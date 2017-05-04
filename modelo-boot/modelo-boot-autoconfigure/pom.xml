@@ -13,6 +13,8 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
+			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 
 		<dependency>
@@ -26,31 +28,15 @@
 			<artifactId>sesc-commons-security</artifactId>
 			<groupId>br.org.sesc</groupId>
 			<optional>true</optional>
-			
+			<scope>provided</scope>
 		</dependency>
 		
 		 <dependency>
             <groupId>br.org.sesc</groupId>
             <artifactId>sesc-permissao-client</artifactId>
             <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
 	</dependencies>
 	
-
-	<repositories>
-		<repository>
-			<id>redspark</id>
-			<url>http://nexus.redspark.io/content/groups/public/</url>
-		</repository>
-		<repository>
-			<id>snapshots</id>
-			<name>redspark snapshots</name>
-			<url>http://nexus.redspark.io/content/repositories/snapshots/</url>
-		</repository>
-		<repository>
-			<id>releases</id>
-			<name>redspark releases</name>
-			<url>http://nexus.redspark.io/content/repositories/releases/</url>
-		</repository>
-	</repositories>
 </project>

@@ -1,8 +1,5 @@
 package io.redspark.autoconfigure.sesc.auth;
-import static org.junit.Assert.*;
-
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +26,11 @@ public class SescUserAuthenticationProviderAutoConfigurationTest {
 		WebServiceTemplate wsBean = (WebServiceTemplate) context.getBean(WebServiceTemplate.class);
 		Assert.assertNotNull(wsBean);
 	}
+	
 	@Test
 	public void loadAuthenticationHook() throws Exception {
-//		boolean wasLoadBean = context.containsBean("hook");
-//		Assert.assertTrue(wasLoadBean);
+		boolean wasLoadBean = context.containsBean("authenticationHook");
+		Assert.assertTrue(wasLoadBean);
 		
 		AuthenticationHook hookBean = (AuthenticationHook) context.getBean(AuthenticationHook.class);
 		Assert.assertNotNull(hookBean);
@@ -46,8 +44,8 @@ public class SescUserAuthenticationProviderAutoConfigurationTest {
 	
 	@Test
 	public void mustLoadSescUserAuthenticationProvider() throws Exception {
-//		boolean wasLoadBean = context.containsBean("sescUserAuthenticationProvider");
-//		Assert.assertTrue(wasLoadBean);
+		boolean wasLoadBean = context.containsBean("sescUserAuthenticationProvider");
+		Assert.assertTrue(wasLoadBean);
 		
 		SescWebServiceAuthenticationProvider hookBean = (SescWebServiceAuthenticationProvider) context.getBean(SescWebServiceAuthenticationProvider.class);
 		Assert.assertNotNull(hookBean);

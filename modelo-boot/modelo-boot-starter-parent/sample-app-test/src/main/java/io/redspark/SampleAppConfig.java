@@ -11,4 +11,6 @@ public class SampleAppConfig {
 	public static void main(String[] args) {
 		new SpringApplicationBuilder().run(args);
 	}
+	
+	
 }

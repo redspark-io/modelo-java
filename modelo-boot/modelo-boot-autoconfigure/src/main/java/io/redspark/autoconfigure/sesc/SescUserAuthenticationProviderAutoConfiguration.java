@@ -1,4 +1,4 @@
-package io.redspark.autoconfigure.sesc.auth;
+package io.redspark.autoconfigure.sesc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.WebServiceMessageFactory;
@@ -30,10 +29,9 @@ import br.org.sesc.commons.security.webservice.SescAuthentication;
 import br.org.sesc.permissao.client.PermissaoServiceClient;
 
 @Configuration
-@ConditionalOnClass(value = SescWebServiceAuthenticationProvider.class)
-@AutoConfigureAfter(value = SescPermissaoClientAutoConfiguration.class)
+@ConditionalOnClass({SescWebServiceAuthenticationProvider.class})
+@AutoConfigureAfter(SescPermissaoClientAutoConfiguration.class)
 public class SescUserAuthenticationProviderAutoConfiguration {
-	
 	@Bean
 	@ConditionalOnMissingBean
 	public WebServiceMessageFactory messageFactory() {
@@ -63,7 +61,7 @@ public class SescUserAuthenticationProviderAutoConfiguration {
 	@Profile({ "DEV", "PRODUCAO" })
 	@ConditionalOnMissingBean
 	@ConditionalOnBean(PermissaoServiceClient.class)
-	public AuthenticationHook hook(PermissaoServiceClient psc) {
+	public AuthenticationHook authenticationHook(PermissaoServiceClient psc) {
 		return new DefaultAutheticationHook(psc);
 	}
 	

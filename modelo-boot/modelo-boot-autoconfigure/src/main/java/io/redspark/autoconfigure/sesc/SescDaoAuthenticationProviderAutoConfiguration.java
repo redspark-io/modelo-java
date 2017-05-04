@@ -1,8 +1,7 @@
-package io.redspark.autoconfigure.sesc.auth;
+package io.redspark.autoconfigure.sesc;
 
 import java.util.ArrayList;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 
 import br.org.sesc.commons.security.SescUser;
-import br.org.sesc.commons.security.SescWebServiceAuthenticationProvider;
 import br.org.sesc.commons.security.test.SimpleUserDetailService;
 
 @Configuration
