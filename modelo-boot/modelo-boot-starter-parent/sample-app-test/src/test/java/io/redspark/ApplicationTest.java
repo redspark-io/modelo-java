@@ -1,13 +1,19 @@
 package io.redspark;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.xml.transform.Source;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -17,24 +23,87 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.ws.client.core.WebServiceTemplate;
+import org.springframework.ws.test.client.MockWebServiceServer;
+import org.springframework.ws.test.client.RequestMatchers;
+import org.springframework.ws.test.client.ResponseCreators;
+import org.springframework.xml.transform.StringSource;
 
-import io.redspark.Application;
+import br.org.sesc.commons.security.SescAuthConst;
 import io.redspark.domain.UserAuthentication;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = {Application.class}, properties = "server.port=10001")
 public abstract class ApplicationTest {
-
-  private static List<Object> toPersist = new ArrayList<Object>();
-
-  private final String server;
-  protected String authentication;
-
   @Autowired
   private JpaTransactionManager manager;
 
   @Autowired
   private JdbcTemplate template;
+	
+	@Value("${sesc.authentication.app.codigo}")
+	private Long codigo;
+
+	@Value("${sesc.authentication.url}")
+	private String authenticationUrl;
+
+	@Autowired
+	@Qualifier("securityWebService")
+	private WebServiceTemplate webServiceTemplate;
+	
+  private static List<Object> toPersist = new ArrayList<Object>();
+  private final String server;
+  protected String authentication;
+	
+	protected void signInWs(UserAuthentication user) {
+		MockWebServiceServer mockWebServiceServer = MockWebServiceServer.createServer(webServiceTemplate);
+		Source responsePayload = createMock(user);
+
+		mockWebServiceServer.expect(RequestMatchers.connectionTo(authenticationUrl))
+		.andRespond(ResponseCreators.withPayload(responsePayload));
+
+		ResponseEntity<Object> response = get("/me")
+				.header(SescAuthConst.HASH_KEY, "hash")
+				.header(SescAuthConst.OPC_CODIGO_KEY, codigo.toString())
+				.header(SescAuthConst.PERMISSAO, "permissao").getResponse();
+
+		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+		authentication = response.getHeaders().getFirst("Set-Cookie");
+	}
+
+	private StringSource createMock(UserAuthentication user) {
+		return new StringSource(
+				"<fncValidarResponse>"
+						+ "<fncValidarReturn>"
+						+ "<resultado>"
+						+ "<uo>15</uo>"
+						+ "<chapa>9999</chapa>"
+						+ "<digito/>"
+						+ "<usu_codigo>"
+						+ user.getId()
+						+ "</usu_codigo>"
+						+ "<usu_id>"
+						+ user.getId()
+						+ "</usu_id>"
+						+ "<nome>"
+						+ user.getLogin()
+						+ "</nome>"
+						+ "<banco/>"
+						+ "<login>"
+						+ user.getLogin()
+						+ "</login>"
+						+ "<parametro/>"
+						+ "<path_inicial>http://www.intranet2homologacao.sescsp.org.br:9090/ssti/</path_inicial>"
+						+ "<ip>192.168.8.197</ip>"
+						+ "<data_login>{ts '2015-03-18 00:00:00'}</data_login>"
+						+ "<sis_codigo>"
+						+ codigo
+						+ "</sis_codigo>"
+						+ "<erro>0</erro>"
+						+ "<erro_mensagem>Consulta executada com sucesso!</erro_mensagem>"
+						+ "</resultado>" + "</fncValidarReturn>"
+						+ "</fncValidarResponse>");
+	}
 
   public ApplicationTest() {
     this.server = "http://localhost:10001";

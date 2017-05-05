@@ -1,14 +1,9 @@
 package io.redspark.compose;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import io.redspark.domain.User;
 import io.redspark.domain.User.UserBuilder;
 
 public class Compose {
-
-  private static AtomicLong counter = new AtomicLong();
-
   public static UserBuilder admin(String name) {
     return user(name).admin(true);
   }

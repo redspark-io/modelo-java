@@ -9,17 +9,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import io.redspark.ApplicationTest;
-import io.redspark.SescApplicationTest;
 import io.redspark.controller.dto.UserDTO;
 import io.redspark.domain.User;
 
-public class MeControllerTest extends SescApplicationTest {
+public class MeControllerTest extends ApplicationTest {
 
   @Test
   public void testMe() {
     User user = admin("bruno").build();
     saveall(user);
-    signIn(user);
+    signInWs(user);
 
    ResponseEntity<UserDTO> response = get("/me").expectedStatus(HttpStatus.OK).getResponse(UserDTO.class);
     assertThat(response.getBody().getId(), equalTo(user.getId()));

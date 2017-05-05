@@ -47,6 +47,11 @@
             <optional>true</optional>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+			<groupId>br.org.sesc</groupId>
+			<artifactId>sesc-permissao-sync</artifactId>
+		</dependency>
 	</dependencies>
 	
 </project>

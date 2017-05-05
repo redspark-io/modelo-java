@@ -42,7 +42,7 @@ public class SescSecurityAutoConfiguration {
 	
 	@Configuration
 	@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-	@ConditionalOnProperty(prefix = "sesc.autenticacao.security", name = "enabled", havingValue = "true")
+	@ConditionalOnProperty(prefix = "sesc.authentication.security", name = "enabled", havingValue = "true")
 	protected static class ApplicationWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 		@Value("${sesc.authentication.ant.ignored.matchers}")
 		private String antIgnoredMatchers;
@@ -62,7 +62,7 @@ public class SescSecurityAutoConfiguration {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			String[] matchrers = antIgnoredMatchers.split(",");
-			http.authorizeRequests().antMatchers("/public").permitAll().anyRequest().fullyAuthenticated();
+			http.authorizeRequests().antMatchers(matchrers).permitAll().anyRequest().fullyAuthenticated();
 			this.configureCsrf(http);
 			this.configureSession(http);
 			this.configureEntryPoint(http);

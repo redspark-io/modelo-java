@@ -15,7 +15,7 @@
 	
 	<properties>
 		<modelo-boot-version>0.0.1-SNAPSHOT</modelo-boot-version>
-		<permissao.client.version>1.6.7</permissao.client.version>
+		<sesc.permissao.version>1.6.7</sesc.permissao.version>
 	</properties>
 	
 	<name>modelo-boot</name>
@@ -31,7 +31,13 @@
 			<dependency>
 				<groupId>br.org.sesc</groupId>
 				<artifactId>sesc-permissao-client</artifactId>
-				<version>${permissao.client.version}</version>
+				<version>${sesc.permissao.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>br.org.sesc</groupId>
+				<artifactId>sesc-permissao-sync</artifactId>
+				<version>${sesc.permissao.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
