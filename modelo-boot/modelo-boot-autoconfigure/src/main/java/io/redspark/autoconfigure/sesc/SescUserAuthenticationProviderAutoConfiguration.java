@@ -58,7 +58,7 @@ public class SescUserAuthenticationProviderAutoConfiguration {
 
 	
 	@Bean
-	@Profile({ "DEV", "PRODUCAO" })
+//	@Profile({ "DEV", "PRODUCAO" })
 	@ConditionalOnMissingBean
 	@ConditionalOnBean(PermissaoServiceClient.class)
 	public AuthenticationHook authenticationHook(PermissaoServiceClient psc) {

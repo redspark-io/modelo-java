@@ -6,6 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -15,6 +17,8 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
@@ -26,6 +30,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import br.org.sesc.commons.security.CustomLogoutSuccessHandler;
+import br.org.sesc.commons.security.SescWebServiceAuthenticationProvider;
 import br.org.sesc.commons.security.SescWebServiceAuthenticationSecurityFilter;
 
 @Configuration
@@ -34,6 +39,7 @@ import br.org.sesc.commons.security.SescWebServiceAuthenticationSecurityFilter;
 @ConditionalOnWebApplication
 @EnableWebSecurity
 public class SescSecurityAutoConfiguration {
+	
 	@Configuration
 	@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 	@ConditionalOnProperty(prefix = "sesc.autenticacao.security", name = "enabled", havingValue = "true")
@@ -44,15 +50,22 @@ public class SescSecurityAutoConfiguration {
 		public SescWebServiceAuthenticationSecurityFilter sescWebServiceAuthenticationSecurityFilter() throws Exception {
 			return new SescWebServiceAuthenticationSecurityFilter(authenticationManager(), authenticationEntryPoint());
 		}
+		
+		@Autowired
+		public void setAuthenticationManagerBuilder(AuthenticationManagerBuilder auth,
+		    @Qualifier("sescUserAuthenticationProvider") SescWebServiceAuthenticationProvider sescWebServiceAuthenticationProvider,
+		    @Qualifier("daoAuthenticationProvider") DaoAuthenticationProvider daoAuthenticationProvider) {
+			auth.authenticationProvider(sescWebServiceAuthenticationProvider);
+			auth.authenticationProvider(daoAuthenticationProvider);
+		}
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			String[] matchrers = antIgnoredMatchers.split(",");
-			http.authorizeRequests().antMatchers(matchrers).permitAll().anyRequest().fullyAuthenticated();
+			http.authorizeRequests().antMatchers("/public").permitAll().anyRequest().fullyAuthenticated();
 			this.configureCsrf(http);
 			this.configureSession(http);
 			this.configureEntryPoint(http);
-			this.configureAuthentication(http);
 			this.configureFilters(http);
 			this.congigureLogout(http);
 		}
@@ -63,10 +76,6 @@ public class SescSecurityAutoConfiguration {
 
 		private void configureFilters(HttpSecurity http) throws Exception {
 			http.addFilterBefore(sescWebServiceAuthenticationSecurityFilter(), BasicAuthenticationFilter.class);
-		}
-
-		private void configureAuthentication(HttpSecurity http) throws Exception {
-			http.httpBasic();
 		}
 
 		private void configureCsrf(HttpSecurity http) throws Exception {

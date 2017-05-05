@@ -7,14 +7,38 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>sample-app-test</artifactId>
+	<properties>
+		<!-- compiler -->
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+		<maven.compiler.testTarget>1.8</maven.compiler.testTarget>
+		<maven.compiler.testSource>1.8</maven.compiler.testSource>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- versions -->
+		<lombok-version>1.16.6</lombok-version>
+		<orika-version>1.4.6</orika-version>
+		<fakesmtp.version>2.0</fakesmtp.version>
+		<coveralls.version>4.1.0</coveralls.version>
+		<jacoco.version>0.7.6.201602180812</jacoco.version>
+	</properties>
 
 	<dependencies>
+		<!-- SPRING -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		<!-- SPRING END -->
+
+		<!-- SESC -->
 		<dependency>
 			<artifactId>sesc-commons-security</artifactId>
 			<groupId>br.org.sesc</groupId>
@@ -24,5 +48,123 @@
 			<groupId>br.org.sesc</groupId>
 			<artifactId>sesc-permissao-client</artifactId>
 		</dependency>
+		<!-- SESC END -->
+
+		<!-- DATABASE -->
+
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<!-- DATABASE -->
+
+		<!-- UTIL -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<!-- UTIL END -->
+
+		<dependency>
+			<groupId>ma.glasnost.orika</groupId>
+			<artifactId>orika-core</artifactId>
+			<version>${orika-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.ws</groupId>
+			<artifactId>spring-ws-test</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.tntim96</groupId>
+			<artifactId>fakesmtp</artifactId>
+			<version>${fakesmtp.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.mail</groupId>
+					<artifactId>mail</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<configuration>
+					<downloadSources>true</downloadSources>
+				</configuration>
+			</plugin>
+
+			<!-- <plugin> -->
+			<!-- <groupId>pl.project13.maven</groupId> -->
+			<!-- <artifactId>git-commit-id-plugin</artifactId> -->
+			<!-- <configuration> -->
+			<!-- <dotGitDirectory>${project.basedir}/../.git</dotGitDirectory> -->
+			<!-- </configuration> -->
+			<!-- </plugin> -->
+
+			<plugin>
+				<groupId>org.eluder.coveralls</groupId>
+				<artifactId>coveralls-maven-plugin</artifactId>
+				<version>${coveralls.version}</version>
+			</plugin>
+
+			<!-- <plugin> -->
+			<!-- <groupId>org.jacoco</groupId> -->
+			<!-- <artifactId>jacoco-maven-plugin</artifactId> -->
+			<!-- <version>${jacoco.version}</version> -->
+			<!-- <executions> -->
+			<!-- <execution> -->
+			<!-- <id>prepare-agent</id> -->
+			<!-- <goals> -->
+			<!-- <goal>prepare-agent</goal> -->
+			<!-- </goals> -->
+			<!-- </execution> -->
+			<!-- </executions> -->
+			<!-- </plugin> -->
+
+		</plugins>
+
+	</build>
 </project>
