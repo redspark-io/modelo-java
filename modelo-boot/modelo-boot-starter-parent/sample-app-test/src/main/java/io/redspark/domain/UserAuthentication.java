@@ -1,4 +1,4 @@
-package io.redspark.security;
+package io.redspark.domain;
 
 public interface UserAuthentication {
 

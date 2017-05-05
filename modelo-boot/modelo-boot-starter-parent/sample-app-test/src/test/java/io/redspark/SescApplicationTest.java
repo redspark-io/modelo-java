@@ -17,7 +17,7 @@ import org.springframework.ws.test.client.ResponseCreators;
 import org.springframework.xml.transform.StringSource;
 
 import br.org.sesc.commons.security.SescAuthConst;
-import io.redspark.security.UserAuthentication;
+import io.redspark.domain.UserAuthentication;
 
 public abstract class SescApplicationTest extends ApplicationTest {
 	private UserAuthentication userAuthentication;
@@ -39,7 +39,22 @@ public abstract class SescApplicationTest extends ApplicationTest {
 	
 	protected void signIn(UserAuthentication user) {
 		MockWebServiceServer mockWebServiceServer = MockWebServiceServer.createServer(webServiceTemplate);
-		Source responsePayload = new StringSource(
+		Source responsePayload = createMock(user);
+
+		mockWebServiceServer.expect(RequestMatchers.connectionTo(authenticationUrl))
+		.andRespond(ResponseCreators.withPayload(responsePayload));
+
+		ResponseEntity<Object> response = super.get("/me")
+				.header(SescAuthConst.HASH_KEY, "hash")
+				.header(SescAuthConst.OPC_CODIGO_KEY, codigo.toString())
+				.header(SescAuthConst.PERMISSAO, "permissao").getResponse();
+
+		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+		authentication = response.getHeaders().getFirst("Set-Cookie");
+	}
+
+	private StringSource createMock(UserAuthentication user) {
+		return new StringSource(
 				"<fncValidarResponse>"
 						+ "<fncValidarReturn>"
 						+ "<resultado>"
@@ -70,17 +85,6 @@ public abstract class SescApplicationTest extends ApplicationTest {
 						+ "<erro_mensagem>Consulta executada com sucesso!</erro_mensagem>"
 						+ "</resultado>" + "</fncValidarReturn>"
 						+ "</fncValidarResponse>");
-
-		mockWebServiceServer.expect(RequestMatchers.connectionTo(authenticationUrl))
-		.andRespond(ResponseCreators.withPayload(responsePayload));
-
-		ResponseEntity<Object> response = super.get("/me")
-				.header(SescAuthConst.HASH_KEY, "hash")
-				.header(SescAuthConst.OPC_CODIGO_KEY, codigo.toString())
-				.header(SescAuthConst.PERMISSAO, "permissao").getResponse();
-
-		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-		authentication = response.getHeaders().getFirst("Set-Cookie");
 	}
 
 	protected void signOut(UserAuthentication user) {

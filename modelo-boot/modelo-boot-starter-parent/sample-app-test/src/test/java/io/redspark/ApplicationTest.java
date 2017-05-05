@@ -19,7 +19,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import io.redspark.Application;
-import io.redspark.security.UserAuthentication;
+import io.redspark.domain.UserAuthentication;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = {Application.class}, properties = "server.port=10001")

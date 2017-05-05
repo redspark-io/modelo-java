@@ -1,8 +1,9 @@
 package io.redspark.controller.dto;
 
-import org.springframework.security.core.authority.AuthorityUtils;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
-import io.redspark.security.DefaultUser;
+import br.org.sesc.commons.security.SescUser;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,11 +13,11 @@ public class UserDTO {
 
   private Long id;
   private String name;
-  private Boolean admin;
+  private Collection<String> authorities;
 
-  public UserDTO(DefaultUser user) {
-    this.id = user.getId();
-    this.name = user.getName();
-    this.admin = user.getAuthorities().contains(AuthorityUtils.createAuthorityList("ROLE_ADMIN").get(0));
+  public UserDTO(SescUser user) {
+    this.id = user.getUsuCodigo();
+    this.name = user.getNome();
+    this.authorities = user.getAuthorities().stream().map(g -> g.getAuthority()).collect(Collectors.toList());
   }
 }

@@ -21,8 +21,8 @@ public class MeControllerTest extends SescApplicationTest {
     saveall(user);
     signIn(user);
 
-   get("/me").expectedStatus(HttpStatus.OK).getResponse(UserDTO.class);
-//    assertThat(response.getBody().getId(), equalTo(user.getId()));
+   ResponseEntity<UserDTO> response = get("/me").expectedStatus(HttpStatus.OK).getResponse(UserDTO.class);
+    assertThat(response.getBody().getId(), equalTo(user.getId()));
   }
 
   @Test
