@@ -10,10 +10,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import io.redspark.Application;
+import io.redspark.ApplicationConfig;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = ApplicationConfig.class)
 public class SescDaoAuthenticationProviderAutoConfigurationTest {
 	
 	@Autowired

@@ -1,5 +1,7 @@
 package io.redspark.autoconfigure.sesc;
 
+import java.util.Collection;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import br.org.sesc.commons.security.AuthenticationHook;
@@ -15,8 +17,11 @@ public class DefaultAutheticationHook implements AuthenticationHook {
 
 	@Override
 	public void execute(SescUser user) {
-		for (String s : client.recuperarPermissoes(user.getSisCodigo(), user.getUsuCodigo(), user.getUnidadeOrcamentaria())) {
+		Collection<String> permissoes = client.recuperarPermissoes(user.getSisCodigo(), user.getUsuCodigo(), user.getUnidadeOrcamentaria());
+		
+		for (String s : permissoes) {
 			user.addAuthority(new SimpleGrantedAuthority(s));
 		}
 	}
+	
 }

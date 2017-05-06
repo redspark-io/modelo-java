@@ -33,7 +33,7 @@ import br.org.sesc.commons.security.SescAuthConst;
 import io.redspark.domain.UserAuthentication;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = {Application.class}, properties = "server.port=10001")
+@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = {ApplicationConfig.class}, properties = "server.port=10001")
 public abstract class ApplicationTest {
   @Autowired
   private JpaTransactionManager manager;

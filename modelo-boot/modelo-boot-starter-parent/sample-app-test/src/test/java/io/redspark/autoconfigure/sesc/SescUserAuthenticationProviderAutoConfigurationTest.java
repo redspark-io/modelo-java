@@ -10,10 +10,10 @@ import org.springframework.ws.client.core.WebServiceTemplate;
 
 import br.org.sesc.commons.security.AuthenticationHook;
 import br.org.sesc.commons.security.SescWebServiceAuthenticationProvider;
-import io.redspark.Application;
+import io.redspark.ApplicationConfig;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = ApplicationConfig.class)
 public class SescUserAuthenticationProviderAutoConfigurationTest {
 	@Autowired
 	private ApplicationContext context;

@@ -1,5 +1,9 @@
 package io.redspark.autoconfigure.sesc;
 
+import static io.redspark.autoconfigure.constants.ApplicationProfile.HOMOLOG;
+import static io.redspark.autoconfigure.constants.ApplicationProfile.PRODUCAO;
+import static io.redspark.autoconfigure.constants.ApplicationProfile.QA;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -14,7 +18,8 @@ import br.org.sesc.permissao.client.config.DefaultSyncConfiguration;
 import br.org.sesc.permissao.client.config.SyncConfiguration;
 
 @Configuration
-@ConditionalOnClass(PermissaoServiceClient.class) //FIXME entender porque não carrega 
+@ConditionalOnClass(PermissaoServiceClient.class)
+@Profile({HOMOLOG, PRODUCAO, QA})
 public class SescPermissaoClientAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
@@ -32,7 +37,6 @@ public class SescPermissaoClientAutoConfiguration {
 	}
 	
 	@Bean
-	@Profile({ "DEV", "PRODUCAO" })
 	@ConditionalOnMissingBean
 	@ConditionalOnBean(SyncConfiguration.class)
 	public PermissaoServiceClient permissaoServiceClient(SyncConfiguration syncConfiguration) {
