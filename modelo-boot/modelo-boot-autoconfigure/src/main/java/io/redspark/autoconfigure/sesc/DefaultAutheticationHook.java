@@ -23,5 +23,4 @@ public class DefaultAutheticationHook implements AuthenticationHook {
 			user.addAuthority(new SimpleGrantedAuthority(s));
 		}
 	}
-	
 }

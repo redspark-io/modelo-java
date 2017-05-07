@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.WebServiceMessageFactory;
 import org.springframework.ws.client.core.WebServiceTemplate;
@@ -58,14 +57,13 @@ public class SescUserAuthenticationProviderAutoConfiguration {
 
 	
 	@Bean
-//	@Profile({ "DEV", "PRODUCAO" })
 	@ConditionalOnMissingBean
 	@ConditionalOnBean(PermissaoServiceClient.class)
 	public AuthenticationHook authenticationHook(PermissaoServiceClient psc) {
 		return new DefaultAutheticationHook(psc);
 	}
 	
-	//TODO deve receber securityWebService via parametro para o link{@ConditionalOnBean} funcionar corretamente
+	//TODO deve receber securityWebService via parametro para o link @ConditionalOnBean funcionar corretamente
 	@Bean
 	@ConditionalOnMissingBean
 	@ConditionalOnBean(value = AuthenticationHook.class)

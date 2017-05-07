@@ -16,6 +16,6 @@ public class SescSecurityAutoConfigurationTest {
 	private ApplicationContext context;
 	
 	@Test
-	public void loadSecurityContext() throws Exception {
+	public void mostLoadSecurityContext() throws Exception {
 	}
 }

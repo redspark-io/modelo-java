@@ -19,7 +19,7 @@ public class SescUserAuthenticationProviderAutoConfigurationTest {
 	private ApplicationContext context;
 	
 	@Test
-	public void loadWsTemplate() throws Exception {
+	public void mustLoadWsTemplate() throws Exception {
 		boolean wasLoadBean = context.containsBean("securityWebService");
 		Assert.assertTrue(wasLoadBean);
 		
@@ -28,7 +28,7 @@ public class SescUserAuthenticationProviderAutoConfigurationTest {
 	}
 	
 	@Test
-	public void loadAuthenticationHook() throws Exception {
+	public void mustLoadAuthenticationHook() throws Exception {
 		boolean wasLoadBean = context.containsBean("authenticationHook");
 		Assert.assertTrue(wasLoadBean);
 		
@@ -37,7 +37,7 @@ public class SescUserAuthenticationProviderAutoConfigurationTest {
 	}
 	
 	@Test
-	public void loadSescAuthenticationValidators() throws Exception {
+	public void mustLoadSescAuthenticationValidators() throws Exception {
 		boolean wasLoadBean = context.containsBean("sescAuthenticationValidators");
 		Assert.assertTrue(wasLoadBean);
 	}
