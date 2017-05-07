@@ -11,7 +11,6 @@ public class XmlPermissionLoaderMock implements PermissionLoader {
 
 	@Override
 	public Set<PermissaoItem> load() {
-		// TODO Auto-generated method stub
 		return new HashSet<>();
 	}
 }

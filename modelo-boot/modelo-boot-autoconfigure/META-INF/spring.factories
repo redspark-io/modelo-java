@@ -3,4 +3,5 @@ io.redspark.autoconfigure.sesc.SescDaoAuthenticationProviderAutoConfiguration,\
 io.redspark.autoconfigure.sesc.SescPermissaoClientAutoConfiguration,\
 io.redspark.autoconfigure.sesc.SescDaoAuthenticationProviderAutoConfiguration,\
 io.redspark.autoconfigure.sesc.SescSecurityAutoConfiguration,\
-io.redspark.autoconfigure.sesc.SescPermissaoSyncAutoConfiguration
+io.redspark.autoconfigure.sesc.SescPermissaoSyncAutoConfiguration,\
+io.redspark.autoconfigure.handler.HandlerExceptionResolverAutoConfiguration
