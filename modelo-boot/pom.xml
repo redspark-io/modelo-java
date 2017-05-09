@@ -16,7 +16,7 @@
 	<properties>
 		<modelo-boot-version>0.0.1-SNAPSHOT</modelo-boot-version>
 		<sesc.permissao.version>1.6.7</sesc.permissao.version>
-		<sesc.notificacoes.version>1.0.0</sesc.notificacoes.version>
+		<sesc.notificacoes.version>1.0.0-SNAPSHOT</sesc.notificacoes.version>
 	</properties>
 
 	<name>modelo-boot</name>
