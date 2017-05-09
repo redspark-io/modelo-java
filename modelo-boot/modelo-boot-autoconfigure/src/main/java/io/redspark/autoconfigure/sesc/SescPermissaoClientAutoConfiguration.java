@@ -18,9 +18,10 @@ import br.org.sesc.permissao.client.config.DefaultSyncConfiguration;
 import br.org.sesc.permissao.client.config.SyncConfiguration;
 
 @Configuration
-@ConditionalOnClass(PermissaoServiceClient.class)
 @Profile({HOMOLOG, PRODUCAO, QA})
+@ConditionalOnClass(PermissaoServiceClient.class)
 public class SescPermissaoClientAutoConfiguration {
+  
 	@Bean
 	@ConditionalOnMissingBean
 	@ConditionalOnProperty(prefix = "sesc.permissao", name = {"url", "login", "password", "hash"})

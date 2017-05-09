@@ -41,7 +41,6 @@ public class HandlerExceptionResolverAutoConfiguration {
 					modelAndView = new ModelAndView();
 				} catch (IOException e) {
 					log.error(e.getMessage(), e);
-					modelAndView = null;
 				}
 			} else if (ex instanceof WebException) {
 				WebException webex = (WebException) ex;
@@ -50,7 +49,6 @@ public class HandlerExceptionResolverAutoConfiguration {
 					modelAndView = new ModelAndView();
 				} catch (IOException e) {
 					log.error(e.getMessage(), e);
-					modelAndView = null;
 				}
 			}
 

@@ -12,12 +12,13 @@
 		<version>1.5.3.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	
+
 	<properties>
 		<modelo-boot-version>0.0.1-SNAPSHOT</modelo-boot-version>
 		<sesc.permissao.version>1.6.7</sesc.permissao.version>
+		<sesc.notificacoes.version>1.0.0</sesc.notificacoes.version>
 	</properties>
-	
+
 	<name>modelo-boot</name>
 
 	<dependencyManagement>
@@ -30,10 +31,16 @@
 
 			<dependency>
 				<groupId>br.org.sesc</groupId>
+				<artifactId>sesc-notificacoes-client</artifactId>
+				<version>${sesc.notificacoes.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>br.org.sesc</groupId>
 				<artifactId>sesc-permissao-client</artifactId>
 				<version>${sesc.permissao.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>br.org.sesc</groupId>
 				<artifactId>sesc-permissao-sync</artifactId>
@@ -58,7 +65,7 @@
 			<url>http://nexus.redspark.io/content/repositories/releases/</url>
 		</repository>
 	</repositories>
-	
+
 	<modules>
 		<module>modelo-boot-starter-parent</module>
 		<module>modelo-boot-autoconfigure</module>

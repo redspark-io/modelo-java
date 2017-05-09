@@ -1,14 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>io.redspark</groupId>
 		<artifactId>modelo-boot</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+
 	<artifactId>modelo-boot-autoconfigure</artifactId>
 	<name>modelo-boot-autoconfigure</name>
-	
+
 	<properties>
 		<!-- compiler -->
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -16,9 +18,11 @@
 		<maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
 		<maven.compiler.testTarget>1.8</maven.compiler.testTarget>
 		<maven.compiler.testSource>1.8</maven.compiler.testSource>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>	
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<sesc-commons-version>2.2.0-SNAPSHOT</sesc-commons-version>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -33,25 +37,95 @@
 			<scope>provided</scope>
 			<optional>true</optional>
 		</dependency>
-		
+
 		<dependency>
 			<artifactId>sesc-commons-security</artifactId>
 			<groupId>br.org.sesc</groupId>
 			<optional>true</optional>
 			<scope>provided</scope>
 		</dependency>
-		
-		 <dependency>
-            <groupId>br.org.sesc</groupId>
-            <artifactId>sesc-permissao-client</artifactId>
-            <optional>true</optional>
-            <scope>provided</scope>
-        </dependency>
-        
-        <dependency>
+    
+    <dependency>
+      <groupId>br.org.sesc</groupId>
+      <artifactId>sesc-notificacoes-client</artifactId>
+      <optional>true</optional>
+      <scope>provided</scope>
+    </dependency>
+    
+		<dependency>
+			<groupId>br.org.sesc</groupId>
+			<artifactId>sesc-permissao-client</artifactId>
+			<optional>true</optional>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>br.org.sesc</groupId>
 			<artifactId>sesc-permissao-sync</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>br.org.sesc</groupId>
+			<artifactId>sesc-commons-utils</artifactId>
+			<version>${sesc-commons-version}</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>joda-time</groupId>
+					<artifactId>joda-time</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<artifactId>logback-classic</artifactId>
+					<groupId>ch.qos.logback</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>br.org.sesc</groupId>
+			<artifactId>sesc-permissao-client</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jdk8</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
 	</dependencies>
-	
+
+
+
+	<repositories>
+		<repository>
+			<id>redspark</id>
+			<url>http://nexus.redspark.io/content/groups/public/</url>
+		</repository>
+		<repository>
+			<id>snapshots</id>
+			<name>redspark snapshots</name>
+			<url>http://nexus.redspark.io/content/repositories/snapshots/</url>
+		</repository>
+		<repository>
+			<id>releases</id>
+			<name>redspark releases</name>
+			<url>http://nexus.redspark.io/content/repositories/releases/</url>
+		</repository>
+	</repositories>
 </project>

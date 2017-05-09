@@ -12,7 +12,8 @@ import io.redspark.ApplicationConfig;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApplicationConfig.class)
 public class SescPermissaoClientAutoconfigurationTest {
-	@Autowired
+	
+  @Autowired
 	private ApplicationContext context;
 	
 	@Test
