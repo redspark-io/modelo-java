@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -34,6 +36,8 @@ import br.org.sesc.commons.security.SescWebServiceAuthenticationSecurityFilter;
 @Configuration
 @ConditionalOnClass({ SescWebServiceAuthenticationSecurityFilter.class })
 @ConditionalOnMissingBean({WebSecurityConfiguration.class})
+@AutoConfigureAfter(value = {SescDaoAuthenticationProviderAutoConfiguration.class, 
+		SescUserAuthenticationProviderAutoConfiguration.class})
 @ConditionalOnWebApplication
 @EnableWebSecurity
 public class SescSecurityAutoConfiguration {
@@ -49,7 +53,7 @@ public class SescSecurityAutoConfiguration {
 			return new SescWebServiceAuthenticationSecurityFilter(authenticationManager(), authenticationEntryPoint());
 		}
 		
-		@Autowired
+		@ConditionalOnBean(name = {"sescUserAuthenticationProvider", "daoAuthenticationProvider"})
 		public void setAuthenticationManagerBuilder(AuthenticationManagerBuilder auth,
 		    @Qualifier("sescUserAuthenticationProvider") SescWebServiceAuthenticationProvider sescWebServiceAuthenticationProvider,
 		    @Qualifier("daoAuthenticationProvider") DaoAuthenticationProvider daoAuthenticationProvider) {
