@@ -18,6 +18,7 @@ test:
   override:
     # build
     - mvn install -f server/pom.xml jacoco:report coveralls:report -DrepoToken=1nqr7w1iwtzAToi58EabiIhjhMgeoZoNR
+    - mvn install -f modelo-boot/modelo-boot-autoconfigure/pom.xml -DskipTests
     - mvn install -f modelo-boot/modelo-boot-starter-parent/sample-app-test/pom.xml
 
   post:
