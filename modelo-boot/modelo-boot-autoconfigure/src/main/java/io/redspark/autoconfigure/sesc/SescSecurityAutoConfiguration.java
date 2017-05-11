@@ -53,7 +53,7 @@ public class SescSecurityAutoConfiguration {
 			return new SescWebServiceAuthenticationSecurityFilter(authenticationManager(), authenticationEntryPoint());
 		}
 		
-		@ConditionalOnBean(name = {"sescUserAuthenticationProvider", "daoAuthenticationProvider"})
+		@Autowired
 		public void setAuthenticationManagerBuilder(AuthenticationManagerBuilder auth,
 		    @Qualifier("sescUserAuthenticationProvider") SescWebServiceAuthenticationProvider sescWebServiceAuthenticationProvider,
 		    @Qualifier("daoAuthenticationProvider") DaoAuthenticationProvider daoAuthenticationProvider) {

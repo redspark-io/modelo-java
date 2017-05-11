@@ -1,14 +1,13 @@
 package io.redspark;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.xml.transform.Source;
 
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ import br.org.sesc.commons.security.SescAuthConst;
 import io.redspark.domain.UserAuthentication;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = {ApplicationTestConfig.class}, properties = "server.port=10001")
+@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = {ApplicationTestConfig.class, ApplicationConfig.class}, properties = "server.port=10001")
 public abstract class ApplicationTest {
   @Autowired
   private JpaTransactionManager manager;
@@ -67,7 +66,7 @@ public abstract class ApplicationTest {
 				.header(SescAuthConst.OPC_CODIGO_KEY, codigo.toString())
 				.header(SescAuthConst.PERMISSAO, "permissao").getResponse();
 
-		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+		Assert.assertThat(response.getStatusCode(), Matchers.equalTo(HttpStatus.OK));
 		authentication = response.getHeaders().getFirst("Set-Cookie");
 	}
 

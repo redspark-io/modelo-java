@@ -18,16 +18,6 @@ import br.org.sesc.commons.security.test.SimpleUserDetailService;
 @ConditionalOnClass(value = DaoAuthenticationProvider.class)
 @EnableConfigurationProperties(SescApplicationUserProperties.class)
 public class SescDaoAuthenticationProviderAutoConfiguration {
-
-	@Bean
-	@ConditionalOnMissingBean
-	@ConditionalOnBean(UserDetailsService.class)
-	public DaoAuthenticationProvider daoAuthenticationProvider(UserDetailsService userDetailsService) {
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(userDetailsService);
-
-		return authenticationProvider;
-	}
 	
 	@Bean
 	@ConditionalOnMissingBean
@@ -43,4 +33,15 @@ public class SescDaoAuthenticationProviderAutoConfiguration {
 		
 		return simpleUserDetailService;
 	}
+	
+	@Bean
+	@ConditionalOnMissingBean
+	@ConditionalOnBean(value = UserDetailsService.class)
+	public DaoAuthenticationProvider daoAuthenticationProvider(UserDetailsService userDetailsService) {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(userDetailsService);
+
+		return authenticationProvider;
+	}
+
 }

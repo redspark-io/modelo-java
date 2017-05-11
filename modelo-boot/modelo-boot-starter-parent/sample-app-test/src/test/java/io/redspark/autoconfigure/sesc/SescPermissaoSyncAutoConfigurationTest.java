@@ -1,7 +1,5 @@
 package io.redspark.autoconfigure.sesc;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
 
 import org.hamcrest.Matchers;
@@ -9,10 +7,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.sesc.permissao.sync.loader.PermissionLoader;
 import org.sesc.permissao.sync.loader.impl.AnnotatedControllerPermissionLoader;
-import org.sesc.permissao.sync.loader.impl.XmlPermissionLoader;
 import org.sesc.permissao.sync.service.SyncService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import io.redspark.ApplicationTest;
 import io.redspark.mock.XmlPermissionLoaderMock;
@@ -51,5 +51,16 @@ public class SescPermissaoSyncAutoConfigurationTest extends ApplicationTest {
 		Assert.assertThat(loaders, Matchers.hasSize(2));
 		Assert.assertNotNull(loaders.get(0));
 		Assert.assertNotNull(loaders.get(1));
+	}
+	
+	@Test
+	public void mustLoadDaoAuthenticationProvider() throws Exception {
+		boolean wasLoadProviderBean = context.containsBean("daoAuthenticationProvider");
+		Assert.assertTrue(wasLoadProviderBean);
+		
+		DaoAuthenticationProvider beanProvider = context.getBean(DaoAuthenticationProvider.class);
+		UserDetailsService detailsService = (UserDetailsService) ReflectionTestUtils.getField(beanProvider, "userDetailsService");
+		
+		Assert.assertNotNull(detailsService);
 	}
 }

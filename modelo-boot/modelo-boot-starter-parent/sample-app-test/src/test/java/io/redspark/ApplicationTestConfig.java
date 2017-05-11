@@ -2,7 +2,6 @@ package io.redspark;
 
 import org.sesc.permissao.sync.loader.PermissionLoader;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,9 +15,8 @@ import io.redspark.mock.PermissaoServiceClientMock;
 import io.redspark.mock.XmlPermissionLoaderMock;
 
 @Configuration
-@EnableAutoConfiguration
-public class ApplicationTestConfig extends ApplicationConfig {
-
+public class ApplicationTestConfig {
+	
   @Bean
   public PermissaoServiceClient permissaoServiceClient() {
     return new PermissaoServiceClientMock();
@@ -31,12 +29,12 @@ public class ApplicationTestConfig extends ApplicationConfig {
 
   @Bean
   @Qualifier("xmlPermissionLoader")
-  public PermissionLoader xmlPermissionLoader() {
+  public PermissionLoader xmlPermissionLoader() {	
     return new XmlPermissionLoaderMock();
   }
   
   @Bean
-  public UserDetailsService userDeatailsService() {
+  public UserDetailsService userDetailsService() {
   	return new UserDetailsService() {
 			@Override
 			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -44,4 +42,5 @@ public class ApplicationTestConfig extends ApplicationConfig {
 			}
 		};
   }
+  
 }
