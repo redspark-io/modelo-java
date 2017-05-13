@@ -93,6 +93,6 @@
 	<modules>
 		<module>modelo-boot-starter-parent</module>
 		<module>modelo-boot-autoconfigure</module>
-		<module>modelo-boot-starter-web</module>
+		<module>modelo-boot-starter-commons</module>
 	</modules>
 </project>
