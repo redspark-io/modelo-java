@@ -1,4 +1,4 @@
-package io.redspark.commons.exception;
+package io.redspak.boot.commons.exception;
 
 import org.springframework.http.HttpStatus;
 
@@ -6,13 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class WebException extends RuntimeException {
+
   private static final long serialVersionUID = 3406636182783807331L;
 
-	private final HttpStatus status;
-  private final String message;
+  private HttpStatus status;
+  private String message;
+
 }

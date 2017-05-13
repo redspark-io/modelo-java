@@ -14,10 +14,21 @@
 	</parent>
 
 	<properties>
-		<modelo-boot-version>0.0.1-SNAPSHOT</modelo-boot-version>
+		<!-- compiler -->
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+		<maven.compiler.testTarget>1.8</maven.compiler.testTarget>
+		<maven.compiler.testSource>1.8</maven.compiler.testSource>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
 		<sesc.permissao.version>1.6.7</sesc.permissao.version>
 		<sesc.notificacoes.version>1.0.1-SNAPSHOT</sesc.notificacoes.version>
 		<sesc.commons.version>2.2.0-SNAPSHOT</sesc.commons.version>
+
+		<orika-version>1.4.6</orika-version>
+
+		<modelo-boot-version>0.0.1-SNAPSHOT</modelo-boot-version>
 	</properties>
 
 	<name>modelo-boot</name>
@@ -52,29 +63,12 @@
 				<groupId>br.org.sesc</groupId>
 				<artifactId>sesc-commons-utils</artifactId>
 				<version>${sesc.commons.version}</version>
-				<scope>provided</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>joda-time</groupId>
-						<artifactId>joda-time</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<artifactId>logback-classic</artifactId>
-						<groupId>ch.qos.logback</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>commons-logging</artifactId>
-						<groupId>commons-logging</groupId>
-					</exclusion>
-				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>ma.glasnost.orika</groupId>
+				<artifactId>orika-core</artifactId>
+				<version>${orika-version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -99,5 +93,6 @@
 	<modules>
 		<module>modelo-boot-starter-parent</module>
 		<module>modelo-boot-autoconfigure</module>
+		<module>modelo-boot-starter-web</module>
 	</modules>
 </project>
