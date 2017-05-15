@@ -60,6 +60,7 @@
 		<dependency>
 			<groupId>br.org.sesc</groupId>
 			<artifactId>sesc-permissao-sync</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -77,17 +78,19 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jdk8</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>io.redspark</groupId>
 			<artifactId>modelo-boot-starter-commons</artifactId>
-			<version>${modelo-boot-version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

@@ -5,7 +5,7 @@ import io.redspark.domain.User.UserBuilder;
 
 public class Compose {
   public static UserBuilder admin(String name) {
-    return user(name).admin(true);
+    return user(name).admin(true).id(1L);
   }
 
   public static UserBuilder user(String name) {

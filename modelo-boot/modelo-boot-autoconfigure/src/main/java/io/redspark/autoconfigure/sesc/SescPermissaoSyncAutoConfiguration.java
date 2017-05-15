@@ -54,8 +54,8 @@ public class SescPermissaoSyncAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
 	@ConditionalOnBean(value = {SyncConfiguration.class}, name = {"xmlPermissionLoader", "annotatedControllerPermissionLoader"})
-	public SyncService syncService(final 
-			SyncConfiguration syncConfiguration,
+	public SyncService syncService(
+			final SyncConfiguration syncConfiguration,
 	    @Qualifier("xmlPermissionLoader") final PermissionLoader xmPermissionLoader,
 	    @Qualifier("annotatedControllerPermissionLoader") final PermissionLoader annotatedControllerPermissionLoader) {
 

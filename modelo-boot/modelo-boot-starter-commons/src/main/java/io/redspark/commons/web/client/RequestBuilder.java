@@ -1,7 +1,5 @@
 package io.redspark.commons.web.client;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -106,9 +104,9 @@ public class RequestBuilder {
     ResponseEntity<T> response = rest.exchange(link, method, entity,
         responseType);
 
-    if (status != null) {
-      assertThat(response.getStatusCode(), equalTo(status));
-    }
+//    if (status != null) {
+//      assertThat(response.getStatusCode(), equalTo(status));
+//    }
     return response;
   }
 
@@ -138,7 +136,7 @@ public class RequestBuilder {
   public void errorMessage(String errorMessage) {
     try {
       JsonNode json = this.getJson();
-      assertThat(json.get("message").asText(), equalTo(errorMessage));
+//      assertThat(json.get("message").asText(), equalTo(errorMessage));
     } catch (IOException e) {
       throw new RuntimeException("Can't convert response to Json");
     }

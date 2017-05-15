@@ -17,7 +17,6 @@ public class MeControllerTest extends ApplicationTest {
   @Test
   public void testMe() {
     User user = admin("bruno").build();
-    saveall(user);
     signInWs(user);
 
    ResponseEntity<UserDTO> response = get("/me").expectedStatus(HttpStatus.OK).getResponse(UserDTO.class);

@@ -1,5 +1,6 @@
 package io.redspark.autoconfigure.sesc;
 
+import static io.redspark.autoconfigure.constants.ApplicationProfile.DEV;
 import static io.redspark.autoconfigure.constants.ApplicationProfile.HOMOLOG;
 import static io.redspark.autoconfigure.constants.ApplicationProfile.PRODUCAO;
 import static io.redspark.autoconfigure.constants.ApplicationProfile.QA;
@@ -16,9 +17,10 @@ import org.springframework.context.annotation.Profile;
 import br.org.sesc.permissao.client.PermissaoServiceClient;
 import br.org.sesc.permissao.client.config.DefaultSyncConfiguration;
 import br.org.sesc.permissao.client.config.SyncConfiguration;
+import io.redspark.autoconfigure.constants.ApplicationProfile;
 
 @Configuration
-@Profile({HOMOLOG, PRODUCAO, QA})
+@Profile({DEV, HOMOLOG, PRODUCAO, QA})
 @ConditionalOnClass(PermissaoServiceClient.class)
 public class SescPermissaoClientAutoConfiguration {
   

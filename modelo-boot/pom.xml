@@ -70,6 +70,14 @@
 				<artifactId>orika-core</artifactId>
 				<version>${orika-version}</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>io.redspark</groupId>
+				<artifactId>modelo-boot-starter-commons</artifactId>
+				<version>${modelo-boot-version}</version>
+			</dependency>
+			
+			
 		</dependencies>
 	</dependencyManagement>
 
