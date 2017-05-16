@@ -21,9 +21,10 @@ test:
 
     # build modelo-boot
     - mvn install -f modelo-boot/pom.xml -N
+    - mvn install -f modelo-boot/modelo-boot-starter-commons/pom.xml -DskipTests
     - mvn install -f modelo-boot/modelo-boot-autoconfigure/pom.xml -DskipTests
     - mvn install -f modelo-boot/modelo-boot-starter-parent/pom.xml -DskipTests
-    - mvn install -f modelo-boot/modelo-boot-starter-parent/sample-app-test/pom.xml
+    - mvn install -f modelo-boot/modelo-boot-starter-parent/sample-app/pom.xml
     - mvn --fail-never dependency:go-offline -f modelo-boot/pom.xml || true
 
   post:
