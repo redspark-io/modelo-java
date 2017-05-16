@@ -22,6 +22,7 @@
 		<fakesmtp.version>2.0</fakesmtp.version>
 		<coveralls.version>4.1.0</coveralls.version>
 		<jacoco.version>0.7.6.201602180812</jacoco.version>
+
 	</properties>
 
 	<dependencies>
@@ -34,7 +35,7 @@
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mail</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
 		<dependency>
@@ -43,22 +44,20 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.ws</groupId>
 			<artifactId>spring-ws-test</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-context</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-beans</artifactId>
-				</exclusion>
-			</exclusions>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>de.codecentric</groupId>
+			<artifactId>spring-boot-admin-starter-client</artifactId>
+			<version>1.5.0</version>
 		</dependency>
 		<!-- SPRING END -->
 
@@ -82,7 +81,7 @@
 			<groupId>br.org.sesc</groupId>
 			<artifactId>sesc-permissao-sync</artifactId>
 		</dependency>
-		<!-- SESC END-->
+		<!-- SESC END -->
 
 		<!-- DATABASE -->
 		<dependency>
@@ -113,20 +112,19 @@
 			<groupId>io.redspark</groupId>
 			<artifactId>modelo-boot-starter-commons</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>com.github.tntim96</groupId>
-			<artifactId>fakesmtp</artifactId>
-			<version>${fakesmtp.version}</version>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.mail</groupId>
-					<artifactId>mail</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Dalston.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
@@ -148,34 +146,11 @@
 				</configuration>
 			</plugin>
 
-			<!-- <plugin> -->
-			<!-- <groupId>pl.project13.maven</groupId> -->
-			<!-- <artifactId>git-commit-id-plugin</artifactId> -->
-			<!-- <configuration> -->
-			<!-- <dotGitDirectory>${project.basedir}/../.git</dotGitDirectory> -->
-			<!-- </configuration> -->
-			<!-- </plugin> -->
-
 			<plugin>
 				<groupId>org.eluder.coveralls</groupId>
 				<artifactId>coveralls-maven-plugin</artifactId>
 				<version>${coveralls.version}</version>
 			</plugin>
-
-			<!-- <plugin> -->
-			<!-- <groupId>org.jacoco</groupId> -->
-			<!-- <artifactId>jacoco-maven-plugin</artifactId> -->
-			<!-- <version>${jacoco.version}</version> -->
-			<!-- <executions> -->
-			<!-- <execution> -->
-			<!-- <id>prepare-agent</id> -->
-			<!-- <goals> -->
-			<!-- <goal>prepare-agent</goal> -->
-			<!-- </goals> -->
-			<!-- </execution> -->
-			<!-- </executions> -->
-			<!-- </plugin> -->
-
 		</plugins>
 
 	</build>

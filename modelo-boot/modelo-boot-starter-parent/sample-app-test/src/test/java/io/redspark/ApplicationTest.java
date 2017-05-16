@@ -23,6 +23,7 @@ import org.springframework.xml.transform.StringSource;
 
 import br.org.sesc.commons.security.SescAuthConst;
 import io.redspark.commons.security.UserAuthentication;
+import io.redspark.commons.web.client.RequestBuilder;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = {ApplicationTestConfig.class, ApplicationConfig.class}, properties = "server.port=10001")

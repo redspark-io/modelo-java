@@ -1,11 +1,12 @@
 package io.redspark.commons.security;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserUtils {
 
-  public static DefaultUser getUserLogged() {
-    return (DefaultUser) getLoggedAsPrincipal();
+  public static UserDetails getUserLogged() {
+    return (UserDetails) getLoggedAsPrincipal();
   }
 
   private static Object getLoggedAsPrincipal() {
@@ -18,8 +19,8 @@ public class UserUtils {
     return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
-  public static boolean isUserLoggedAsHolmesUser(DefaultUser defaultUser) {
-    return defaultUser != null && DefaultUser.class.isAssignableFrom(defaultUser.getClass());
+  public static boolean isUserLoggedAsHolmesUser(UserDetails defaultUser) {
+    return defaultUser != null && UserDetails.class.isAssignableFrom(defaultUser.getClass());
   }
 
 }

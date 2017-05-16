@@ -1,11 +1,14 @@
 package io.redspark.commons.web.client;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.URI;
 import java.util.Arrays;
 
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class RequestBuilder {
 
   private ObjectMapper mapper = new ObjectMapper();
-  private RestTemplate rest = new RestTemplate();
+  private TestRestTemplate rest = new TestRestTemplate();
   private String URI;
   private MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
   private MultiValueMap<String, Object> variables = new LinkedMultiValueMap<String, Object>();
@@ -104,9 +106,9 @@ public class RequestBuilder {
     ResponseEntity<T> response = rest.exchange(link, method, entity,
         responseType);
 
-//    if (status != null) {
-//      assertThat(response.getStatusCode(), equalTo(status));
-//    }
+    if (status != null) {
+      assertThat(response.getStatusCode(), equalTo(status));
+    }
     return response;
   }
 
@@ -136,7 +138,7 @@ public class RequestBuilder {
   public void errorMessage(String errorMessage) {
     try {
       JsonNode json = this.getJson();
-//      assertThat(json.get("message").asText(), equalTo(errorMessage));
+      assertThat(json.get("message").asText(), equalTo(errorMessage));
     } catch (IOException e) {
       throw new RuntimeException("Can't convert response to Json");
     }

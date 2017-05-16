@@ -102,5 +102,6 @@
 		<module>modelo-boot-starter-parent</module>
 		<module>modelo-boot-autoconfigure</module>
 		<module>modelo-boot-starter-commons</module>
+		<module>modelo-boot-dashboard</module>
 	</modules>
 </project>
