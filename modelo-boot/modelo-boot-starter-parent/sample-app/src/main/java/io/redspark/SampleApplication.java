@@ -5,10 +5,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 
 
 @SpringBootApplication
-public class ApplicationConfig {
-
+public class SampleApplication {
 	public static void main(String[] args) throws Exception {
-		new SpringApplicationBuilder(ApplicationConfig.class).run(args);
+		new SpringApplicationBuilder(SampleApplication.class).run(args);
 	}
-
 }

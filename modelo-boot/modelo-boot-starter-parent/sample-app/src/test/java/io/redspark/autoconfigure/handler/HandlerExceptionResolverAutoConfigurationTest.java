@@ -9,10 +9,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import io.redspark.ApplicationConfig;
+import io.redspark.SampleApplication;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = ApplicationConfig.class)
+@SpringBootTest(classes = SampleApplication.class)
 public class HandlerExceptionResolverAutoConfigurationTest {
 	@Autowired
 	private ApplicationContext context;

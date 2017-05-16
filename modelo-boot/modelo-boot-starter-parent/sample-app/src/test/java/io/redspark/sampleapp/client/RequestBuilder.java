@@ -1,4 +1,4 @@
-package io.redspark.commons.web.client;
+package io.redspark.sampleapp.client;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;

@@ -21,6 +21,6 @@
 	</dependencies>
 
 	<modules>
-		<module>sample-app-test</module>
+		<module>sample-app</module>
 	</modules>
 </project>

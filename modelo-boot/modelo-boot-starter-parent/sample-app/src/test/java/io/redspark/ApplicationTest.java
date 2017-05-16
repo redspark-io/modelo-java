@@ -22,11 +22,12 @@ import org.springframework.ws.test.client.ResponseCreators;
 import org.springframework.xml.transform.StringSource;
 
 import br.org.sesc.commons.security.SescAuthConst;
+import io.redspark.SampleApplication;
 import io.redspark.commons.security.UserAuthentication;
-import io.redspark.commons.web.client.RequestBuilder;
+import io.redspark.sampleapp.client.RequestBuilder;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = {ApplicationTestConfig.class, ApplicationConfig.class}, properties = "server.port=10001")
+@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = {ApplicationTestConfig.class, SampleApplication.class}, properties = "server.port=10001")
 public abstract class ApplicationTest {
 	@Value("${sesc.authentication.app.codigo}")
 	private Long codigo;

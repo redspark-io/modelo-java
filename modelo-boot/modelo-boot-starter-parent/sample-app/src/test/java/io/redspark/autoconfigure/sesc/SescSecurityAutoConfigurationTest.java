@@ -7,10 +7,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import io.redspark.ApplicationConfig;
+import io.redspark.SampleApplication;
+
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = ApplicationConfig.class)
+@SpringBootTest(classes = SampleApplication.class)
 public class SescSecurityAutoConfigurationTest {
 	@Autowired
 	private ApplicationContext context;
