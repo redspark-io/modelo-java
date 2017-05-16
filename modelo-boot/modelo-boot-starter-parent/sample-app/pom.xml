@@ -24,7 +24,8 @@
 		<fakesmtp.version>2.0</fakesmtp.version>
 		<coveralls.version>4.1.0</coveralls.version>
 		<jacoco.version>0.7.6.201602180812</jacoco.version>
-
+		
+		<spring-cloud.version>Dalston.RELEASE</spring-cloud.version>
 	</properties>
 
 	<dependencies>
@@ -66,6 +67,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-config-server</artifactId>
 		</dependency>
 		<!-- SPRING END -->
 
@@ -121,6 +127,18 @@
 			<artifactId>modelo-boot-starter-commons</artifactId>
 		</dependency>
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
