@@ -38,8 +38,8 @@ import br.org.sesc.commons.security.SescWebServiceAuthenticationSecurityFilter;
 @ConditionalOnMissingBean({WebSecurityConfiguration.class})
 @AutoConfigureAfter(value = {SescDaoAuthenticationProviderAutoConfiguration.class, 
 		SescUserAuthenticationProviderAutoConfiguration.class})
+@ConditionalOnProperty(prefix = "sesc.authentication.security", name = "enabled", havingValue = "true")
 @ConditionalOnWebApplication
-@EnableWebSecurity
 public class SescSecurityAutoConfiguration {
 	
 	@Configuration
