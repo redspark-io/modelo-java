@@ -69,14 +69,12 @@
 				<artifactId>orika-core</artifactId>
 				<version>${orika-version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>io.redspark</groupId>
 				<artifactId>modelo-boot-starter-commons</artifactId>
 				<version>${modelo-boot-version}</version>
 			</dependency>
-			
-			
 		</dependencies>
 	</dependencyManagement>
 
@@ -96,6 +94,23 @@
 			<url>http://nexus.redspark.io/content/repositories/releases/</url>
 		</repository>
 	</repositories>
+
+	<distributionManagement>
+		<site>
+			<id>tomcat</id>
+			<url>scp:///</url>
+		</site>
+
+		<repository>
+			<id>releases</id>
+			<url>http://nexus.redspark.io/content/repositories/releases/</url>
+		</repository>
+
+		<snapshotRepository>
+			<id>snapshots</id>
+			<url>http://nexus.redspark.io/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<modules>
 		<module>modelo-boot-starter-parent</module>

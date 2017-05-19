@@ -86,7 +86,7 @@
 			<artifactId>jackson-datatype-jsr310</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>io.redspark</groupId>
 			<artifactId>modelo-boot-starter-commons</artifactId>
@@ -95,21 +95,20 @@
 	</dependencies>
 
 
+	<distributionManagement>
+		<site>
+			<id>tomcat</id>
+			<url>scp:///modelo-boot-autoconfigure</url>
+		</site>
 
-	<repositories>
-		<repository>
-			<id>redspark</id>
-			<url>http://nexus.redspark.io/content/groups/public/</url>
-		</repository>
-		<repository>
-			<id>snapshots</id>
-			<name>redspark snapshots</name>
-			<url>http://nexus.redspark.io/content/repositories/snapshots/</url>
-		</repository>
 		<repository>
 			<id>releases</id>
-			<name>redspark releases</name>
 			<url>http://nexus.redspark.io/content/repositories/releases/</url>
 		</repository>
-	</repositories>
+
+		<snapshotRepository>
+			<id>snapshots</id>
+			<url>http://nexus.redspark.io/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>

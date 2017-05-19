@@ -38,7 +38,7 @@ public class DefaultSuccessHandler implements AuthenticationSuccessHandler, Logo
 
     if (authentication != null) {
       Object principal = authentication.getPrincipal();
-      jsonGenerator.writeObject(convertPrincipal.convertPrincipal(principal));
+//      jsonGenerator.writeObject(convertPrincipal.convertPrincipal(principal)); //TODO
 
       this.updateHeaders(response);
 
