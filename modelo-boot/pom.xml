@@ -28,6 +28,8 @@
 		<orika-version>1.4.6</orika-version>
 
 		<modelo-boot-version>0.0.1-SNAPSHOT</modelo-boot-version>
+		
+		<swagger.version>2.6.1</swagger.version>
 	</properties>
 
 	<name>modelo-boot</name>
@@ -74,6 +76,18 @@
 				<groupId>io.redspark</groupId>
 				<artifactId>modelo-boot-starter-commons</artifactId>
 				<version>${modelo-boot-version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger2</artifactId>
+				<version>${swagger.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger-ui</artifactId>
+				<version>${swagger.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
