@@ -18,32 +18,31 @@ import br.org.sesc.commons.security.test.SimpleUserDetailService;
 @Configuration
 @ConditionalOnClass(value = DaoAuthenticationProvider.class)
 @EnableConfigurationProperties(SescApplicationUserProperties.class)
-@ConditionalOnProperty(prefix = "sesc.authentication.security", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "sesc.authentication.security.basic", name = "enabled", havingValue = "true")
 public class SescDaoAuthenticationProviderAutoConfiguration {
-	
-	@Bean
-	@ConditionalOnMissingBean
-	public UserDetailsService userDetailsService(SescApplicationUserProperties sescApplicationUser) {
-		ArrayList<SescUser> userAuthList = new ArrayList<SescUser>();
-		for (int i = 0; i < sescApplicationUser.size(); i++) {
-			userAuthList.add(sescApplicationUser.getSescUser(i));
-		}
 
-		UserDetailsService simpleUserDetailService = new SimpleUserDetailService(userAuthList);
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(simpleUserDetailService);
-		
-		return simpleUserDetailService;
-	}
-	
-	@Bean
-	@ConditionalOnMissingBean
-	@ConditionalOnBean(value = UserDetailsService.class)
-	public DaoAuthenticationProvider daoAuthenticationProvider(UserDetailsService userDetailsService) {
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(userDetailsService);
+  @Bean
+  @ConditionalOnMissingBean
+  public UserDetailsService userDetailsService(SescApplicationUserProperties sescApplicationUser) {
 
-		return authenticationProvider;
-	}
+    ArrayList<SescUser> userAuthList = new ArrayList<SescUser>();
+    for (int i = 0; i < sescApplicationUser.size(); i++) {
+      userAuthList.add(sescApplicationUser.getSescUser(i));
+    }
+
+    return new SimpleUserDetailService(userAuthList);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  @ConditionalOnBean(value = UserDetailsService.class)
+  public DaoAuthenticationProvider daoAuthenticationProvider(UserDetailsService userDetailsService) {
+
+    DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+
+    authenticationProvider.setUserDetailsService(userDetailsService);
+
+    return authenticationProvider;
+  }
 
 }

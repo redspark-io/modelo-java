@@ -30,7 +30,10 @@ public class HandlerExceptionResolverAutoConfiguration {
 	@ConditionalOnMissingBean
 	public HandlerExceptionResolver handlerExceptionResolver() {
 		return (request, response, handler, ex) -> {
-			ModelAndView modelAndView = null;
+			
+		  ModelAndView modelAndView = null;
+			
+		  ex.printStackTrace();
 
 			if (ex.getClass().isAssignableFrom(BindException.class)) {
 				BindException bindex = (BindException) ex;

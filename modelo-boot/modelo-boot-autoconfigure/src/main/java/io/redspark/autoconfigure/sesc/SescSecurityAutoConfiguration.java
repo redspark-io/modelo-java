@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -21,7 +20,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -46,7 +44,8 @@ public class SescSecurityAutoConfiguration {
 	@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 	@ConditionalOnProperty(prefix = "sesc.authentication.security", name = "enabled", havingValue = "true")
 	protected static class ApplicationWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
-		@Value("#{'${sesc.authentication.ant.ignored.matchers}'.split(',')}")
+		
+	  @Value("#{'${sesc.authentication.ant.ignored.matchers}'.split(',')}")
 		private String[] antIgnoredMatchers;
 			
 		public SescWebServiceAuthenticationSecurityFilter sescWebServiceAuthenticationSecurityFilter() throws Exception {
