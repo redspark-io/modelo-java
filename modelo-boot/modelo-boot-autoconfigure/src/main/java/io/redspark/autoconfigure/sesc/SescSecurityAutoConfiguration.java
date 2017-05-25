@@ -20,6 +20,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -27,78 +28,100 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import SescBasicAuthenticationFilter.SescBasicAuthenticationFilter;
 import br.org.sesc.commons.security.CustomLogoutSuccessHandler;
 import br.org.sesc.commons.security.SescWebServiceAuthenticationProvider;
 import br.org.sesc.commons.security.SescWebServiceAuthenticationSecurityFilter;
 
 @Configuration
+@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+@ConditionalOnMissingBean({ WebSecurityConfiguration.class })
 @ConditionalOnClass({ SescWebServiceAuthenticationSecurityFilter.class })
-@ConditionalOnMissingBean({WebSecurityConfiguration.class})
-@AutoConfigureAfter(value = {SescDaoAuthenticationProviderAutoConfiguration.class, 
-		SescUserAuthenticationProviderAutoConfiguration.class})
+@AutoConfigureAfter(value = { SescDaoAuthenticationProviderAutoConfiguration.class, SescUserAuthenticationProviderAutoConfiguration.class })
 @ConditionalOnProperty(prefix = "sesc.authentication.security", name = "enabled", havingValue = "true")
 @ConditionalOnWebApplication
-public class SescSecurityAutoConfiguration {
-	
-	@Configuration
-	@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-	@ConditionalOnProperty(prefix = "sesc.authentication.security", name = "enabled", havingValue = "true")
-	protected static class ApplicationWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
-		
-	  @Value("#{'${sesc.authentication.ant.ignored.matchers}'.split(',')}")
-		private String[] antIgnoredMatchers;
-			
-		public SescWebServiceAuthenticationSecurityFilter sescWebServiceAuthenticationSecurityFilter() throws Exception {
-			return new SescWebServiceAuthenticationSecurityFilter(authenticationManager(), authenticationEntryPoint());
-		}
-		
-		@Autowired
-		public void setAuthenticationManagerBuilder(AuthenticationManagerBuilder auth,
-		    @Qualifier("sescUserAuthenticationProvider") SescWebServiceAuthenticationProvider sescWebServiceAuthenticationProvider,
-		    @Qualifier("daoAuthenticationProvider") DaoAuthenticationProvider daoAuthenticationProvider) {
-			auth.authenticationProvider(sescWebServiceAuthenticationProvider);
-			auth.authenticationProvider(daoAuthenticationProvider);
-		}
+public class SescSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http.authorizeRequests().antMatchers(antIgnoredMatchers).permitAll().anyRequest().fullyAuthenticated();
-			this.configureCsrf(http);
-			this.configureSession(http);
-			this.configureEntryPoint(http);
-			this.configureFilters(http);
-			this.congigureLogout(http);
-		}
+  @Value("#{'${authentication.ant.ignored.matchers}'.split(',')}")
+  protected String[] antIgnoredMatchers;
 
-		private void congigureLogout(HttpSecurity http) throws Exception {
-			http.logout().logoutSuccessHandler(new CustomLogoutSuccessHandler()).invalidateHttpSession(true);
-		}
+  @Autowired
+  private AuthenticationManagerBuilder auth;
 
-		private void configureFilters(HttpSecurity http) throws Exception {
-			http.addFilterBefore(sescWebServiceAuthenticationSecurityFilter(), BasicAuthenticationFilter.class);
-		}
+  public SescWebServiceAuthenticationSecurityFilter sescWebServiceAuthenticationSecurityFilter() throws Exception {
+    return new SescWebServiceAuthenticationSecurityFilter(authenticationManager(), authenticationEntryPoint());
+  }
 
-		private void configureCsrf(HttpSecurity http) throws Exception {
-			http.csrf().disable();
-		}
+  public SescBasicAuthenticationFilter sescBasicAuthenticationFilter() throws Exception {
+    return new SescBasicAuthenticationFilter(authenticationManager());
+  }
 
-		private void configureSession(HttpSecurity http) throws Exception {
-			http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
-		}
+  @Autowired(required = false)
+  @Qualifier("daoAuthenticationProvider")
+  public void setDaoAuthenticationProvider(DaoAuthenticationProvider dao) {
+    auth.authenticationProvider(dao);
+  }
 
-		private void configureEntryPoint(HttpSecurity http) throws Exception {
-			http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint());
-		}
+  @Autowired(required = false)
+  @Qualifier("sescUserAuthenticationProvider")
+  public void setSescWebServiceAuthenticationProvider(SescWebServiceAuthenticationProvider ws) {
+    auth.authenticationProvider(ws);
+  }
 
-		private AuthenticationEntryPoint authenticationEntryPoint() {
-			return new AuthenticationEntryPoint() {
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
 
-				@Override
-				public void commence(HttpServletRequest request, HttpServletResponse response,
-				    AuthenticationException authException) throws IOException, ServletException {
-					response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "unauthorized");
-				}
-			};
-		}
-	}
+    http.authorizeRequests()
+        .anyRequest()
+        .fullyAuthenticated()
+        .and()
+        .authorizeRequests()
+        .antMatchers(antIgnoredMatchers)
+        .permitAll();
+
+    this.configureCsrf(http);
+    this.configureSession(http);
+    this.configureEntryPoint(http);
+    this.configureFilters(http);
+    this.congigureLogout(http);
+  }
+
+  @Override
+  public void configure(WebSecurity web) {
+    web
+        .ignoring()
+        .antMatchers(antIgnoredMatchers);
+  }
+
+  protected void congigureLogout(HttpSecurity http) throws Exception {
+    http.logout().logoutSuccessHandler(new CustomLogoutSuccessHandler()).invalidateHttpSession(true);
+  }
+
+  protected void configureFilters(HttpSecurity http) throws Exception {
+    http.addFilter(sescBasicAuthenticationFilter());
+    http.addFilterBefore(sescWebServiceAuthenticationSecurityFilter(), BasicAuthenticationFilter.class);
+  }
+
+  protected void configureCsrf(HttpSecurity http) throws Exception {
+    http.csrf().disable();
+  }
+
+  protected void configureSession(HttpSecurity http) throws Exception {
+    http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+  }
+
+  protected void configureEntryPoint(HttpSecurity http) throws Exception {
+    http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint());
+  }
+
+  protected AuthenticationEntryPoint authenticationEntryPoint() {
+    return new AuthenticationEntryPoint() {
+
+      @Override
+      public void commence(HttpServletRequest request, HttpServletResponse response,
+          AuthenticationException authException) throws IOException, ServletException {
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "unauthorized");
+      }
+    };
+  }
 }
