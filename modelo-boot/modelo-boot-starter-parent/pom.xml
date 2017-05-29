@@ -21,7 +21,8 @@
 	</dependencies>
 
 	<modules>
-		<module>sample-app</module>
+		
+		<module>modelo-boot-test</module>
 	</modules>
 	
 		<distributionManagement>
