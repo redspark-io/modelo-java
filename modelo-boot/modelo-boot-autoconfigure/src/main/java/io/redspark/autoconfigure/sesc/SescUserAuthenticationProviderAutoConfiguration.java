@@ -30,7 +30,7 @@ import br.org.sesc.permissao.client.PermissaoServiceClient;
 @Configuration
 @ConditionalOnClass({SescWebServiceAuthenticationProvider.class})
 @AutoConfigureAfter(SescPermissaoClientAutoConfiguration.class)
-@ConditionalOnProperty(prefix = "sesc.authentication.security.ws", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "sesc.authentication.provider.ws", name = "enabled", havingValue = "true")
 public class SescUserAuthenticationProviderAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean

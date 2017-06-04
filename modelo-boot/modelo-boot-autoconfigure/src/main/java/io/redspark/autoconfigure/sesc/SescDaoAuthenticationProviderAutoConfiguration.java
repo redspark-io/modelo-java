@@ -18,7 +18,7 @@ import br.org.sesc.commons.security.test.SimpleUserDetailService;
 @Configuration
 @ConditionalOnClass(value = DaoAuthenticationProvider.class)
 @EnableConfigurationProperties(SescApplicationUserProperties.class)
-@ConditionalOnProperty(prefix = "sesc.authentication.security.basic", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "sesc.authentication.provider.basic", name = "enabled", havingValue = "true")
 public class SescDaoAuthenticationProviderAutoConfiguration {
 
   @Bean
