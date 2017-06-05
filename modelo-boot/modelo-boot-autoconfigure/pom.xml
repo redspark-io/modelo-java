@@ -110,6 +110,12 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>br.org.sesc</groupId>
+			<artifactId>sesc-administrativo-client</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>

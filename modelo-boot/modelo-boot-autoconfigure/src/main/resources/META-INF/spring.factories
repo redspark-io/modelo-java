@@ -7,5 +7,6 @@ io.redspark.autoconfigure.sesc.SescPermissaoSyncAutoConfiguration,\
 io.redspark.autoconfigure.sesc.SescSecurityAutoConfiguration,\
 io.redspark.autoconfigure.sesc.SescNotificationClientAutoConfiguration,\
 io.redspark.autoconfigure.handler.HandlerExceptionResolverAutoConfiguration,\
-io.redspark.autoconfigure.security.SecurityAutoConfiguration
+io.redspark.autoconfigure.security.SecurityAutoConfiguration,\
+io.redspark.autoconfigure.sesc.SescAdministrativoAutoConfiguration
 

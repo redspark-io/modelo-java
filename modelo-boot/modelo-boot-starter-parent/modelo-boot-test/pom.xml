@@ -96,6 +96,11 @@
 			<groupId>br.org.sesc</groupId>
 			<artifactId>sesc-permissao-sync</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>br.org.sesc</groupId>
+			<artifactId>sesc-administrativo-client</artifactId>
+		</dependency>
 		<!-- SESC END -->
 
 		<!-- DATABASE -->

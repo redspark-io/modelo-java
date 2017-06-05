@@ -24,11 +24,12 @@
 		<sesc.permissao.version>1.6.7</sesc.permissao.version>
 		<sesc.notificacoes.version>1.0.1-SNAPSHOT</sesc.notificacoes.version>
 		<sesc.commons.version>2.2.0-SNAPSHOT</sesc.commons.version>
+		<sesc.administrativo.client.version>2.5.33</sesc.administrativo.client.version>
 
 		<orika-version>1.4.6</orika-version>
 
 		<modelo-boot-version>0.0.1-SNAPSHOT</modelo-boot-version>
-		
+
 		<swagger.version>2.6.1</swagger.version>
 	</properties>
 
@@ -64,6 +65,12 @@
 				<groupId>br.org.sesc</groupId>
 				<artifactId>sesc-commons-utils</artifactId>
 				<version>${sesc.commons.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>br.org.sesc</groupId>
+				<artifactId>sesc-administrativo-client</artifactId>
+				<version>${sesc.administrativo.client.version}</version>
 			</dependency>
 
 			<dependency>
