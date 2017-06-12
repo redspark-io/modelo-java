@@ -19,12 +19,6 @@ test:
     # build modelo-java
     - mvn install -f server/pom.xml jacoco:report coveralls:report -DrepoToken=1nqr7w1iwtzAToi58EabiIhjhMgeoZoNR
 
-    # build modelo-boot
-    - mvn install -f modelo-boot/pom.xml -N
-    - mvn install -f modelo-boot/modelo-boot-starter-commons/pom.xml -DskipTests
-    - mvn install -f modelo-boot/modelo-boot-autoconfigure/pom.xml -DskipTests
-    - mvn install -f modelo-boot/modelo-boot-starter-parent/pom.xml -DskipTests
-    - mvn install -f modelo-boot/modelo-boot-starter-parent/modelo-boot-test/pom.xml
     - mvn --fail-never dependency:go-offline -f modelo-boot/pom.xml || true
 
   post:
