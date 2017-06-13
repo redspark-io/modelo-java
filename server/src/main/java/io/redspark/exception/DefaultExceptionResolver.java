@@ -17,14 +17,18 @@ public class DefaultExceptionResolver implements HandlerExceptionResolver {
   private static final Logger LOGGER = LoggerFactory.getLogger(DefaultExceptionResolver.class);
 
   @Override
-  public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
-      Exception ex) {
+  public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+    
     ModelAndView modelAndView = null;
 
+    ex.printStackTrace();
+    
     if (ex.getClass().isAssignableFrom(BindException.class)) {
+    
       BindException bindex = (BindException) ex;
       final StringBuilder message = new StringBuilder();
       bindex.getAllErrors().forEach(a -> message.append(a.getDefaultMessage()).append("\n"));
+      
       try {
         response.sendError(HttpStatus.BAD_REQUEST.value(), message.toString());
         modelAndView = new ModelAndView();
@@ -33,7 +37,9 @@ public class DefaultExceptionResolver implements HandlerExceptionResolver {
         modelAndView = null;
       }
     } else if (ex instanceof WebException) {
+      
       WebException webex = (WebException) ex;
+      
       try {
         response.sendError(webex.getStatus().value(), ex.getMessage());
         modelAndView = new ModelAndView();

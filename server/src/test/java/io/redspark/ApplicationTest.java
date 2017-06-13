@@ -21,13 +21,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import io.redspark.security.UserAuthentication;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = {Application.class}, properties = "server.port=10001")
+@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = { Application.class }, properties = "server.port=10001")
 public abstract class ApplicationTest {
 
   private static List<Object> toPersist = new ArrayList<Object>();
 
   private final String server;
-  private String authentication;
+  private String       authentication;
 
   @Autowired
   private JpaTransactionManager manager;
@@ -64,6 +64,21 @@ public abstract class ApplicationTest {
   protected void saveall(Object... objects) {
     this.add(objects);
     this.saveall();
+  }
+
+  protected <T> T save(T obj) {
+
+    EntityManager em = manager.getEntityManagerFactory().createEntityManager();
+    em.getTransaction().begin();
+
+    em.persist(obj);
+    em.flush();
+    em.clear();
+    em.close();
+
+    em.getTransaction().commit();
+
+    return obj;
   }
 
   protected void saveall() {

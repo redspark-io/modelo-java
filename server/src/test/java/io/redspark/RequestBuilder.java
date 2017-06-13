@@ -26,16 +26,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RequestBuilder {
 
-  private ObjectMapper mapper = new ObjectMapper();
-  private TestRestTemplate rest = new TestRestTemplate();
-  private String URI;
-  private MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-  private MultiValueMap<String, Object> variables = new LinkedMultiValueMap<String, Object>();
+  private ObjectMapper                  mapper      = new ObjectMapper();
+  private TestRestTemplate              rest        = new TestRestTemplate();
+  private String                        URI;
+  private MultiValueMap<String, String> headers     = new LinkedMultiValueMap<String, String>();
+  private MultiValueMap<String, Object> variables   = new LinkedMultiValueMap<String, Object>();
   private MultiValueMap<String, String> queryString = new LinkedMultiValueMap<String, String>();
-  private HttpMethod method;
-  private String server;
-  private HttpStatus status;
-  private Object json;
+  private HttpMethod                    method;
+  private String                        server;
+  private HttpStatus                    status;
+  private Object                        json;
 
   public RequestBuilder(String server, String URI, HttpMethod method) {
     super();

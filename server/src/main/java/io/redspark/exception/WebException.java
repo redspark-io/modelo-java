@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class WebException extends RuntimeException {
 

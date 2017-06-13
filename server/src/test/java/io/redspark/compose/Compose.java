@@ -8,6 +8,8 @@ import io.redspark.domain.Hotel;
 import io.redspark.domain.Hotel.HotelBuilder;
 import io.redspark.domain.User;
 import io.redspark.domain.User.UserBuilder;
+import io.redspark.domain.vet.Animal;
+import io.redspark.domain.vet.Dono;
 
 public class Compose {
 
@@ -27,5 +29,13 @@ public class Compose {
 
   public static HotelBuilder hotel(String name, City city) {
     return Hotel.builder().name(name).address("Rua Quintana, 753").city(city).zip("12345-123");
+  }
+
+  public static Animal.AnimalBuilder animal(String nome, Dono dono) {
+    return Animal.builder().nome(nome).dono(dono);
+  }
+  
+  public static Dono.DonoBuilder dono(String nome) {
+    return Dono.builder().nome(nome);
   }
 }

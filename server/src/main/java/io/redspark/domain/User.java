@@ -21,8 +21,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User implements UserAuthentication {
 
-  @GeneratedValue
   @Id
+  @GeneratedValue
   @Column(name = "user_id")
   private Long id;
 
