@@ -1,10 +1,11 @@
 package io.redspark.domain.vet;
 
+import static javax.persistence.FetchType.LAZY;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,58 +17,84 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Builder;
 
 @Entity
+@Builder
 @Table(name = Consulta.ENTITY_NAME, schema = Consulta.SCHEMA_NAME)
-@NamedQueries({ @NamedQuery(name = Consulta.FIND_ALL, query = " SELECT u FROM Consulta u "),
-		@NamedQuery(name = Consulta.FIND_BY_ID, query = " SELECT u FROM Consulta u WHERE u.id = :id "), })
+@NamedQueries({ @NamedQuery(name = Consulta.FIND_ALL, query = " SELECT u FROM Consulta u "), @NamedQuery(name = Consulta.FIND_BY_ID, query = " SELECT u FROM Consulta u WHERE u.id = :id "), })
 public class Consulta {
 
-	public static final String ENTITY_NAME = "consulta";
-	public static final String SCHEMA_NAME = "public";
-	public static final String FIND_ALL = "Consulta.findAll";
-	public static final String FIND_BY_ID = "Consulta.findById";
+	public static final String	ENTITY_NAME	= "consulta";
+	public static final String	SCHEMA_NAME	= "public";
+	public static final String	FIND_ALL		= "Consulta.findAll";
+	public static final String	FIND_BY_ID	= "Consulta.findById";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true, nullable = false)
-	private Integer id;
+	private Long id;
 
-	@ManyToOne
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "id_veterinario")
 	private Veterinario veterinario;
 
-	@ManyToOne
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "id_animal")
 	private Animal animal;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "data_consulta", nullable = false, insertable = false, updatable = false)
-	private Date dateConsulta = new Date();
+	@Column(name = "data_consulta", nullable = false)
+	private Date dateConsulta;
 
-	@OneToMany(mappedBy = "consulta", cascade = CascadeType.ALL)
+	@JsonIgnore
+	@OneToMany(mappedBy = "consulta", fetch = LAZY)
 	private List<Agendamento> agendamentos = new ArrayList<>();
 
 	public Consulta() {
-
+		super();
 	}
 
-	public Integer getId() {
+	public Consulta(Veterinario veterinario, Animal animal, Date dateConsulta) {
+		super();
+		this.veterinario = veterinario;
+		this.animal = animal;
+		this.dateConsulta = dateConsulta;
+	}
+
+	public Consulta(Long id, Veterinario veterinario, Animal animal, Date dateConsulta) {
+		super();
+		this.id = id;
+		this.veterinario = veterinario;
+		this.animal = animal;
+		this.dateConsulta = dateConsulta;
+	}
+
+	public Consulta(Veterinario veterinario, Animal animal, Date dateConsulta, List<Agendamento> agendamentos) {
+		super();
+		this.veterinario = veterinario;
+		this.animal = animal;
+		this.dateConsulta = dateConsulta;
+		this.agendamentos = agendamentos;
+	}
+
+	public Consulta(Long id, Veterinario veterinario, Animal animal, Date dateConsulta, List<Agendamento> agendamentos) {
+		super();
+		this.id = id;
+		this.veterinario = veterinario;
+		this.animal = animal;
+		this.dateConsulta = dateConsulta;
+		this.agendamentos = agendamentos;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Veterinario getVeterinario() {
-		return veterinario;
-	}
-
-	public void setVeterinario(Veterinario veterinario) {
-		this.veterinario = veterinario;
 	}
 
 	public Animal getAnimal() {
@@ -84,6 +111,22 @@ public class Consulta {
 
 	public void setDateConsulta(Date dateConsulta) {
 		this.dateConsulta = dateConsulta;
+	}
+
+	public List<Agendamento> getAgendamentos() {
+		return agendamentos;
+	}
+
+	public void setAgendamentos(List<Agendamento> agendamentos) {
+		this.agendamentos = agendamentos;
+	}
+
+	public Veterinario getVeterinario() {
+		return veterinario;
+	}
+
+	public void setVeterinario(Veterinario veterinario) {
+		this.veterinario = veterinario;
 	}
 
 	@Override

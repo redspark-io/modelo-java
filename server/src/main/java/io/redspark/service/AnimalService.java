@@ -6,6 +6,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,60 +21,79 @@ import io.redspark.repository.DonoRepository;
 @Service
 public class AnimalService {
 
-  // @Inject || @EJB
-  @Autowired
-  private AnimalRepository repository;
+	// @Inject || @EJB
+	@Autowired
+	private AnimalRepository repository;
 
-  @Autowired
-  private DonoRepository donoRepository;
+	@Autowired
+	private DonoRepository donoRepository;
 
-  public Animal findOne(Long id) {
-    return repository.findOne(id);
-  }
+	@Transactional(readOnly = true)
+	public Animal findOne(Long id) {
+		return repository.findOne(id);
+	}
 
-  @Transactional(readOnly = true)
-  public Animal findByDono(Dono dono) {
-    return repository.findByDono(dono);
-  }
+	@Transactional(readOnly = true)
+	public List<Animal> findAll() {
+		return repository.findAll();
+	}
 
-  @Transactional
-  public Animal insert(AnimalForm form) {
+	@Transactional(readOnly = true)
+	public Animal findByDono(Dono dono) {
+		return repository.findByDono(dono);
+	}
 
-    Dono dono = donoRepository.findOne(form.getDonoId());
+	@Transactional
+	public Animal insert(AnimalForm form) {
 
-    if (isNull(dono))
-      throw new WebException(BAD_REQUEST, "Valores inválidos");
+		Dono dono = donoRepository.findOne(form.getDonoId());
 
-    Animal animal = Animal.builder()
-        .nome(form.getName())
-        .dono(dono)
-        .build();
+		if (isNull(dono))
+			throw new WebException(BAD_REQUEST, "Valores inválidos");
 
-    animal = repository.save(animal);
+		Animal animal = Animal.builder().nome(form.getName()).dono(dono).build();
 
-    return animal;
-  }
+		animal = repository.save(animal);
 
-  @Transactional
-  public Animal update(Long id, AnimalForm form) {
+		return animal;
+	}
 
-    Animal animal = repository.findOne(id);
+	@Transactional
+	public Animal update(Long id, AnimalForm form) {
 
-    Dono dono = donoRepository.findOne(form.getDonoId());
+		Animal animal = repository.findOne(id);
 
-    if (isNull(animal) || isNull(dono))
-      throw new WebException(BAD_REQUEST, "Valores inválidos");
+		Dono dono = donoRepository.findOne(form.getDonoId());
 
-    animal.setDono(dono);
-    animal.setNome(form.getName());
+		if (isNull(animal) || isNull(dono))
+			throw new WebException(BAD_REQUEST, "Valores inválidos");
 
-    repository.save(animal);
+		animal.setDono(dono);
+		animal.setNome(form.getName());
 
-    return animal;
-  }
+		repository.save(animal);
 
-  @Transactional(readOnly = true)
-  public List<Animal> findAll() {
-    return repository.findAll();
-  }
+		return animal;
+	}
+
+	@Transactional
+	public HttpStatus delete(Long id) {
+
+		if (isNull(id)) {
+			throw new WebException(BAD_REQUEST, "Valores inválidos");
+		}
+
+		HttpStatus retorno;
+		Animal animal = repository.findOne(id);
+
+		if (isNull(animal)) {
+			retorno = HttpStatus.NOT_FOUND;
+		} else {
+			repository.delete(animal);
+			retorno = HttpStatus.OK;
+		}
+
+		return retorno;
+
+	}
 }

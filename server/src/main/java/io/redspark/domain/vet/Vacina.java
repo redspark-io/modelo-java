@@ -1,13 +1,14 @@
 package io.redspark.domain.vet;
 
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -17,19 +18,27 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = Vacina.ENTITY_NAME, schema = Vacina.SCHEMA_NAME)
-@NamedQueries({ @NamedQuery(name = Vacina.FIND_ALL, query = " SELECT v FROM Vacina v "),
-		@NamedQuery(name = Vacina.FIND_ALL_BY_IDS, query = " SELECT v FROM Vacina v WHERE v.id IN :ids"), })
+@NamedQueries({ @NamedQuery(name = Vacina.FIND_ALL, query = " SELECT v FROM Vacina v "), @NamedQuery(name = Vacina.FIND_ALL_BY_IDS, query = " SELECT v FROM Vacina v WHERE v.id IN :ids"), })
 public class Vacina {
 
-	public static final String ENTITY_NAME = "vacina";
-	public static final String SCHEMA_NAME = "public";
-	public static final String FIND_ALL = "Vacina.findAll";
-	public static final String FIND_ALL_BY_IDS = "Vacina.findAllByIds";
+	public static final String	ENTITY_NAME			= "vacina";
+	public static final String	SCHEMA_NAME			= "public";
+	public static final String	FIND_ALL				= "Vacina.findAll";
+	public static final String	FIND_ALL_BY_IDS	= "Vacina.findAllByIds";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = IDENTITY)
 	@Column(unique = true, nullable = false)
 	private Integer id;
 
@@ -38,41 +47,8 @@ public class Vacina {
 	private String nome;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "vacina", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "vacina", fetch = LAZY)
 	private List<Agendamento> agendamentos = new ArrayList<>();
-
-	public Vacina() {
-
-	}
-
-	public Vacina(String nome) {
-		super();
-		this.nome = nome;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String name) {
-		this.nome = name;
-	}
-
-	public List<Agendamento> getAgendamentos() {
-		return agendamentos;
-	}
-
-	public void setAgendamentos(List<Agendamento> agendamentos) {
-		this.agendamentos = agendamentos;
-	}
 
 	@Override
 	public int hashCode() {

@@ -1,51 +1,22 @@
 package io.redspark.controller.dto;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDate;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ConsultaDTO {
 
-	private Integer idAnimal;
-	private Integer idVeterinario;
-	private Date dataConsulta;
-	private Map<Date, Integer> agendamentos = new HashMap<>();
-
-	public ConsultaDTO() {
-	}
-	
-
-	public Integer getIdAnimal() {
-		return idAnimal;
-	}
-
-	public void setIdAnimal(Integer idAnimal) {
-		this.idAnimal = idAnimal;
-	}
-
-	public Integer getIdVeterinario() {
-		return idVeterinario;
-	}
-
-	public void setIdVeterinario(Integer idVeterinario) {
-		this.idVeterinario = idVeterinario;
-	}
-
-	public Date getDataConsulta() {
-		return dataConsulta;
-	}
-
-	public void setDataConsulta(Date dataConsulta) {
-		this.dataConsulta = dataConsulta;
-	}
-
-	public Map<Date, Integer> getAgendamentos() {
-		return agendamentos;
-	}
-
-	public void setAgendamentos(Map<Date, Integer> agendamentos) {
-		this.agendamentos = agendamentos;
-	}
+	private Long	id;
+	private Long	idAnimal;
+	private Long	idVeterinario;
+	private LocalDate	dataConsulta;
 
 	@Override
 	public int hashCode() {

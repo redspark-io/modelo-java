@@ -1,11 +1,15 @@
 package io.redspark.domain.vet;
 
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
+import static javax.persistence.TemporalType.TIMESTAMP;
+
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,93 +17,50 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Entity
+@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = Agendamento.ENTITY_NAME, schema = Agendamento.SCHEMA_NAME)
-@NamedQueries({ 
-	@NamedQuery(name = Agendamento.FIND_ALL, query = " SELECT u FROM Agendamento u "), 
-	@NamedQuery(name = Agendamento.FIND_ALL_AGENDAMENTOS, query = " SELECT a FROM Agendamento a WHERE a.data = :data "), 
-	})
-public class Agendamento {
+@NamedQueries({ @NamedQuery(name = Agendamento.FIND_ALL, query = " SELECT u FROM Agendamento u "), @NamedQuery(name = Agendamento.FIND_ALL_AGENDAMENTOS, query = " SELECT a FROM Agendamento a WHERE a.data = :data "), })
+public class Agendamento implements Serializable {
 
-	public static final String ENTITY_NAME = "agendamento";
-	public static final String SCHEMA_NAME = "public";
-	public static final String FIND_ALL = "Agendamento.findAll";
-	public static final String FIND_ALL_AGENDAMENTOS = "Agendamento.findAllAgendamento";
+	private static final long serialVersionUID = 7515533818787442233L;
 
-	
+	public static final String	ENTITY_NAME						= "agendamento";
+	public static final String	SCHEMA_NAME						= "public";
+	public static final String	FIND_ALL							= "Agendamento.findAll";
+	public static final String	FIND_ALL_AGENDAMENTOS	= "Agendamento.findAllAgendamento";
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = IDENTITY)
 	@Column(unique = true, nullable = false)
 	private Integer id;
 
-	@ManyToOne
+	@NonNull
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "id_consulta")
 	private Consulta consulta;
 
-	@ManyToOne
+	@NonNull
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "id_vacina")
 	private Vacina vacina;
 
-	@ManyToOne
+	@NonNull
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "id_animal")
 	private Animal animal;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "data", nullable = false, insertable = false, updatable = false)
+	@Temporal(TIMESTAMP)
+	@Column(name = "data", nullable = false)
 	private Date data = new Date();
-
-	public Agendamento() {
-
-	}
-
-	public Agendamento(Consulta consulta, Vacina vacina, Animal animal) {
-		super();
-		this.consulta = consulta;
-		this.vacina = vacina;
-		this.animal = animal;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Vacina getVacina() {
-		return vacina;
-	}
-
-	public void setVacina(Vacina vacina) {
-		this.vacina = vacina;
-	}
-
-	public Animal getAnimal() {
-		return animal;
-	}
-
-	public void setAnimal(Animal animal) {
-		this.animal = animal;
-	}
-
-	public Date getData() {
-		return data;
-	}
-
-	public Consulta getConsulta() {
-		return consulta;
-	}
-
-	public void setConsulta(Consulta consulta) {
-		this.consulta = consulta;
-	}
-
-	public void setData(Date data) {
-		this.data = data;
-	}
 
 	@Override
 	public int hashCode() {

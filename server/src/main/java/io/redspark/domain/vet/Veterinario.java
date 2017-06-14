@@ -1,13 +1,15 @@
 package io.redspark.domain.vet;
 
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -15,43 +17,56 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = Veterinario.ENTITY_NAME, schema = Veterinario.SCHEMA_NAME)
-@NamedQueries({ @NamedQuery(name = Veterinario.FIND_ALL, query = " SELECT u FROM Veterinario u "),
-		@NamedQuery(name = Veterinario.FIND_BY_ID, query = " SELECT u FROM Veterinario u WHERE u.id = :id "), })
-public class Veterinario {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-	public static final String ENTITY_NAME = "veterinario";
-	public static final String SCHEMA_NAME = "public";
-	public static final String FIND_ALL = "Veterinario.findAll";
-	public static final String FIND_BY_ID = "Veterinario.findById";
+import lombok.Builder;
+import lombok.NonNull;
+
+@Entity
+@Builder
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })	
+@Table(name = Veterinario.ENTITY_NAME, schema = Veterinario.SCHEMA_NAME)
+@NamedQueries({ @NamedQuery(name = Veterinario.FIND_ALL, query = " SELECT u FROM Veterinario u "), @NamedQuery(name = Veterinario.FIND_BY_ID, query = " SELECT u FROM Veterinario u WHERE u.id = :id "), })
+public class Veterinario implements Serializable {
+
+	private static final long serialVersionUID = 7468567096349207353L;
+
+	public static final String	ENTITY_NAME	= "veterinario";
+	public static final String	SCHEMA_NAME	= "public";
+	public static final String	FIND_ALL		= "Veterinario.findAll";
+	public static final String	FIND_BY_ID	= "Veterinario.findById";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = IDENTITY)
 	@Column(unique = true, nullable = false)
-	private Integer id;
+	private Long id;
 
 	@NotNull
+	@NonNull
 	@Column(nullable = false, length = 100)
 	private String nome;
 
-	@OneToMany(mappedBy = "veterinario", cascade = CascadeType.ALL)
+	@JsonIgnore
+	@OneToMany(mappedBy = "veterinario", fetch = LAZY)
 	private List<Consulta> consultas = new ArrayList<>();
 
 	public Veterinario() {
-
-	}
-
-	public Veterinario(String nome) {
 		super();
-		this.nome = nome;
 	}
 
-	public Integer getId() {
+	public Veterinario(Long id, String nome, List<Consulta> consultas) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.consultas = consultas;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -59,8 +74,8 @@ public class Veterinario {
 		return nome;
 	}
 
-	public void setNome(String name) {
-		this.nome = name;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public List<Consulta> getConsultas() {
