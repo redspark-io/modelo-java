@@ -1,6 +1,6 @@
 package io.redspark.controller;
 
-import static io.redspark.controller.ControllerConstants.ME;
+import static io.redspark.controller.constant.ControllerConstants.ME;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

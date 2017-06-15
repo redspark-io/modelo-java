@@ -13,30 +13,31 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Builder
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = Animal.ENTITY_NAME, schema = Animal.SCHEMA_NAME)
-@NamedQueries({ @NamedQuery(name = Animal.FIND_ALL, query = " SELECT u FROM Animal u "), })
 public class Animal implements Serializable {
 
 	private static final long serialVersionUID = 5447700345782667759L;
 
-	public static final String	ENTITY_NAME	= "animal";
-	public static final String	SCHEMA_NAME	= "public";
-	public static final String	FIND_ALL		= "Animal.findAll";
-	public static final String	FIND_BY_ID	= "Animal.findById";
+	public static final String ENTITY_NAME = "animal";
+	public static final String SCHEMA_NAME = "public";
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -58,70 +59,6 @@ public class Animal implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy = "animal", fetch = LAZY)
 	private List<Consulta> consultas = new ArrayList<>();
-
-	public Animal() {
-
-	}
-
-	public Animal(String nome) {
-		super();
-		this.nome = nome;
-	}
-
-	public Animal(String nome, Dono dono) {
-		super();
-		this.nome = nome;
-		this.dono = dono;
-	}
-
-	public Animal(Long id, String nome, Dono dono, List<Agendamento> agendamentos, List<Consulta> consultas) {
-		this.id = id;
-		this.dono = dono;
-		this.nome = nome;
-		this.agendamentos = agendamentos;
-		this.consultas = consultas;
-
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public Dono getDono() {
-		return dono;
-	}
-
-	public void setDono(Dono dono) {
-		this.dono = dono;
-	}
-
-	public List<Agendamento> getAgendamentos() {
-		return agendamentos;
-	}
-
-	public void setAgendamentos(List<Agendamento> agendamentos) {
-		this.agendamentos = agendamentos;
-	}
-
-	public List<Consulta> getConsultas() {
-		return consultas;
-	}
-
-	public void setConsultas(List<Consulta> consultas) {
-		this.consultas = consultas;
-	}
 
 	@Override
 	public int hashCode() {

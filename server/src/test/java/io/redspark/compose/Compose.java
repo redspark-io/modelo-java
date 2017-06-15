@@ -1,6 +1,6 @@
 package io.redspark.compose;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicLong;
 
 import io.redspark.domain.City;
@@ -9,9 +9,11 @@ import io.redspark.domain.Hotel;
 import io.redspark.domain.Hotel.HotelBuilder;
 import io.redspark.domain.User;
 import io.redspark.domain.User.UserBuilder;
+import io.redspark.domain.vet.Agendamento;
 import io.redspark.domain.vet.Animal;
 import io.redspark.domain.vet.Consulta;
 import io.redspark.domain.vet.Dono;
+import io.redspark.domain.vet.Vacina;
 import io.redspark.domain.vet.Veterinario;
 
 public class Compose {
@@ -27,7 +29,8 @@ public class Compose {
 	}
 
 	public static CityBuilder city(String name) {
-		return City.builder().name(name).country("Country " + counter.incrementAndGet()).state("State " + counter.get());
+		return City.builder().name(name).country("Country " + counter.incrementAndGet())
+				.state("State " + counter.get());
 	}
 
 	public static HotelBuilder hotel(String name, City city) {
@@ -42,8 +45,20 @@ public class Compose {
 		return Dono.builder().nome(nome);
 	}
 
-	public static Consulta.ConsultaBuilder consulta(Animal animal, Veterinario veterinario, Date dataCosulta) {
-		return Consulta.builder().animal(animal).veterinario(veterinario).dateConsulta(dataCosulta);
+	public static Dono.DonoBuilder dono(String nome, String email) {
+		return Dono.builder().nome(nome).email(email);
+	}
+
+	public static Agendamento.AgendamentoBuilder agendamento(Animal animal, Vacina vacina, Consulta consulta, LocalDateTime data) {
+		return Agendamento.builder().animal(animal).consulta(consulta).vacina(vacina).data(data);
+	}
+
+	public static Consulta.ConsultaBuilder consulta(Animal animal, Veterinario veterinario, java.time.LocalDateTime dataCosulta) {
+		return Consulta.builder().animal(animal).veterinario(veterinario).data(dataCosulta);
+	}
+
+	public static Vacina.VacinaBuilder vacina(String nome) {
+		return Vacina.builder().nome(nome);
 	}
 
 	public static Veterinario.VeterinarioBuilder veterinario(String nome) {

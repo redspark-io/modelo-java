@@ -1,6 +1,6 @@
 package io.redspark.controller;
 
-import static io.redspark.controller.ControllerConstants.HOTEL;
+import static io.redspark.controller.constant.ControllerConstants.HOTEL;
 
 import java.util.stream.Collectors;
 

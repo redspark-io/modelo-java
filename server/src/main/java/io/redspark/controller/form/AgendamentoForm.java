@@ -16,10 +16,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ConsultaForm {
+public class AgendamentoForm {
 
 	private Long idAnimal;
-	private Long idVeterinario;
+	private Long idVacina;
+	private Long idConsulta;
 
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	@JsonSerialize(using = LocalDateTimeSerializer.class)

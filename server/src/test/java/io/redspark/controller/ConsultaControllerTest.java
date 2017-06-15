@@ -6,8 +6,7 @@ import static io.redspark.compose.Compose.consulta;
 import static io.redspark.compose.Compose.dono;
 import static io.redspark.compose.Compose.veterinario;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -17,9 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import io.redspark.ApplicationTest;
+import io.redspark.controller.constant.ControllerConstants;
+import io.redspark.controller.dto.ConsultaDTO;
 import io.redspark.domain.User;
 import io.redspark.domain.vet.Animal;
-import io.redspark.domain.vet.Consulta;
 import io.redspark.domain.vet.Dono;
 import io.redspark.domain.vet.Veterinario;
 
@@ -32,34 +32,24 @@ public class ConsultaControllerTest extends ApplicationTest {
 		saveall(admin);
 		signIn(admin);
 
-		Dono naelson = save(dono("Naelson Vet").build());
+		Dono dono = save(dono("Naelson Vet").build());
 
-		Animal toto = save(animal("Totó", naelson).build());
-		Animal toti = save(animal("Toti", naelson).build());
-		Animal totu = save(animal("Totu", naelson).build());
+		Animal toto = save(animal("Totó", dono).build());
+		Animal toti = save(animal("Toti", dono).build());
+		Animal totu = save(animal("Totu", dono).build());
 
 		Veterinario veterinario = save(veterinario("João da Silva").build());
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
-
-		try {
-
-			save(consulta(toto, veterinario, sdf.parse("13-05-2017")).build());
-			save(consulta(toti, veterinario, sdf.parse("13-05-2017")).build());
-			save(consulta(totu, veterinario, sdf.parse("13-05-2017")).build());
-			save(consulta(toto, veterinario, sdf.parse("13-06-2017")).build());
-			save(consulta(toti, veterinario, sdf.parse("13-06-2017")).build());
-			save(consulta(totu, veterinario, sdf.parse("13-06-2017")).build());
-
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		save(consulta(toto, veterinario, LocalDateTime.now()).build());
+		save(consulta(toti, veterinario, LocalDateTime.now()).build());
+		save(consulta(totu, veterinario, LocalDateTime.now()).build());
 	}
 
 	@Test
 	public void find_shouldReturnConsultas() {
-		ResponseEntity<Consulta[]> responseType = get(ControllerConstants.CONSULTA).expectedStatus(HttpStatus.OK).getResponse(Consulta[].class);
-		Assert.assertThat(responseType.getBody().length, Matchers.equalTo(6));
+		ResponseEntity<ConsultaDTO[]> responseType = get(ControllerConstants.CONSULTA)
+				.expectedStatus(HttpStatus.OK)
+				.getResponse(ConsultaDTO[].class);
+		Assert.assertThat(responseType.getBody().length, Matchers.equalTo(3));
 	}
-
 }

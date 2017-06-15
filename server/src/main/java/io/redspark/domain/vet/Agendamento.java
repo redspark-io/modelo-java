@@ -2,10 +2,9 @@ package io.redspark.domain.vet;
 
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
-import static javax.persistence.TemporalType.TIMESTAMP;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,35 +12,40 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@RequiredArgsConstructor
+@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Table(name = Agendamento.ENTITY_NAME, schema = Agendamento.SCHEMA_NAME)
-@NamedQueries({ @NamedQuery(name = Agendamento.FIND_ALL, query = " SELECT u FROM Agendamento u "), @NamedQuery(name = Agendamento.FIND_ALL_AGENDAMENTOS, query = " SELECT a FROM Agendamento a WHERE a.data = :data "), })
 public class Agendamento implements Serializable {
 
 	private static final long serialVersionUID = 7515533818787442233L;
 
-	public static final String	ENTITY_NAME						= "agendamento";
-	public static final String	SCHEMA_NAME						= "public";
-	public static final String	FIND_ALL							= "Agendamento.findAll";
-	public static final String	FIND_ALL_AGENDAMENTOS	= "Agendamento.findAllAgendamento";
+	public static final String	ENTITY_NAME	= "agendamento";
+	public static final String	SCHEMA_NAME	= "public";
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(unique = true, nullable = false)
-	private Integer id;
+	private Long id;
 
 	@NonNull
 	@ManyToOne(fetch = LAZY)
@@ -58,9 +62,10 @@ public class Agendamento implements Serializable {
 	@JoinColumn(name = "id_animal")
 	private Animal animal;
 
-	@Temporal(TIMESTAMP)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@Column(name = "data", nullable = false)
-	private Date data = new Date();
+	private LocalDateTime data;
 
 	@Override
 	public int hashCode() {
@@ -86,5 +91,4 @@ public class Agendamento implements Serializable {
 			return false;
 		return true;
 	}
-
 }

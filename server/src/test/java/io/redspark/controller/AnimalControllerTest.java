@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 
 import io.redspark.ApplicationTest;
+import io.redspark.controller.constant.ControllerConstants;
 import io.redspark.domain.User;
 import io.redspark.domain.vet.Animal;
 import io.redspark.domain.vet.Dono;

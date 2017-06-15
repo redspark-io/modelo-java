@@ -10,8 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -20,27 +18,26 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = Vacina.ENTITY_NAME, schema = Vacina.SCHEMA_NAME)
-@NamedQueries({ @NamedQuery(name = Vacina.FIND_ALL, query = " SELECT v FROM Vacina v "), @NamedQuery(name = Vacina.FIND_ALL_BY_IDS, query = " SELECT v FROM Vacina v WHERE v.id IN :ids"), })
 public class Vacina {
 
-	public static final String	ENTITY_NAME			= "vacina";
-	public static final String	SCHEMA_NAME			= "public";
-	public static final String	FIND_ALL				= "Vacina.findAll";
-	public static final String	FIND_ALL_BY_IDS	= "Vacina.findAllByIds";
+	public static final String ENTITY_NAME = "vacina";
+	public static final String SCHEMA_NAME = "public";
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(unique = true, nullable = false)
-	private Integer id;
+	private Long id;
 
 	@NotNull
 	@Column(nullable = false, length = 100)

@@ -1,6 +1,6 @@
 package io.redspark.controller;
 
-import static io.redspark.controller.ControllerConstants.ANIMAL;
+import static io.redspark.controller.constant.ControllerConstants.ANIMAL;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;

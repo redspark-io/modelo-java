@@ -11,31 +11,34 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Builder
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })	
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@RequiredArgsConstructor
 @Table(name = Veterinario.ENTITY_NAME, schema = Veterinario.SCHEMA_NAME)
-@NamedQueries({ @NamedQuery(name = Veterinario.FIND_ALL, query = " SELECT u FROM Veterinario u "), @NamedQuery(name = Veterinario.FIND_BY_ID, query = " SELECT u FROM Veterinario u WHERE u.id = :id "), })
 public class Veterinario implements Serializable {
 
 	private static final long serialVersionUID = 7468567096349207353L;
 
-	public static final String	ENTITY_NAME	= "veterinario";
-	public static final String	SCHEMA_NAME	= "public";
-	public static final String	FIND_ALL		= "Veterinario.findAll";
-	public static final String	FIND_BY_ID	= "Veterinario.findById";
+	public static final String ENTITY_NAME = "veterinario";
+	public static final String SCHEMA_NAME = "public";
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -50,41 +53,6 @@ public class Veterinario implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy = "veterinario", fetch = LAZY)
 	private List<Consulta> consultas = new ArrayList<>();
-
-	public Veterinario() {
-		super();
-	}
-
-	public Veterinario(Long id, String nome, List<Consulta> consultas) {
-		super();
-		this.id = id;
-		this.nome = nome;
-		this.consultas = consultas;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public List<Consulta> getConsultas() {
-		return consultas;
-	}
-
-	public void setConsultas(List<Consulta> consultas) {
-		this.consultas = consultas;
-	}
 
 	@Override
 	public int hashCode() {

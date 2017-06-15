@@ -16,41 +16,41 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.redspark.controller.constant.ControllerConstants;
-import io.redspark.controller.dto.ConsultaDTO;
-import io.redspark.controller.form.ConsultaForm;
-import io.redspark.domain.vet.Consulta;
-import io.redspark.service.ConsultaService;
+import io.redspark.controller.dto.AgendamentoDTO;
+import io.redspark.controller.form.AgendamentoForm;
+import io.redspark.domain.vet.Agendamento;
+import io.redspark.service.AgendamentoService;
 
 @RestController
-@RequestMapping(value = ControllerConstants.CONSULTA)
-public class ConsultaController {
+@RequestMapping(value = ControllerConstants.AGENDAMENTO)
+public class AgendamentoController {
 
 	@Autowired
-	private ConsultaService consultaService;
+	private AgendamentoService agendamentoService;
 
 	@RequestMapping(method = GET, value = "{id}")
-	public Consulta find(@PathVariable Long id) {
-		return consultaService.findOne(id);
+	public Agendamento find(@PathVariable Long id) {
+		return agendamentoService.findOne(id);
 	}
 
 	@RequestMapping(method = GET)
-	public List<ConsultaDTO> findAll() {
-		return consultaService.findAll().stream().map(ConsultaDTO::new).collect(Collectors.toList());
+	public List<AgendamentoDTO> findAll() {
+		return agendamentoService.findAll().stream().map(AgendamentoDTO::new).collect(Collectors.toList());
 	}
 
 	@RequestMapping(method = POST)
-	public Consulta insert(@RequestBody ConsultaForm consultaForm) {
-		return consultaService.insert(consultaForm);
+	public Agendamento insert(@RequestBody AgendamentoForm agendamentoForm) {
+		return agendamentoService.insert(agendamentoForm);
 	}
 
 	@RequestMapping(method = PUT, value = "{id}")
-	public Consulta update(@PathVariable Long id, @RequestBody ConsultaForm consultaForm) {
-		return consultaService.update(id, consultaForm);
+	public Agendamento update(@PathVariable Long id, @RequestBody AgendamentoForm agendamentoForm) {
+		return agendamentoService.update(id, agendamentoForm);
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "{id}")
 	public HttpStatus delete(@PathVariable Long id) {
-		return consultaService.delete(id);
+		return agendamentoService.delete(id);
 	}
 
 }

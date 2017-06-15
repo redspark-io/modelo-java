@@ -1,6 +1,6 @@
 package io.redspark.controller;
 
-import static io.redspark.controller.ControllerConstants.MAIL;
+import static io.redspark.controller.constant.ControllerConstants.MAIL;
 
 import javax.mail.MessagingException;
 

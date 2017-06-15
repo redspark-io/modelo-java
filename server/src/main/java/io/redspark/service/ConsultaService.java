@@ -51,11 +51,12 @@ public class ConsultaService {
 		Animal animal = animalRepository.findOne(consultaForm.getIdAnimal());
 		Veterinario veterinario = veterinarioRepository.findOne(consultaForm.getIdVeterinario());
 
-		if (isNull(consultaForm.getDateConsulta()) || isNull(animal) || isNull(veterinario)) {
+		if (isNull(consultaForm.getData()) || isNull(animal) || isNull(veterinario)) {
 			throw new WebException(BAD_REQUEST, "Valores inválidos");
 		}
 
-		Consulta consulta = Consulta.builder().dateConsulta(consultaForm.getDateConsulta()).build();
+		Consulta consulta = Consulta.builder().veterinario(veterinario).animal(animal).data(consultaForm.getData())
+				.build();
 
 		return consultaRepository.save(consulta);
 	}
@@ -63,7 +64,7 @@ public class ConsultaService {
 	@Transactional
 	public Consulta update(Long id, ConsultaForm consultaForm) {
 
-		if (isNull(id) || isNull(consultaForm) || isNull(consultaForm.getDateConsulta())) {
+		if (isNull(id) || isNull(consultaForm) || isNull(consultaForm.getData())) {
 			throw new WebException(BAD_REQUEST, "Valores inválidos");
 		}
 
@@ -77,7 +78,7 @@ public class ConsultaService {
 
 		consulta.setAnimal(animal);
 		consulta.setVeterinario(veterinario);
-		consulta.setDateConsulta(consultaForm.getDateConsulta());
+		consulta.setData(consultaForm.getData());
 
 		consultaRepository.save(consulta);
 

@@ -16,25 +16,27 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 
 @Entity
 @Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = Dono.ENTITY_NAME, schema = Dono.SCHEMA_NAME)
 public class Dono implements Serializable {
 
 	private static final long serialVersionUID = -7380415448649459773L;
 
-	public static final String	ENTITY_NAME	= "dono";
-	public static final String	SCHEMA_NAME	= "public";
-	public static final String	FIND_ALL		= "Dono.findAll";
-	public static final String	FIND_BY_ID	= "Dono.findById";
+	public static final String ENTITY_NAME = "dono";
+	public static final String SCHEMA_NAME = "public";
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -52,50 +54,6 @@ public class Dono implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy = "dono", fetch = LAZY)
 	private List<Animal> animais = new ArrayList<Animal>();
-
-	public Dono() {
-
-	}
-
-	public Dono(Long id, String nome, String email, List<Animal> animais) {
-		super();
-		this.id = id;
-		this.nome = nome;
-		this.email = email;
-		this.animais = animais;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public List<Animal> getAnimais() {
-		return animais;
-	}
-
-	public void setAnimais(List<Animal> animais) {
-		this.animais = animais;
-	}
 
 	@Override
 	public int hashCode() {

@@ -1,28 +1,46 @@
 package io.redspark.controller.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+
+import io.redspark.domain.vet.Consulta;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ConsultaDTO {
 
-	private Long	id;
-	private Long	idAnimal;
-	private Long	idVeterinario;
-	private LocalDate	dataConsulta;
+	private Long id;
+	private Long idAnimal;
+	private Long idVeterinario;
+
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	private LocalDateTime data;
+
+	public ConsultaDTO(Consulta consulta) {
+		this.id = consulta.getId();
+		this.idAnimal = consulta.getAnimal().getId();
+		this.idVeterinario = consulta.getVeterinario().getId();
+		this.data = consulta.getData();
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((dataConsulta == null) ? 0 : dataConsulta.hashCode());
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
 		result = prime * result + ((idAnimal == null) ? 0 : idAnimal.hashCode());
 		result = prime * result + ((idVeterinario == null) ? 0 : idVeterinario.hashCode());
 		return result;
@@ -37,10 +55,10 @@ public class ConsultaDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		ConsultaDTO other = (ConsultaDTO) obj;
-		if (dataConsulta == null) {
-			if (other.dataConsulta != null)
+		if (data == null) {
+			if (other.data != null)
 				return false;
-		} else if (!dataConsulta.equals(other.dataConsulta))
+		} else if (!data.equals(other.data))
 			return false;
 		if (idAnimal == null) {
 			if (other.idAnimal != null)

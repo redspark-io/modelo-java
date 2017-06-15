@@ -6,6 +6,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,39 +16,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.redspark.controller.constant.ControllerConstants;
-import io.redspark.controller.form.VacinaForm;
-import io.redspark.domain.vet.Vacina;
-import io.redspark.service.VacinaService;
+import io.redspark.controller.dto.VeterinarioDTO;
+import io.redspark.controller.form.VeterinarioForm;
+import io.redspark.domain.vet.Veterinario;
+import io.redspark.service.VeterinarioService;
 
 @RestController
-@RequestMapping(value = ControllerConstants.VACINA)
-public class VacinaController {
+@RequestMapping(value = ControllerConstants.VETERINARIO)
+public class VeterinarioController {
 
 	@Autowired
-	private VacinaService vacinaService;
+	private VeterinarioService veterinarioService;
 
 	@RequestMapping(method = GET, value = "{id}")
-	public Vacina find(@PathVariable Long id) {
-		return vacinaService.findOne(id);
+	public Veterinario find(@PathVariable Long id) {
+		return veterinarioService.findOne(id);
 	}
 
 	@RequestMapping(method = GET)
-	public List<Vacina> findAll() {
-		return vacinaService.findAll();
+	public List<VeterinarioDTO> findAll() {
+		return veterinarioService.findAll().stream().map(VeterinarioDTO::new).collect(Collectors.toList());
 	}
 
 	@RequestMapping(method = POST)
-	public Vacina insert(@RequestBody VacinaForm vacinaForm) {
-		return vacinaService.insert(vacinaForm);
+	public Veterinario insert(@RequestBody VeterinarioForm veterinarioForm) {
+		return veterinarioService.insert(veterinarioForm);
 	}
 
 	@RequestMapping(method = PUT, value = "{id}")
-	public Vacina update(@PathVariable Long id, @RequestBody VacinaForm vacinaForm) {
-		return vacinaService.update(id, vacinaForm);
+	public Veterinario update(@PathVariable Long id, @RequestBody VeterinarioForm veterinarioForm) {
+		return veterinarioService.update(id, veterinarioForm);
 	}
 
 	@RequestMapping(method = DELETE, value = "{id}")
 	public HttpStatus delete(@PathVariable Long id) {
-		return vacinaService.delete(id);
+		return veterinarioService.delete(id);
 	}
 }
