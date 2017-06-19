@@ -3,6 +3,8 @@ package io.redspark.compose;
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicLong;
 
+import io.redspark.controller.dto.AgendamentoDTO;
+import io.redspark.controller.form.AgendamentoForm;
 import io.redspark.domain.City;
 import io.redspark.domain.City.CityBuilder;
 import io.redspark.domain.Hotel;
@@ -51,6 +53,14 @@ public class Compose {
 
 	public static Agendamento.AgendamentoBuilder agendamento(Animal animal, Vacina vacina, Consulta consulta, LocalDateTime data) {
 		return Agendamento.builder().animal(animal).consulta(consulta).vacina(vacina).data(data);
+	}
+
+	public static AgendamentoForm.AgendamentoFormBuilder agendamentoForm(Animal animal, Vacina vacina, Consulta consulta, LocalDateTime data) {
+		return AgendamentoForm.builder()
+				.idAnimal(animal.getId())
+				.idConsulta(consulta.getId())
+				.idVacina(vacina.getId())
+				.data(data);
 	}
 
 	public static Consulta.ConsultaBuilder consulta(Animal animal, Veterinario veterinario, java.time.LocalDateTime dataCosulta) {

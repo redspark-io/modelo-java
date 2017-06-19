@@ -2,6 +2,7 @@ package io.redspark.controller;
 
 import static io.redspark.controller.constant.ControllerConstants.CITY;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -42,81 +43,85 @@ import io.redspark.utils.SQLLikeUtils;
 @Secured(Roles.ROLE_ADMIN)
 public class CityController {
 
-  private MapperUtils<City, CityDTO> convert = new MapperUtils<City, CityDTO>(City.class, CityDTO.class);
+	private MapperUtils<City, CityDTO> convert = new MapperUtils<City, CityDTO>(City.class, CityDTO.class);
 
-  @Autowired
-  private CityRepository repository;
+	@Autowired
+	private CityRepository repository;
 
-  @Autowired
-  private HotelRepository hotelRepository;
+	@Autowired
+	private HotelRepository hotelRepository;
 
-  @Transactional(readOnly = true)
-  @GetMapping
-  public Page<CityDTO> list(@PageableDefault(page = 0, size = 50, sort = "name") Pageable page,
-      @RequestParam(value = "search", required = false) String search) {
+	@Transactional(readOnly = true)
+	@GetMapping
+	public Page<CityDTO> list(@PageableDefault(page = 0, size = 50, sort = "name") Pageable page,
+			@RequestParam(value = "search", required = false) String search) {
 
-    Page<City> result;
+		Page<City> result;
 
-    if (StringUtils.hasText(search)) {
-      result = repository.search(SQLLikeUtils.like(search), page);
-    } else {
-      result = repository.findAll(page);
-    }
+		if (StringUtils.hasText(search)) {
+			result = repository.search(SQLLikeUtils.like(search), page);
+		} else {
+			result = repository.findAll(page);
+		}
 
-    return new PageImpl<CityDTO>(result.getContent().stream().map(c -> convert.toDTO(c)).collect(Collectors.toList()),
-        page, result.getTotalElements());
-  }
+		List<CityDTO> cidades = result.getContent()
+				.stream()
+				.map(c -> convert.toDTO(c))
+				.collect(Collectors.toList());
 
-  @Transactional(readOnly = true)
-  @GetMapping(value = "/{id}")
-  public CityDTO read(@PathVariable("id") Long id) {
+		return new PageImpl<CityDTO>(cidades, page, result.getTotalElements());
+	}
 
-    City city = repository.findOne(id);
-    if (city == null) {
-      throw new NotFoundException(City.class);
-    }
-    return convert.toDTO(city);
-  }
+	@Transactional(readOnly = true)
+	@GetMapping(value = "/{id}")
+	public CityDTO read(@PathVariable("id") Long id) {
 
-  @Transactional
-  @PostMapping
-  @ResponseStatus(value = HttpStatus.CREATED)
-  public CityDTO create(@Valid @RequestBody CityDTO dto) {
+		City city = repository.findOne(id);
+		if (city == null) {
+			throw new NotFoundException(City.class);
+		}
+		return convert.toDTO(city);
+	}
 
-    City entity = convert.toEntity(dto);
-    entity = repository.save(entity);
-    return convert.toDTO(entity);
-  }
+	@Transactional
+	@PostMapping
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public CityDTO create(@Valid @RequestBody CityDTO dto) {
 
-  @Transactional
-  @PutMapping(value = "/{ref}")
-  @ResponseBody
-  public CityDTO update(@PathVariable("ref") Long ref, @Valid @RequestBody CityDTO dto) {
-    City entity = repository.findOne(ref);
-    if (entity == null) {
-      throw new NotFoundException(City.class);
-    }
-    convert.updateEntity(entity, dto, "id", "natures");
-    entity = repository.save(entity);
-    return convert.toDTO(entity);
-  }
+		City entity = convert.toEntity(dto);
+		entity = repository.save(entity);
+		return convert.toDTO(entity);
+	}
 
-  @Transactional
-  @DeleteMapping(value = "/{id}")
-  public CityDTO delete(@PathVariable("id") Long id) {
+	@Transactional
+	@PutMapping(value = "/{ref}")
+	@ResponseBody
+	public CityDTO update(@PathVariable("ref") Long ref, @Valid @RequestBody CityDTO dto) {
+		City entity = repository.findOne(ref);
+		if (entity == null) {
+			throw new NotFoundException(City.class);
+		}
+		convert.updateEntity(entity, dto, "id", "natures");
+		entity = repository.save(entity);
+		return convert.toDTO(entity);
+	}
 
-    City city = repository.findOne(id);
+	@Transactional
+	@DeleteMapping(value = "/{id}")
+	public CityDTO delete(@PathVariable("id") Long id) {
 
-    if (city == null) {
-      throw new NotFoundException(City.class);
-    }
-    if (hotelRepository.countByCity(city) > 0) {
-      throw new WebException(HttpStatus.PRECONDITION_FAILED, "city.hasHotel");
-    }
+		City city = repository.findOne(id);
 
-    this.repository.delete(city);
+		if (city == null) {
+			throw new NotFoundException(City.class);
+		}
+		if (hotelRepository.countByCity(city) > 0) {
+			throw new WebException(HttpStatus.PRECONDITION_FAILED, "city.hasHotel");
+		}
 
-    return convert.toDTO(city);
-  }
+		this.repository.delete(city);
+
+		return convert.toDTO(city);
+	}
 
 }

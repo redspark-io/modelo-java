@@ -1,25 +1,34 @@
 package io.redspark.controller;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
-
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.redspark.controller.constant.ControllerConstants;
 import io.redspark.controller.dto.AgendamentoDTO;
 import io.redspark.controller.form.AgendamentoForm;
 import io.redspark.domain.vet.Agendamento;
+import io.redspark.exception.NotFoundException;
 import io.redspark.service.AgendamentoService;
+import io.redspark.utils.MapperUtils;
 
 @RestController
 @RequestMapping(value = ControllerConstants.AGENDAMENTO)
@@ -28,28 +37,44 @@ public class AgendamentoController {
 	@Autowired
 	private AgendamentoService agendamentoService;
 
-	@RequestMapping(method = GET, value = "{id}")
-	public Agendamento find(@PathVariable Long id) {
-		return agendamentoService.findOne(id);
+	private MapperUtils<Agendamento, AgendamentoDTO> convert = new MapperUtils<Agendamento, AgendamentoDTO>(Agendamento.class, AgendamentoDTO.class);
+
+	@GetMapping(value = "{id}")
+	public AgendamentoDTO find(@PathVariable Long id) {
+		Agendamento agendamento = agendamentoService.findOne(id);
+		if (Objects.isNull(agendamento)) {
+			throw new NotFoundException(Agendamento.class);
+		}
+		return convert.toDTO(agendamento);
 	}
 
-	@RequestMapping(method = GET)
+	@GetMapping
 	public List<AgendamentoDTO> findAll() {
-		return agendamentoService.findAll().stream().map(AgendamentoDTO::new).collect(Collectors.toList());
+		return agendamentoService.findAll()
+				.stream()
+				.map(AgendamentoDTO::new)
+				.collect(Collectors.toList());
 	}
 
-	@RequestMapping(method = POST)
-	public Agendamento insert(@RequestBody AgendamentoForm agendamentoForm) {
-		return agendamentoService.insert(agendamentoForm);
+	@GetMapping(value = "/page")
+	public Page<AgendamentoDTO> findAll(@PageableDefault(page = 0, size = 50, sort = "animal.nome") Pageable page,
+			@RequestParam(value = "search", required = false) String search) {
+		return agendamentoService.findAll(page, search);
 	}
 
-	@RequestMapping(method = PUT, value = "{id}")
-	public Agendamento update(@PathVariable Long id, @RequestBody AgendamentoForm agendamentoForm) {
+	@PostMapping
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public AgendamentoDTO insert(@Valid @RequestBody AgendamentoForm agendamentoForm) {
+		return convert.toDTO(agendamentoService.insert(agendamentoForm));
+	}
+
+	@PutMapping(value = "{id}")
+	public AgendamentoDTO update(@PathVariable Long id, @RequestBody AgendamentoForm agendamentoForm) {
 		return agendamentoService.update(id, agendamentoForm);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "{id}")
-	public HttpStatus delete(@PathVariable Long id) {
+	@DeleteMapping(value = "{id}")
+	public AgendamentoDTO delete(@PathVariable Long id) {
 		return agendamentoService.delete(id);
 	}
 

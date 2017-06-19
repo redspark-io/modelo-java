@@ -1,6 +1,7 @@
 package io.redspark.controller.dto;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -21,10 +22,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AgendamentoDTO {
 
-	private Long id;
-	private Long idAnimal;
-	private Long idConsulta;
-	private Long idVacina;
+	private Long	id;
+	private Long	idAnimal;
+	private Long	idConsulta;
+	private Long	idVacina;
 
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
